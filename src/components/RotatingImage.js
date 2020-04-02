@@ -7,14 +7,14 @@ export default function RotatingImage() {
     const [rotateAnim] = useState(new Animated.Value(0));
 
     useEffect(() => {
-        Animated.timing(
+        Animated.loop(Animated.timing(
             rotateAnim,
             {
                 toValue: 1,
                 duration: 20000,
                 easing: Easing.linear
             }
-        ).start()
+        )).start()
     });
 
     const spin = rotateAnim.interpolate({
