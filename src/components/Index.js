@@ -1,10 +1,13 @@
 import React from 'react';
-import { View, Image, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 
-export default function App() {
+//Custom components imports
+import RotatingImage from './RotatingImage';
+
+export default function Index() {
     return (
         <View style={styles.container}>
-            <Image style={{width: '30vh', height: '30vh'}} source={require('../../assets/opencircle.png')}/>
+            <RotatingImage/>
         </View>
     );
 }
