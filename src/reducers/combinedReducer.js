@@ -5,7 +5,7 @@ import { combineReducers } from 'redux';
 import { ToggleReducer } from './ToggleReducer';
 
 const combinedReducer = combineReducers({
-   toggle: ToggleReducer
+    toggle: ToggleReducer
 });
 
 export default combinedReducer;

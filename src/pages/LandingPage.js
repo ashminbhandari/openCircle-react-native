@@ -1,19 +1,22 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import {View, Switch, StyleSheet} from 'react-native';
+import { useSelector, useDispatch } from 'react-redux';
+import { toggle } from '../actions/actions';
 
 //Custom components imports
 import RotatingImageComponent from '../components/RotatingImageComponent';
 
 export default function LandingPage() {
-    const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const toggleValue = useSelector(state => state.toggle);
+    const dispatch = useDispatch();
+
     return (
         <View style={styles.container}>
             <RotatingImageComponent/>
             <Switch
                 style={{height: '2em', margin: '2em'}}
-                onValueChange={toggleSwitch}
-                value={isEnabled}
+                onValueChange={() => {dispatch(toggle()); console.log(toggleValue)}}
+                value={toggleValue}
             />
         </View>
     );

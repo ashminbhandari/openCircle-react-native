@@ -1,18 +1,27 @@
 import React from 'react';
 import {View} from 'react-native';
-import { createStore } from 'redux'; //For one stop store creation
+import { createStore, applyMiddleware, compose } from 'redux'; //For one stop store creation
+import reduxThunk from 'redux-thunk';
 import { Provider } from 'react-redux'; //Store provision for entire app
 
 //Custom components imports
 import LandingPage from './src/pages/LandingPage';
 
 //Import all reducers
-import combinedReducer from './src/reducers';
+import combinedReducer from './src/reducers/combinedReducer';
+
+//Apply thunk
+const thunk = applyMiddleware(reduxThunk);
+
+//Redux dev tools
+const devTool = window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__();
+
+//Compose enhancers
+const composedEnhancers = compose(thunk, devTool);
 
 //Create store
 const store =  createStore(
-    combinedReducer,
-    window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
+    combinedReducer, composedEnhancers
 );
 
 export default function RotatingImageComponent() {
@@ -23,5 +32,5 @@ export default function RotatingImageComponent() {
             </View>
         </Provider>
     );
-}
+};
 
