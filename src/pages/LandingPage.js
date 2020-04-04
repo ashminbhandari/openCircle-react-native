@@ -14,7 +14,7 @@ export default function LandingPage() {
         <View style={styles.container}>
             <RotatingImageComponent/>
             <Switch
-                style={{height: '2em', margin: '2em'}}
+                style={{margin: 30}}
                 onValueChange={() => {dispatch(toggle()); console.log(toggleValue)}}
                 value={toggleValue}
             />
@@ -25,7 +25,7 @@ export default function LandingPage() {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'black',
-        height: '100vh',
+        height: '100%',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',

@@ -26,8 +26,8 @@ export default function RotatingImage() {
         <Animated.Image
             style={{
                 transform: [{rotate: spin}],
-                height: '25vh',
-                width: '25vh'
+                height: 200,
+                width: 200
             }}
             source={require('../../assets/opencircle.png')} />
     );
