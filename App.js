@@ -11,8 +11,9 @@ import {Provider} from 'react-redux'; //Store provision for entire app
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from "@react-navigation/stack";
 
-//Custom components imports
+//Custom pages imports
 import LandingPage from './src/pages/LandingPage';
+import MapPage from './src/pages/MapPage';
 
 //Import all reducers
 import combinedReducer from './src/reducers/combinedReducer';
@@ -39,6 +40,7 @@ export default function App() {
             <NavigationContainer>
                 <Stack.Navigator>
                     <Stack.Screen name="Landing" component={LandingPage}/>
+                    <Stack.Screen name={"Map"} component={MapPage}/>
                 </Stack.Navigator>
             </NavigationContainer>
         </Provider>
