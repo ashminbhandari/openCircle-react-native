@@ -2,6 +2,7 @@
   "expo": {
     "name": "openCircle",
     "slug": "openCircle",
+    "scheme": "openCircle",
     "platforms": [
       "ios",
       "android",

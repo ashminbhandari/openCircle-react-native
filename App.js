@@ -1,5 +1,8 @@
 //Basic react imports
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+
+//App authentication
+import { View, Text, Button, AsyncStorage } from 'react-native';
 
 //Store, redux and thunk
 import {createStore, applyMiddleware} from 'redux'; //For one stop store creation
