@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {Animated, Easing} from 'react-native';
 
 export default function RotatingImage() {
-
     //Initial value for rotation animation
     const [rotateAnim] = useState(new Animated.Value(0));
 
@@ -29,7 +28,7 @@ export default function RotatingImage() {
                 height: 200,
                 width: 200
             }}
-            source={require('../../assets/opencircle.png')} />
+            source={require('../../../assets/opencircle.png')} />
     );
 }
 

@@ -2,10 +2,10 @@ import React, {useState} from 'react';
 import {View, Switch, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {toggle} from '../actions/actions';
-import {FontAwesome} from '@expo/vector-icons';
+import AuthorizeButton from '../components/logical/AuthorizeButton';
 
 //Custom components imports
-import RotatingImageComponent from '../components/RotatingImageComponent';
+import RotatingImageComponent from '../components/ui/RotatingImageComponent';
 
 export default function LandingPage() {
     const [isAuthorized, setAuthorized] = useState(false);
@@ -30,12 +30,7 @@ export default function LandingPage() {
         return (
             <View style={styles.container}>
                 <RotatingImageComponent/>
-                <TouchableOpacity style={styles.button}>
-                    <View style={{flexDirection: 'row'}}>
-                        <FontAwesome size={32} style={{color: 'white'}} name={'spotify'}/>
-                        <Text style={styles.text}>Connect with Spotify</Text>
-                    </View>
-                </TouchableOpacity>
+                <AuthorizeButton/>
             </View>
         );
     }
@@ -48,17 +43,5 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
     },
-    button: {
-        backgroundColor: '#1DB954',
-        borderRadius: 50,
-        margin: 40,
-        padding: 15,
-    },
-    text: {
-        color: 'white',
-        paddingTop: 7,
-        marginLeft: 7,
-        fontFamily: 'Avenir'
-    }
 });
 
