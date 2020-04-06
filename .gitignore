@@ -9,7 +9,7 @@ npm-debug.*
 *.orig.*
 web-build/
 web-report/
-authConfig.js
+src/components/logical/authConfig.js
 
 # macOS
 .DS_Store
