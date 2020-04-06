@@ -33,7 +33,11 @@ export default function App() {
     return (
         <Provider store={store}>
             <NavigationContainer>
-                <Stack.Navigator>
+                <Stack.Navigator
+                    screenOptions={{
+                        headerShown: false
+                    }}
+                >
                     <Stack.Screen name="Landing" component={LandingPage}/>
                 </Stack.Navigator>
             </NavigationContainer>
