@@ -12,7 +12,7 @@
     "@react-native-community/masked-view": "0.1.7",
     "@react-navigation/native": "^5.1.4",
     "@react-navigation/stack": "^5.2.9",
-    "@use-expo/font": "^1.0.1",
+    "@use-expo/font": "^2.0.0",
     "axios": "^0.19.2",
     "expo": "~37.0.6",
     "expo-app-auth": "~9.0.0",
