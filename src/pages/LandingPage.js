@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import {View, Switch, StyleSheet, TouchableOpacity, Text} from 'react-native';
 import {useSelector, useDispatch} from 'react-redux';
 import {toggle} from '../actions/actions';
-import AuthorizeButton from '../components/logical/AuthorizeButton';
+import AuthorizeButton from '../components/logical/Authorization/AuthorizeButton';
 
 //Custom components imports
 import RotatingImageComponent from '../components/ui/RotatingImageComponent';
