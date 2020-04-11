@@ -1,5 +1,6 @@
 //Basic react imports
 import React, {useEffect, useState} from 'react';
+import Constants from 'expo-constants';
 
 //App authentication
 import {getData} from './src/components/logical/Authorization/AsyncStorage';
@@ -31,6 +32,9 @@ const store = createStore(
 const Stack = createStackNavigator();
 
 export default function App() {
+    useEffect(() => {
+        console.log(Constants.manifest.ios.config.googleMapsApiKey);
+    })
     return (
         <Provider store={store}>
             <NavigationContainer>
@@ -39,7 +43,8 @@ export default function App() {
                         headerShown: false
                     }}
                 >
-                    {getData('accessToken') == null ? (
+                    {
+                        getData('accessToken') == null ? (
                         // No token found, user isn't signed in
                         <Stack.Screen
                             name="Landing"
