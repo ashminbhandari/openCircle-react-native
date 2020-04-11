@@ -1,8 +1,8 @@
 //Basic react imports
-import React, { useEffect, useState } from 'react';
+import React, {useEffect, useState} from 'react';
 
 //App authentication
-import { View, Text, Button } from 'react-native';
+import {getData} from './src/components/logical/Authorization/AsyncStorage';
 
 //Store, redux and thunk
 import {createStore, applyMiddleware} from 'redux'; //For one stop store creation
@@ -14,7 +14,8 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from "@react-navigation/stack";
 
 //Custom pages imports
-import LandingPage from './src/pages/LandingPage';
+import LandingPage from './src/pages/LandingPage/LandingPage';
+import MapPage from './src/pages/MapPage/MapPage';
 
 //Import all reducers
 import combinedReducer from './src/reducers/combinedReducer';
@@ -38,7 +39,16 @@ export default function App() {
                         headerShown: false
                     }}
                 >
-                    <Stack.Screen name="Landing" component={LandingPage}/>
+                    {getData('accessToken') == null ? (
+                        // No token found, user isn't signed in
+                        <Stack.Screen
+                            name="Landing"
+                            component={LandingPage}
+                        />
+                    ) : (
+                        // User is signed in
+                        <Stack.Screen name="Map" component={MapPage} />
+                    )}
                 </Stack.Navigator>
             </NavigationContainer>
         </Provider>
