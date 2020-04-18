@@ -18,7 +18,6 @@ const AuthorizeButton = (observer(() => {
     );
 }));
 
-
 const styles = StyleSheet.create(
     {
         button: {

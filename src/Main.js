@@ -12,7 +12,6 @@ import { useStores } from './hooks/useStores';
 //Navigation
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from "@react-navigation/stack";
-
 const Stack = createStackNavigator();
 
 const Main = observer(() => {
