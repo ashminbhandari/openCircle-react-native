@@ -16,6 +16,7 @@ const scopesArr = ['user-modify-playback-state', 'user-read-currently-playing', 
     'playlist-modify-private', 'user-read-recently-played', 'user-top-read']; //This is the scope of accessing that we will be asking for from the user
 const scopes = scopesArr.join(' ');
 
+//Gets the authorization code from Spotify (required for access tokens)
 const getAuthorizationCode = async () => {
     try {
         const credentials = await getCredentials();
@@ -36,11 +37,13 @@ const getAuthorizationCode = async () => {
     }
 };
 
+//Auth store
 export class AuthorizationStore {
     @observable isLogged = false;
     @observable accessToken = null;
     @observable refreshToken = null;
     @observable expirationTime = null;
+
     @action getAccessToken = async () => {
         try {
             const authorizationCode = await getAuthorizationCode();
