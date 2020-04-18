@@ -1,12 +1,14 @@
-import React, {useState, useEffect} from 'react';
+import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet, AsyncStorage} from "react-native";
+import { observer } from 'mobx-react';
+import { useStores } from '../../hooks/useStores'
 import {FontAwesome} from "@expo/vector-icons";
-import Tokens from "./Tokens";
 
-export default function AuthorizeButton() {
+const AuthorizeButton = (observer(() => {
+    const { AuthorizationStore } = useStores();
     return (
         <View>
-            <TouchableOpacity style={styles.button} onPress={Tokens}>
+            <TouchableOpacity style={styles.button} onPress={() => AuthorizationStore.getAccessToken()}>
                 <View style={{flexDirection: 'row'}}>
                     <FontAwesome size={32} style={{color: 'white'}} name={'spotify'}/>
                     <Text style={styles.text}>Connect with Spotify</Text>
@@ -14,7 +16,7 @@ export default function AuthorizeButton() {
             </TouchableOpacity>
         </View>
     );
-};
+}));
 
 
 const styles = StyleSheet.create(
@@ -34,5 +36,5 @@ const styles = StyleSheet.create(
     }
 );
 
-
+export default AuthorizeButton;
 

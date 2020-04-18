@@ -8,6 +8,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@babel/plugin-proposal-decorators": "^7.8.3",
     "@expo/vector-icons": "latest",
     "@react-native-community/masked-view": "0.1.7",
     "@react-navigation/native": "^5.1.5",
@@ -18,6 +19,9 @@
     "expo": "~37.0.6",
     "expo-app-auth": "~9.0.0",
     "expo-auth-session": "^1.0.0",
+    "expo-constants": "~9.0.0",
+    "mobx": "^5.15.4",
+    "mobx-react": "^6.2.2",
     "react": "~16.13.1",
     "react-dom": "~16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
@@ -27,8 +31,7 @@
     "react-native-safe-area-context": "0.7.3",
     "react-native-screens": "~2.4.0",
     "react-native-web": "~0.11.7",
-    "redux-thunk": "^2.3.0",
-    "expo-constants": "~9.0.0"
+    "redux-thunk": "^2.3.0"
   },
   "devDependencies": {
     "@babel/core": "^7.8.6",
