@@ -6,7 +6,7 @@ import * as Permissions from 'expo-permissions';
 import mapStyle from './MapStyle';
 
 export default function MapPage() {
-    const [userLocation, setUserLocation] = useState({latitude: 20.0234, longitude: -40.0000}); //User's current location
+    const [userLocation, setUserLocation] = useState(null); //User's current location
     const [locationPermission, setLocationPermission] = useState(false); //Doesn't have permission to check location at the start
 
     useEffect(() => {
@@ -28,23 +28,35 @@ export default function MapPage() {
         //If there is a permission then get the user location and set it in state
         if (locationPermission) {
             let location = await Location.getCurrentPositionAsync();
-            setUserLocation({latitude:location.coords.latitude, longitude:location.coords.longitude})
+            setUserLocation(location)
         }
     }
 
     return (
         <View style={styles.container}>
-            <MapView style={styles.mapStyle}
-                     provider={PROVIDER_GOOGLE}
-                     customMapStyle={mapStyle}>
-                <Marker
-                    coordinate={userLocation}
-                />
-            </MapView>
+            {
+                userLocation != null ? (
+                    <MapView style={styles.mapStyle}
+                             provider={PROVIDER_GOOGLE}
+                             customMapStyle={mapStyle}
+                             initialRegion={{
+                                 latitude: userLocation.coords.latitude,
+                                 longitude: userLocation.coords.longitude,
+                                 latitudeDelta: 0.0922,
+                                 longitudeDelta: 0.0421
+                             }}>
+                        <Marker
+                            coordinate={{
+                                latitude: userLocation.coords.latitude,
+                                longitude: userLocation.coords.longitude}}
+                        >
 
+                        </Marker>
+                    </MapView>
+                ) : ( <View/>)
+            }
         </View>
     );
-
 }
 
 const styles = StyleSheet.create({

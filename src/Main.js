@@ -21,7 +21,6 @@ const Main = observer(() => {
             <Stack.Navigator screenOptions={{
                 headerShown: false
             }}>
-                {console.log(AuthorizationStore.accessToken)}
                 {
                     AuthorizationStore.accessToken == null ? (
                         // No token found, user isn't signed in

@@ -25,6 +25,9 @@
     "ios": {
       "supportsTablet": true,
       "bundleIdentifier": "cp.opencircle.bi",
+      "config": {
+        "googleMapsApiKey":"AIzaSyAhjyX2B0vAzccFenQ93wILAg3Sx7EoCLU"
+      }
     }
   }
 }

@@ -5,7 +5,7 @@ import {encode as btoa} from "base-64";
 
 //Get the user credentials from the server
 const getCredentials = async () => {
-    const res = await axios.get('http://10.0.0.226:3000/auth/spotifyCredentials');
+    const res = await axios.get('http://192.168.1.138:3000/auth/spotifyCredentials');
     const Credentials = res.data;
     return Credentials;
 };
@@ -47,9 +47,9 @@ export class AuthorizationStore {
     @action getAccessToken = async () => {
         try {
             const authorizationCode = await getAuthorizationCode();
-            const credentials = await getCredentials()
+            const credentials = await getCredentials();
             const credsB64 = btoa(`${credentials.clientId}:${credentials.clientSecret}`);
-            let requestBody = `grant_type=refresh_token&refresh_token=${refreshToken}`
+            let requestBody = `grant_type=refresh_token&refresh_token=${refreshToken}`;
             if (!this.expirationTime || new Date().getTime() > this.expirationTime) {
                 requestBody = `grant_type=authorization_code&code=${authorizationCode}&redirect_uri=${credentials.redirectUri}` //refresh if token expired
             }
