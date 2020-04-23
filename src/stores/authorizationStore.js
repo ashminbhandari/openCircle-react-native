@@ -4,7 +4,7 @@ import * as AuthSession from "expo-auth-session";
 
 //Get the user credentials from the server
 const getCredentials = async () => {
-    const res = await axios.get('http://10.0.0.226:3000/spotify/credentials');
+    const res = await axios.get('http://10.0.0.226:3000/auth/credentials');
     const credentials = res.data;
     return credentials;
 };
@@ -50,7 +50,7 @@ export class AuthorizationStore {
     @action getAccessToken = async () => {
             const authCode = await getAuthorizationCode();
             try {
-                const response  = await axios.post('http://10.0.0.226:3000/spotify/token', {
+                const response  = await axios.post('http://10.0.0.226:3000/auth/token', {
                     code: authCode
                 });
                 this.accessToken = response.data.token;
