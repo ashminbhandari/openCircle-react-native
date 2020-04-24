@@ -11,7 +11,7 @@ let spotifySchema = new mongoose.Schema({
     refresh_token: {
         type: String,
     },
-    expirationTime: {
+    expiration_time: {
         type: Number,
     },
 })

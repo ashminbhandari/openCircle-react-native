@@ -1,5 +1,7 @@
 const fetch = require('node-fetch');
 const btoa = require('base-64');
+var Spotify = require('../database/models/spotify');
+var httpStatus = require('http-status-codes');
 
 module.exports = {
     //Given an authorization code, gets an access token
@@ -15,8 +17,9 @@ module.exports = {
                 },
                 body: requestBody,
             });
-
             const responseJson = await response.json();
+
+            //If error
             if (responseJson.error != undefined) {
                 const message = 'Error during authorization code validation';
                 console.log(message);
@@ -30,6 +33,29 @@ module.exports = {
             }
         } catch (err) {
             throw err;
+        }
+    },
+
+    async upsertAuthData(authorizationCode) {
+        let result = {};
+        try {
+            let tokenInfo = await this.getAccessToken(authorizationCode);
+            let authData = {
+                auth_code: authorizationCode,
+                access_token: tokenInfo.accessToken,
+                refresh_token: tokenInfo.refreshToken,
+                expiration_time: tokenInfo.expirationTime
+            }
+            let upsert = await Spotify.findOneAndUpdate({auth_code: authorizationCode}
+                , authData
+                , {upsert: true});
+            result = upsert ? {httpStatus: httpStatus.OK, status:"successful"} :
+                {httpStatus: httpStatus.BAD_REQUEST, status:"failed"};
+            return result;
+        } catch (error) {
+            console.error("Error in upsertAuthData at authService.js..." + error);
+            result = {httpStatus: httpStatus.INTERNAL_SERVER_ERROR, status:"failed", errorDetails:error};
+            return result;
         }
     }
 }

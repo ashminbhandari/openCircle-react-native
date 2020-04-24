@@ -10,7 +10,7 @@ router.get('/credentials', function (req, res) {
     res.json(credentials);
 });
 
-router.route('/token').post(authController.getAccessToken);
+router.route('/token').post(authController.upsertAuthData);
 //POST request once user obtains their Spotify authorization code
 // router.post('/token', (req, res) => {
 //

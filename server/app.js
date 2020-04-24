@@ -1,18 +1,25 @@
+//Standard Node.js/Express.js imports
 var createError = require('http-errors');
 var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
+
+//DB connection imports
+var db = require('./database/connection');
+
 //Environment file
 require('dotenv').config();
+
+//Establish database connection
+db.dbConnection();
 
 //Routers
 var authRouter = require('./routes/auth');
 
 //Express app
 var app = express();
-
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));

@@ -25,4 +25,4 @@ let getDBConnection = async () => {
 require('./models/spotify');
 
 //Export connection
-module.exports = () => getDBConnection();
+module.exports.dbConnection = () => getDBConnection();

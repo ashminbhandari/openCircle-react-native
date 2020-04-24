@@ -8,7 +8,7 @@ const AuthorizeButton = (observer(() => {
     const { AuthorizationStore } = useStores();
     return (
         <View>
-            <TouchableOpacity style={styles.button} onPress={() => AuthorizationStore.getAccessToken()}>
+            <TouchableOpacity style={styles.button} onPress={() => AuthorizationStore.getIsLogged()}>
                 <View style={{flexDirection: 'row'}}>
                     <FontAwesome size={32} style={{color: 'white'}} name={'spotify'}/>
                     <Text style={styles.text}>Connect with Spotify</Text>

@@ -1,22 +1,14 @@
-const httpStatus = require('http-status-codes')
-const authService = require('../services/authService')
-const jwt = require('jsonwebtoken');
+const httpStatus = require('http-status-codes');
+const authService = require('../services/authService');
 
 module.exports = {
-    async getAccessToken(req,res,next) {
-        let response;
+    async upsertAuthData(req,res) {
         try {
-            let spotifyAccessToken = await authService.getAccessToken(req.body.code);
-
-            //Sign with JWT and send
-            jwt.sign(spotifyAccessToken, process.env.JWT_SECRET_KEY, (err, token) => {
-                return res.status(httpStatus.CREATED).json({
-                    token
-                })
-            });
+            let response = await authService.upsertAuthData(req.body.code);
+            return res.status(response.httpStatus).send(response);
         } catch(err) {
-            console.log('Error in authController while creating token.');
+            console.log('Error in upsertAuthData in authController.');
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).send('Error creating tokens.');
         }
     }
-}
+};

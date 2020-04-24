@@ -22,7 +22,7 @@ const Main = observer(() => {
                 headerShown: false
             }}>
                 {
-                    AuthorizationStore.accessToken == null ? (
+                    AuthorizationStore.isLogged == null ? (
                         // No token found, user isn't signed in
                         <Stack.Screen
                             name="Landing"

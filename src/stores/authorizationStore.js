@@ -1,6 +1,14 @@
 import {observable, action} from 'mobx';
 import axios from 'axios'; //For server calls (credentials)
 import * as AuthSession from "expo-auth-session";
+import { create, persist } from 'mobx-presist';
+
+//Hydrate the store
+const hydrate = create({
+    storage: AsyncStorage,
+    jsonify: true
+
+});
 
 //Get the user credentials from the server
 const getCredentials = async () => {
@@ -45,20 +53,25 @@ const getAuthorizationCode = async () => {
 
 //Auth store
 export class AuthorizationStore {
-    @observable accessToken = null;
+    @persist @observable accessToken = null;
 
     @action getAccessToken = async () => {
-            const authCode = await getAuthorizationCode();
-            try {
-                const response  = await axios.post('http://10.0.0.226:3000/auth/token', {
-                    code: authCode
-                });
-                this.accessToken = response.data.token;
-                console.log("Access token received: " + this.accessToken);
-            } catch (err) {
-                console.log(err.response);
-            }
+        const authCode = await getAuthorizationCode();
+        try {
+            const response  = await axios.post('http://10.0.0.226:3000/auth/token', {
+                code: authCode
+            });
+            this.accessToken = response.data.token;
+            console.log("Access token received: " + this.accessToken);
+        } catch (err) {
+            console.log(err.response);
+        }
     }
 }
+
+//Hydrate the store
+hydrate('some', AuthorizationStore).then(() => console.log('Authorization store has been hydrated...'))
+
+
 
 
