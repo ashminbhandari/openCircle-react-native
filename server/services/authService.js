@@ -46,15 +46,16 @@ module.exports = {
                 refresh_token: tokenInfo.refreshToken,
                 expiration_time: tokenInfo.expirationTime
             }
-            let upsert = await Spotify.findOneAndUpdate({auth_code: authorizationCode}
+
+            await Spotify.findOneAndUpdate({auth_code: authorizationCode}
                 , authData
                 , {upsert: true});
-            result = upsert ? {httpStatus: httpStatus.OK, status:"successful"} :
-                {httpStatus: httpStatus.BAD_REQUEST, status:"failed"};
+
+            result = {httpStatus: httpStatus.OK, status: "successful"}
             return result;
         } catch (error) {
             console.error("Error in upsertAuthData at authService.js..." + error);
-            result = {httpStatus: httpStatus.INTERNAL_SERVER_ERROR, status:"failed", errorDetails:error};
+            result = {httpStatus: httpStatus.INTERNAL_SERVER_ERROR, status: "failed", errorDetails: error};
             return result;
         }
     }
