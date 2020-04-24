@@ -1,7 +1,8 @@
 const fetch = require('node-fetch');
 const btoa = require('base-64');
-var Spotify = require('../database/models/spotify');
+var Users = require('../database/models/spotify');
 var httpStatus = require('http-status-codes');
+var encryption = require('../utilities/encryption')
 
 module.exports = {
     //Given an authorization code, gets an access token
@@ -17,6 +18,8 @@ module.exports = {
                 },
                 body: requestBody,
             });
+
+            //Convert to JSON
             const responseJson = await response.json();
 
             //If error
@@ -26,9 +29,16 @@ module.exports = {
                 throw new Error(message);
             }
 
+            //Encrypt the token information
+            //Encryption results have format {iv: '', encryptedData:''}
+            let encAccessToken = encryption.encrypt(responseJson.access_token);
+            let encRefreshToken = encryption.encrypt(responseJson.refresh_token);
+
             return {
-                accessToken: responseJson.access_token,
-                refreshToken: responseJson.refresh_token,
+                encAccessToken: encAccessToken.encryptedData,
+                ivAccessToken: encAccessToken.iv,
+                encRefreshToken: encRefreshToken.encryptedData,
+                ivRefreshToken: encRefreshToken.iv,
                 expirationTime: new Date().getTime() + responseJson.expires_in * 1000
             }
         } catch (err) {
@@ -39,16 +49,12 @@ module.exports = {
     async upsertAuthData(authorizationCode) {
         let result = {};
         try {
+            //gets token information
             let tokenInfo = await this.getAccessToken(authorizationCode);
-            let authData = {
-                auth_code: authorizationCode,
-                access_token: tokenInfo.accessToken,
-                refresh_token: tokenInfo.refreshToken,
-                expiration_time: tokenInfo.expirationTime
-            }
 
-            await Spotify.findOneAndUpdate({auth_code: authorizationCode}
-                , authData
+            //upsert database
+            await Users.findOneAndUpdate({encAccessToken: tokenInfo.encAccessToken}
+                , tokenInfo
                 , {upsert: true});
 
             result = {httpStatus: httpStatus.OK, status: "successful"}

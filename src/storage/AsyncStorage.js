@@ -1,3 +1,4 @@
+//Get and save functions for AsyncStorage storage
 import { AsyncStorage } from 'react-native';
 
 export default {

@@ -4,6 +4,7 @@ var express = require('express');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+const helmet = require('helmet');
 
 
 //DB connection imports
@@ -31,6 +32,9 @@ app.use('/auth', authRouter);
 app.use(function(req, res, next) {
   next(createError(404));
 });
+
+//Basic security
+app.use(helmet());
 
 // error handler
 app.use(function(err, req, res, next) {
