@@ -2,7 +2,7 @@ const fetch = require('node-fetch');
 const btoa = require('base-64');
 const Users = require('../database/models/users');
 const httpStatus = require('http-status-codes');
-const encryption = require('../utils/encryption.js');
+const encryption = require('../authentication/encryption.js');
 
 module.exports = {
     //Given an authorization code, gets an access token
@@ -22,6 +22,7 @@ module.exports = {
             //Convert to JSON
             const responseJson = await response.json();
 
+            console.log(responseJson);
             //If error
             if (responseJson.error != undefined) {
                 const message = 'Error during authorization code validation';
@@ -29,23 +30,20 @@ module.exports = {
                 throw new Error(message);
             }
 
-            //Encrypt the token information
-            //Encryption results have format {iv: '', encryptedData:''}
-            let encAccessToken = encryption.encrypt(responseJson.access_token);
-            let encRefreshToken = encryption.encrypt(responseJson.refresh_token);
-
             return {
-                encAccessToken: encAccessToken.encryptedData,
-                ivAccessToken: encAccessToken.iv,
-                encRefreshToken: encRefreshToken.encryptedData,
-                ivRefreshToken: encRefreshToken.iv,
-                expirationTime: new Date().getTime() + responseJson.expires_in * 1000
+                spotify_id: '123',
+                password: '123',
+                access_token: '123',
+                refresh_token: '123',
+                expiration_time: new Date().getTime() + responseJson.expires_in * 1000
             }
         } catch (err) {
             throw err;
         }
     },
 
+    
+    //Equivalent of sign up 
     async upsertAuthData(authorizationCode) {
         let result = {};
         try {
@@ -63,6 +61,7 @@ module.exports = {
                 function (err, doc) {
                     result = {httpStatus: httpStatus.OK, status: "successful", userID: doc._id};
                 });
+
             return result;
         } catch (error) {
             console.error("Error in upsertAuthData at authService.js..." + error);

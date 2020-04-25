@@ -8,6 +8,7 @@ const scopesArr = ['user-modify-playback-state', 'user-read-currently-playing', 
 const scopes = scopesArr.join(' ');
 
 
+
 export default {
 
     //Get Spotify credentials from the server to initiate an auth session

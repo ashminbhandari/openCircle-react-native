@@ -1,6 +1,10 @@
 const spotifyController = require('../controllers/spotifyController');
-var express = require('express');
-var router = express.Router();
+const express = require('express');
+const passportAuth = require('../authentication/passportAuth');
+
+const router = express.Router();
+
+router.use(passportAuth.isAuthenticated);
 
 router.route('/users').post(spotifyController.iAmOnline)
 

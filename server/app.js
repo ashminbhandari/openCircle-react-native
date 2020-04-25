@@ -1,14 +1,22 @@
 //Standard Node.js/Express.js imports
-var createError = require('http-errors');
-var express = require('express');
-var path = require('path');
-var cookieParser = require('cookie-parser');
-var logger = require('morgan');
+const createError = require('http-errors');
+const express = require('express');
+const path = require('path');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
 const helmet = require('helmet');
+const mongoose = require('mongoose');
 
+//Session management imports
+const session = require('express-session');
+const MongoStore = require('connect-mongo')(session);
+
+//Auth purposes
+const passport = require('passport');
+const passportAuth = require("./authentication/passportAuth");
 
 //DB connection imports
-var db = require('./database/connection');
+const db = require('./database/connection');
 
 //Environment file
 require('dotenv').config();
@@ -36,8 +44,25 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
+//Session management
+app.use(session({
+  secret: process.env.SESSION_SECRET_KEY,
+  resave: false,
+  saveUninitialized: true,
+  store: new MongoStore({mongooseConnection: mongoose.connection}),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24 //one day
+  }
+}))
+
 //Basic security
 app.use(helmet());
+
+//Configure passport authentication
+passportAuth.initializePassport(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+
 
 // error handler
 app.use(function(err, req, res, next) {

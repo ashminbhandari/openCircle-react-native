@@ -1,23 +1,23 @@
 var mongoose = require('mongoose');
 
 let usersSchema = new mongoose.Schema({
-    encAccessToken: {
+    spotify_id: {
         type: String,
         required: true
     },
-    ivAccessToken: {
+    password: {
         type: String,
         required: true
     },
-    encRefreshToken: {
+    access_token: {
         type: String,
         required: true
     },
-    ivRefreshToken: {
+    refresh_token: {
         type: String,
         required: true
     },
-    expirationTime: {
+    expiration_time: {
         type: Number,
         required: true
     },
