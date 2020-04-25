@@ -21,7 +21,7 @@ export default {
     async getAuthorizationCode() {
         try {
             //Spotify credentials from the server
-            const credentials = await getCredentials();
+            const credentials = await this.getCredentials();
 
             //Session redirect URL
             const redirectUrl = AuthSession.getRedirectUrl();

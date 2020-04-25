@@ -1,8 +1,8 @@
 const fetch = require('node-fetch');
 const btoa = require('base-64');
-var Users = require('../database/models/spotify');
-var httpStatus = require('http-status-codes');
-var encryption = require('../utilities/encryption')
+const Users = require('../database/models/users');
+const httpStatus = require('http-status-codes');
+const encryption = require('../utils/encryption.js');
 
 module.exports = {
     //Given an authorization code, gets an access token
@@ -52,18 +52,32 @@ module.exports = {
             //gets token information
             let tokenInfo = await this.getAccessToken(authorizationCode);
 
-            //upsert database
-            await Users.findOneAndUpdate({encAccessToken: tokenInfo.encAccessToken}
-                , tokenInfo
-                , {upsert: true});
+            //result
+            let result;
 
-            result = {httpStatus: httpStatus.OK, status: "successful"}
+            //upsert database
+            let upsertedData = await Users.findOneAndUpdate(
+                {encAccessToken: tokenInfo.encAccessToken}
+                , tokenInfo
+                , {upsert: true, new: true},
+                function (err, doc) {
+                    result = {httpStatus: httpStatus.OK, status: "successful", userID: doc._id};
+                });
             return result;
         } catch (error) {
             console.error("Error in upsertAuthData at authService.js..." + error);
             result = {httpStatus: httpStatus.INTERNAL_SERVER_ERROR, status: "failed", errorDetails: error};
             return result;
         }
+    },
+
+    getCredentials() {
+        let response;
+        const clientId = process.env.SPOTIFY_CLIENT_ID;
+        const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
+        const credentials = {clientId, redirectUri};
+        response.json(credentials);
+        return response;
     }
 }
 

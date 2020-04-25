@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text, TouchableOpacity, View, StyleSheet, AsyncStorage} from "react-native";
+import {Text, TouchableOpacity, View, StyleSheet} from "react-native";
 import { observer } from 'mobx-react';
 import { useStores } from '../../hooks/useStores'
 import {FontAwesome} from "@expo/vector-icons";

@@ -18,6 +18,7 @@ db.dbConnection();
 
 //Routers
 var authRouter = require('./routes/auth');
+var spotifyRouter = require('./routes/spotify');
 
 //Express app
 var app = express();
@@ -27,6 +28,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 app.use('/auth', authRouter);
+app.use('/spotify', spotifyRouter);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -6,7 +6,7 @@ import httpStatus from 'http-status-codes';
 
 //Auth store
 export class AuthorizationStore {
-    @observable hasToken = null; //If user has token then they can communicate with our server
+    @observable token = null; //If user has token then they can communicate with our server
 
     @action getAccessToken = async () => {
         try {
@@ -14,16 +14,20 @@ export class AuthorizationStore {
                 code: await authService.getAuthorizationCode()
             });
             if(response.data.httpStatus === httpStatus.OK) {
-                this.hasToken = true;
+                this.token = response.data.userID;
+                console.log("Server successfully saved token. Token: ", this.token);
             }
         } catch (err) {
-            console.log(err.response);
+            console.log("Server could not send token. Status: ",
+                err.response.data.httpStatus);
         }
     };
-    
+
     //Persist store to AsyncStorage, we will refer to that later instead
     persistStore = autorun(async ()=>{
         await AsyncStorage.saveToAsyncStorage('token', this.token);
     });
+
+
 }
 
