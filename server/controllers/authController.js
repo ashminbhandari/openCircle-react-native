@@ -11,8 +11,4 @@ module.exports = {
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).send('Error creating tokens.');
         }
     },
-
-    getCredentials() {
-        return authService.getCredentials();
-    }
 };

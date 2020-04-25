@@ -2,7 +2,13 @@ const authController = require('../controllers/authController');
 var express = require('express');
 var router = express.Router();
 
-router.route('/credentials').get(authController.getCredentials);
+//Get request for Spotify credentials
+router.get('/credentials', function (req, res) {
+    const clientId = process.env.SPOTIFY_CLIENT_ID;
+    const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
+    const credentials = {clientId, redirectUri};
+    res.json(credentials);
+});
 
 router.route('/token').post(authController.upsertAuthData);
 

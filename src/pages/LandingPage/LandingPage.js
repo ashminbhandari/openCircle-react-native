@@ -15,7 +15,7 @@ const LandingPage = observer(() => {
     return (
         <View style={styles.container}>
             <RotatingImageComponent/>
-            {AuthorizationStore.token == null ? (
+            {AuthorizationStore.token === null ? (
                 <AuthorizeButton/>
             ) : (
                 <Switch

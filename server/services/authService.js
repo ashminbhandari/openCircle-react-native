@@ -70,14 +70,5 @@ module.exports = {
             return result;
         }
     },
-
-    getCredentials() {
-        let response;
-        const clientId = process.env.SPOTIFY_CLIENT_ID;
-        const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
-        const credentials = {clientId, redirectUri};
-        response.json(credentials);
-        return response;
-    }
 }
 

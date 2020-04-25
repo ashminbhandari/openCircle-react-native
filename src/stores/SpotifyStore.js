@@ -1,20 +1,17 @@
-import {observable, autorun} from 'mobx';
-import axios from 'axios'; //For server calls (credentials)
-import AuthorizationStore from './AuthorizationStore';
+import {action, observable} from 'mobx';
+import axios from "axios";
+import authService from "../services/authService";
 
 //Spotify store
 export class SpotifyStore {
-    @observable isToggled = false; //If the user has toggled on the map i.e. they are online
+    @observable onlineUsers = null;
 
-    //Let server know that user toggled the app
-    userHasToggled = autorun(async () => {
-        try {
-            const response = await axios.post('http://10.0.0.226:3000/spotify/', {
-                id: AuthorizationStore.token
-            });
-        } catch (error) {
-
-        }
-    });
+    @action iAmOnline = async (id, location) => {
+        const response  = await axios.post('http://10.0.0.226:3000/spotify/users', {
+            id: id,
+            location: location
+        });
+        console.log(response);
+    }
 }
 

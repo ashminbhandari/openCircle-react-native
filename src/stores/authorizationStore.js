@@ -7,7 +7,7 @@ import httpStatus from 'http-status-codes';
 //Auth store
 export class AuthorizationStore {
     @observable token = null; //If user has token then they can communicate with our server
-
+    @observable isToggled = false; //If the user has toggled on the map i.e. they are online
     @action getAccessToken = async () => {
         try {
             const response  = await axios.post('http://10.0.0.226:3000/auth/token', {
@@ -27,7 +27,5 @@ export class AuthorizationStore {
     persistStore = autorun(async ()=>{
         await AsyncStorage.saveToAsyncStorage('token', this.token);
     });
-
-
 }
 
