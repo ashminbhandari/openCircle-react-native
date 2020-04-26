@@ -9,7 +9,6 @@ const LandingPage = observer(() => {
     const [password, onChangeText] = useState(null);
     const [authCode, setAuthCode] = useState(null);
 
-
     function joinServer() {
 
     }
