@@ -21,8 +21,4 @@ export default {
             throw error;
         }
     },
-
-    async clear() {
-        await AsyncStorage.clear();
-    }
 }

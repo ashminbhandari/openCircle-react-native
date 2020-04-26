@@ -26,7 +26,7 @@ export default function RotatingImage(props) {
             style={{
                 transform: [{rotate: spin}],
                 height: 200,
-                width: 200
+                width: 200,
             }}
             source={props.imgSource}/>
     )

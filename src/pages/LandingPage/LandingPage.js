@@ -1,18 +1,28 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {View, KeyboardAvoidingView, Switch, StyleSheet, TextInput} from 'react-native';
 import GreenButton from '../../components/ui/GreenButton';
 import {observer} from 'mobx-react';
-import {useStores} from '../../hooks/useStores'
 import RotatingImageComponent from '../../components/ui/RotatingImageComponent';
-import AuthStorage from '../../storage/AuthorizationStorage';
+import AuthorizationService from '../../services/AuthorizationService';
 
 const LandingPage = observer(() => {
-    const [password, onChangeText] = useState('');
-    const {AuthorizationStore} = useStores();
+    const [password, onChangeText] = useState(null);
+    const [authCode, setAuthCode] = useState(null);
+
 
     function joinServer() {
-        AuthorizationStore.isToggled = !AuthorizationStore.isToggled;
-        AuthorizationStore.password = value;
+
+    }
+
+    async function getAuthCode() {
+        try {
+            let code = await AuthorizationService.getAuthorizationCode();
+            setAuthCode(code);
+            console.log("Code received as..", code);
+        } catch (error) {
+            console.error("Error getting/setting auth code in LandingPage.js");
+            throw error;
+        }
     }
 
     return (
@@ -20,10 +30,11 @@ const LandingPage = observer(() => {
             style={styles.container}
             behavior="padding">
             <RotatingImageComponent imgSource={require('../../../assets/opencircle.png')}/>
-            {(AuthStorage.getHasAuth() === 'false' || AuthorizationStore.hasAuth === 'false') ?
+            {authCode === null ?
                 (<GreenButton
                     text={'Connect with Spotify'}
-                    faName='spotify'/>) : (
+                    faName='spotify'
+                    onPress={getAuthCode}/>) : (
                     <View>
                         <TextInput
                             secureTextEntry={true}
@@ -32,12 +43,12 @@ const LandingPage = observer(() => {
                             value={password}
                             onChangeText={pass => onChangeText(pass)}
                             style={styles.textInput}
+                            keyboardAppearance={'dark'}
                         />
-                        <Switch
-                            onValueChange={joinServer}
-                            value={AuthorizationStore.isToggled}
-                            style={styles.switch}
-                        />
+                        <GreenButton
+                            text={'Join server'}
+                            faName='server'
+                            onPress={joinServer}/>
                     </View>
                 )}
         </KeyboardAvoidingView>
@@ -50,11 +61,6 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-    },
-
-    switch: {
-        marginTop: 20,
-        alignSelf: 'center'
     },
 
     textInput: {
