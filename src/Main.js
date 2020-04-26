@@ -2,8 +2,8 @@
 import React, {useEffect} from 'react';
 
 //Custom pages imports
-import LandingPage from './pages/LandingPage/LandingPage';
-import MapPage from './pages/MapPage/MapPage';
+import ConnectScreen from './screens/ConnectScreen/ConnectScreen';
+import MapScreen from './screens/MapScreen/MapScreen';
 
 //MobX imports
 import { observer } from 'mobx-react';
@@ -25,12 +25,12 @@ const Main = observer(() => {
                     AuthorizationStore.isToggled === false ? (
                         // No token found, user isn't signed in
                         <Stack.Screen
-                            name="Landing"
-                            component={LandingPage}
+                            name="ConnectScreen"
+                            component={ConnectScreen}
                         />
                     ) : (
                         // User is signed in
-                        <Stack.Screen name="Map" component={MapPage}/>
+                        <Stack.Screen name="MapScreen" component={MapScreen}/>
                     )}
             </Stack.Navigator>
         </NavigationContainer>

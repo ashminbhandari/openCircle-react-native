@@ -4,11 +4,8 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import mapStyle from './MapStyle';
-import {useStores} from '../../hooks/useStores';
 
 export default function MapPage() {
-    const {SpotifyStore} = useStores();
-    const {AuthorizationStore} = useStores();
     const [userLocation, setUserLocation] = useState(null); //User's current location
     const [locationPermission, setLocationPermission] = useState(false); //Doesn't have permission to check location at the start
 
