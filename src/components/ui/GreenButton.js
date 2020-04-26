@@ -4,14 +4,14 @@ import { observer } from 'mobx-react';
 import { useStores } from '../../hooks/useStores'
 import {FontAwesome} from "@expo/vector-icons";
 
-const AuthorizeButton = (observer(() => {
+const GreenButton = (observer((props) => {
     const { AuthorizationStore } = useStores();
     return (
         <View>
             <TouchableOpacity style={styles.button} onPress={() => AuthorizationStore.getAuthCode()}>
                 <View style={{flexDirection: 'row'}}>
-                    <FontAwesome size={32} style={{color: 'white'}} name={'spotify'}/>
-                    <Text style={styles.text}>Connect with Spotify</Text>
+                    <FontAwesome size={32} style={{color: 'white'}} name={props.faName}/>
+                    <Text style={styles.text}>{props.text}</Text>
                 </View>
             </TouchableOpacity>
         </View>
@@ -35,5 +35,5 @@ const styles = StyleSheet.create(
     }
 );
 
-export default AuthorizeButton;
+export default GreenButton;
 

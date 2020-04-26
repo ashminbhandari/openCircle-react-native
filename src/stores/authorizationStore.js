@@ -20,7 +20,7 @@ export class AuthorizationStore {
             //Log
             console.log('Received AuthCode: ', this.authCode);
 
-            if(this.authCode !== null) {
+            if(this.authCode) {
                 this.hasAuth = 'true';
             }
         } catch(error) {

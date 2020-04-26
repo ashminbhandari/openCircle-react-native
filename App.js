@@ -1,5 +1,5 @@
 //Basic react imports
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'mobx-react-lite/batchingForReactNative'
 
 //Import the entry point

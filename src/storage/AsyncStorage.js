@@ -20,5 +20,9 @@ export default {
             console.error("Error in AsyncStorage while getting...", error);
             throw error;
         }
+    },
+
+    async clear() {
+        await AsyncStorage.clear();
     }
 }

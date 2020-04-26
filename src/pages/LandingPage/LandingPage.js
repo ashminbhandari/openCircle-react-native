@@ -1,39 +1,46 @@
-import React, { useState, useEffect } from 'react';
-import {View, Switch, StyleSheet, TextInput} from 'react-native';
-import AuthorizeButton from '../../components/ui/AuthorizeButton';
+import React, {useState} from 'react';
+import {View, KeyboardAvoidingView, Switch, StyleSheet, TextInput} from 'react-native';
+import GreenButton from '../../components/ui/GreenButton';
 import {observer} from 'mobx-react';
 import {useStores} from '../../hooks/useStores'
 import RotatingImageComponent from '../../components/ui/RotatingImageComponent';
 import AuthStorage from '../../storage/AuthorizationStorage';
 
 const LandingPage = observer(() => {
-    const [password, onChangeText] = useState('Enter your password')
+    const [password, onChangeText] = useState('');
     const {AuthorizationStore} = useStores();
 
-    function toggleSwitch() {
+    function joinServer() {
         AuthorizationStore.isToggled = !AuthorizationStore.isToggled;
         AuthorizationStore.password = value;
     }
 
     return (
-        <View style={styles.container}>
-            <RotatingImageComponent/>
-            {(AuthStorage.getHasAuth() === 'false' || AuthorizationStore.hasAuth !== 'false') ?
-                (<AuthorizeButton/>) : (
-                <View>
-                    <TextInput
-                        textContentType="password"
-                        value={password}
-                        onChangeText={pass=>onChangeText(pass)}
-                    />
-                    <Switch
-                        onValueChange={toggleSwitch}
-                        value={AuthorizationStore.isToggled}
-                        style={styles.switch}
-                    />
-                </View>
-            )}
-        </View>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior="padding">
+            <RotatingImageComponent imgSource={require('../../../assets/opencircle.png')}/>
+            {(AuthStorage.getHasAuth() === 'false' || AuthorizationStore.hasAuth === 'false') ?
+                (<GreenButton
+                    text={'Connect with Spotify'}
+                    faName='spotify'/>) : (
+                    <View>
+                        <TextInput
+                            secureTextEntry={true}
+                            maxLength={16}
+                            textContentType="password"
+                            value={password}
+                            onChangeText={pass => onChangeText(pass)}
+                            style={styles.textInput}
+                        />
+                        <Switch
+                            onValueChange={joinServer}
+                            value={AuthorizationStore.isToggled}
+                            style={styles.switch}
+                        />
+                    </View>
+                )}
+        </KeyboardAvoidingView>
     );
 });
 
@@ -46,7 +53,20 @@ const styles = StyleSheet.create({
     },
 
     switch: {
-        marginTop: 40
+        marginTop: 20,
+        alignSelf: 'center'
+    },
+
+    textInput: {
+        backgroundColor: 'black',
+        color: 'white',
+        fontSize: 20,
+        borderColor: 'white',
+        borderWidth: 1,
+        padding: 15,
+        borderRadius: 50,
+        marginTop: 40,
+        width: 200
     }
 });
 

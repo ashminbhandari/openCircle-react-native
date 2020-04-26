@@ -1,5 +1,5 @@
 //Basic react imports
-import React from 'react';
+import React, {useEffect} from 'react';
 
 //Custom pages imports
 import LandingPage from './pages/LandingPage/LandingPage';

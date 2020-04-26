@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react';
 import {Animated, Easing} from 'react-native';
 
-export default function RotatingImage() {
+export default function RotatingImage(props) {
     //Initial value for rotation animation
     const [rotateAnim] = useState(new Animated.Value(0));
 
@@ -14,7 +14,7 @@ export default function RotatingImage() {
                 easing: Easing.linear
             }
         )).start();
-    }, rotateAnim);
+    }, [rotateAnim]);
 
     const spin = rotateAnim.interpolate({
         inputRange: [0, 1],
@@ -28,7 +28,7 @@ export default function RotatingImage() {
                 height: 200,
                 width: 200
             }}
-            source={require('../../../assets/opencircle.png')}/>
+            source={props.imgSource}/>
     )
 }
 
