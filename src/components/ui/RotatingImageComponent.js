@@ -13,8 +13,8 @@ export default function RotatingImage() {
                 duration: 20000,
                 easing: Easing.linear
             }
-        )).start()
-    });
+        )).start();
+    }, rotateAnim);
 
     const spin = rotateAnim.interpolate({
         inputRange: [0, 1],
@@ -28,8 +28,8 @@ export default function RotatingImage() {
                 height: 200,
                 width: 200
             }}
-            source={require('../../../assets/opencircle.png')} />
-    );
+            source={require('../../../assets/opencircle.png')}/>
+    )
 }
 
 

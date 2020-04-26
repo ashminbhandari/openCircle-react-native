@@ -7,10 +7,7 @@ const scopesArr = ['user-modify-playback-state', 'user-read-currently-playing', 
     'playlist-modify-private', 'user-read-recently-played', 'user-top-read']; //This is the scope of accessing that we will be asking for from the user
 const scopes = scopesArr.join(' ');
 
-
-
 export default {
-
     //Get Spotify credentials from the server to initiate an auth session
     async getCredentials() {
         const res = await axios.get('http://10.0.0.226:3000/auth/credentials');
