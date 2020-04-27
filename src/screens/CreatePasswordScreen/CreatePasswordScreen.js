@@ -43,15 +43,17 @@ const CreatePasswordScreen = (props) => {
                     }
                 });
 
-                //Set AsyncStorage with the user's Spotify ID
-                let user = await AsyncStorage.saveToAsyncStorage('user', response.data.user);
+                //Our user
+                let user = response.data.user;
 
-                if (user) {
+                //Set AsyncStorage with the user's Spotify ID
+                let asyncSave = await AsyncStorage.saveToAsyncStorage('user', user);
+
+                if (asyncSave) {
                     console.log('Saved user: ', user);
                 } else {
                     console.log('Could not save the user');
                 }
-
             } catch (error) {
                 setServerError('    OOF, you made a bad request    ');
             }
