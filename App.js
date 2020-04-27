@@ -1,13 +1,14 @@
 //Basic react imports
-import React, { useEffect } from 'react';
+import React from 'react';
 import 'mobx-react-lite/batchingForReactNative'
 
 //Import the entry point
-import Main from './src/Main';
+import EntryPoint from './src/EntryPoint';
+
 
 export default function App() {
     return (
-        <Main/>
+        <EntryPoint/>
     );
 };
 

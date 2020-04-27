@@ -5,9 +5,10 @@ export default {
     async saveToAsyncStorage(key,value) {
         try {
             await AsyncStorage.setItem(key, JSON.stringify(value));
+            return true;
         } catch (error) {
             console.error("Error in AsyncStorage while saving...", error);
-            throw error;
+            return false;
         }
     },
 
@@ -18,7 +19,7 @@ export default {
             return parsedData;
         } catch (error) {
             console.error("Error in AsyncStorage while getting...", error);
-            throw error;
+            return false;
         }
     },
 }

@@ -1,11 +1,11 @@
 import React from 'react';
 import {Text, TouchableOpacity, View, StyleSheet} from "react-native";
 import {observer} from 'mobx-react';
-import {useStores} from '../../hooks/useStores'
 import {FontAwesome} from "@expo/vector-icons";
 
-const GreenButton = (observer((props) => {
-    const {AuthorizationStore} = useStores();
+const Button = (observer((props) => {
+    //Shake animation during error
+
     return (
         <View>
             <TouchableOpacity style={styles.button} onPress={props.onPress}>
@@ -21,7 +21,8 @@ const GreenButton = (observer((props) => {
 const styles = StyleSheet.create(
     {
         button: {
-            backgroundColor: '#1DB954',
+            borderColor: 'white',
+            borderWidth: 1,
             borderRadius: 50,
             margin: 40,
             padding: 15,
@@ -35,5 +36,5 @@ const styles = StyleSheet.create(
     }
 );
 
-export default GreenButton;
+export default Button;
 

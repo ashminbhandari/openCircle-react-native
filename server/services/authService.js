@@ -45,7 +45,7 @@ module.exports = {
             console.log('A new user has been created...');
 
             //Send back Spotify ID
-            result = {httpStatus: httpStatus.OK, status:'success', responseData: user.id};
+            result = {httpStatus: httpStatus.OK, status:'success', user: user.id};
             return result;
         } catch (error) {
             console.error("Error creating user...", error);
