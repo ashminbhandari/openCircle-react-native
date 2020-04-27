@@ -10,6 +10,6 @@ router.get('/credentials', function (req, res) {
     res.json(credentials);
 });
 
-router.route('/token').post(authController.upsertAuthData);
+router.route('/createUser').post(authController.createUser);
 
 module.exports = router;

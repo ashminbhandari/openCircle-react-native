@@ -29,6 +29,7 @@
     "passport-linkedin-oauth2": "^2.0.0",
     "passport-local": "^1.0.0",
     "passport-spotify": "^1.1.0",
-    "pug": "2.0.0-beta11"
+    "pug": "2.0.0-beta11",
+    "spotify-web-api-node": "^4.0.0"
   }
 }

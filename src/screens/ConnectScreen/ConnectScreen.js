@@ -4,13 +4,25 @@ import GreenButton from '../../components/ui/GreenButton';
 import {observer} from 'mobx-react';
 import RotatingImageComponent from '../../components/ui/RotatingImageComponent';
 import AuthorizationService from '../../services/AuthorizationService';
+import axios from 'axios';
 
 const LandingPage = observer(() => {
-    const [password, onChangeText] = useState(null);
+    const [password, onChangePassword] = useState(null);
     const [authCode, setAuthCode] = useState(null);
 
-    function joinServer() {
-
+    async function joinServer() {
+        let response;
+        try {
+            response = await axios.post('http://10.0.0.226:3000/auth/createUser', {
+                code: authCode,
+                auth: {
+                    password: password
+                }
+            });
+            return 1;
+        } catch(error) {
+            console.log("Error joining server...", error);
+        }
     }
 
     async function getAuthCode() {
@@ -40,7 +52,7 @@ const LandingPage = observer(() => {
                             maxLength={16}
                             textContentType="password"
                             value={password}
-                            onChangeText={pass => onChangeText(pass)}
+                            onChangeText={pass => onChangePassword(pass)}
                             style={styles.textInput}
                             keyboardAppearance={'dark'}
                         />

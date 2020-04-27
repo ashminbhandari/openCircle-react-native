@@ -2,17 +2,24 @@ import axios from "axios";
 import * as AuthSession from "expo-auth-session";
 
 //The scope that we will be asking the user permission for
-const scopesArr = ['user-modify-playback-state', 'user-read-currently-playing', 'user-read-playback-state', 'user-library-modify',
-    'user-library-read', 'playlist-read-private', 'playlist-read-collaborative', 'playlist-modify-public',
-    'playlist-modify-private', 'user-read-recently-played', 'user-top-read']; //This is the scope of accessing that we will be asking for from the user
+const scopesArr = ['user-read-email', 'user-read-currently-playing', 'user-follow-read',
+    'app-remote-control', 'user-read-recently-played', 'streaming',
+    'user-follow-modify', 'user-library-read', 'playlist-modify-public', 'user-top-read',
+    'user-read-private'
+]; //This is the scope of accessing that we will be asking for from the user
 const scopes = scopesArr.join(' ');
 
 export default {
     //Get Spotify credentials from the server to initiate an auth session
     async getCredentials() {
-        const res = await axios.get('http://10.0.0.226:3000/auth/credentials');
-        const credentials = res.data;
-        return credentials;
+        try {
+            const res = await axios.get('http://10.0.0.226:3000/auth/credentials');
+            const credentials = res.data;
+            return credentials;
+        } catch (error) {
+            console.error("Error at getCredentials in AuthorizationService...", error);
+            throw error;
+        }
     },
 
     //AuthCode from session

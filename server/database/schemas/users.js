@@ -1,7 +1,15 @@
 var mongoose = require('mongoose');
 
 let usersSchema = new mongoose.Schema({
-    spotify_id: {
+    id: {
+        type: String,
+        required: true
+    },
+    name: {
+        type: String,
+        required: true
+    },
+    email: {
         type: String,
         required: true
     },
