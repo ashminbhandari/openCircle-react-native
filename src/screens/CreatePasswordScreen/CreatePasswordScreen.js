@@ -55,7 +55,7 @@ const CreatePasswordScreen = (props) => {
                     console.log('Could not save the user');
                 }
             } catch (error) {
-                setServerError('    OOF, you made a bad request    ');
+                setServerError('  Time expired. Restart the application.');
             }
         } else {
             setButtonErrorShake(true);
@@ -75,10 +75,12 @@ const CreatePasswordScreen = (props) => {
             />
 
             {serverError ? (
-                <Text style={{color: 'yellow'}}>
-                    <FontAwesome size={30} name={'warning'}/>
-                    {serverError}
-                </Text>
+                <View style={{flexDirection:'row'}}>
+                    <FontAwesome size={40} style={{color:'yellow', margin:2}} name={'clock-o'}/>
+                    <Text style={{color: 'yellow', alignSelf:'center'}}>
+                        {serverError}
+                    </Text>
+                </View>
             ) : (<></>)}
 
             {validationError ? (
