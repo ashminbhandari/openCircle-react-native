@@ -6,6 +6,7 @@ import CreatePasswordScreen from "../CreatePasswordScreen/CreatePasswordScreen";
 
 const AuthorizeSpotifyScreen = observer(() => {
     const [authCode, setAuthCode] = useState(null);
+    const [error, setError] = useState(false);
 
     //Gets the authorization code
     async function getAuthCode() {
@@ -14,21 +15,22 @@ const AuthorizeSpotifyScreen = observer(() => {
             setAuthCode(code);
             console.log("Code received as..", code);
         } catch (error) {
-            console.error("Error getting/setting auth code in LandingPage.js");
-            throw error;
+            console.log("Error getting/setting auth code in LandingPage.js");
+            setError(true);
         }
     }
 
     return (
         <>
         {
-            authCode === null ? (
+            authCode  ? (
+                <CreatePasswordScreen authCode={authCode}/>
+            ) : (
                 <Button
                     text={'Connect with Spotify'}
                     faName='spotify'
-                    onPress={getAuthCode}/>
-            ) : (
-                <CreatePasswordScreen authCode={authCode}/>
+                    onPress={getAuthCode}
+                    error={error}/>
             )
         }
         </>

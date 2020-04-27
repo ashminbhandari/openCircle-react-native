@@ -3,30 +3,38 @@ import Button from '../../components/UIElements/Button';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import axios from "axios";
 import AsyncStorage from "../../storage/AsyncStorage";
-
+import {FontAwesome} from "@expo/vector-icons";
 
 const CreatePasswordScreen = (props) => {
     const [password, onChangePassword] = useState('');
-    const [error, setError] = useState('');
+    const [validationError, setValidationError] = useState('');
+    const [buttonErrorShake, setButtonErrorShake] = useState('');
+    const [serverError, setServerError] = useState('');
 
     const validatePassword = () => {
-        if(password.length < 8) {
-            setError('Password must be of at least 8 characters')
+        if (password.length == 0) {
             return false;
-        }
-        else {
-            setError('');
+        } else if (password.length == 7) {
+            setValidationError(1 + ' more character');
+            return false;
+        } else if (password.length < 8) {
+            let remChars = 8 - password.length;
+            setValidationError(remChars + ' more characters');
+            return false;
+        } else {
+            setValidationError('');
             return true;
         }
     };
 
-    useEffect (()=> {
+    useEffect(() => {
+        setButtonErrorShake(false); //Make sure that button doesn't shake each re-render
         validatePassword();
     });
 
     //Send a create user request to the server
     const createUser = async () => {
-        if(validatePassword) {
+        if (validatePassword()) {
             try {
                 let response = await axios.post('http://10.0.0.226:3000/auth/createUser', {
                     code: props.authCode,
@@ -45,10 +53,12 @@ const CreatePasswordScreen = (props) => {
                 }
 
             } catch (error) {
-                setError('')
+                setServerError('    OOF, you made a bad request    ');
             }
+        } else {
+            setButtonErrorShake(true);
         }
-    }
+    };
 
     return (
         <View>
@@ -58,14 +68,26 @@ const CreatePasswordScreen = (props) => {
                 textContentType="password"
                 value={password}
                 onChangeText={pass => onChangePassword(pass)}
-                style={[styles.textInput, {borderColor: error ? 'red' : '#66ff00'}]}
+                style={[styles.textInput, {borderColor: validationError ? 'red' : 'white'}]}
                 keyboardAppearance={'dark'}
             />
-            <Text style={{color:'red'}}>{error}</Text>
+
+            {serverError ? (
+                <Text style={{color: 'yellow'}}>
+                    <FontAwesome size={30} name={'warning'}/>
+                    {serverError}
+                </Text>
+            ) : (<></>)}
+
+            {validationError ? (
+                <Text style={{color: 'red', alignSelf: 'center'}}>{validationError}</Text>
+            ) : (<></>)}
+
             <Button
                 text={'Create a password'}
                 faName='lock'
-                onPress={createUser}/>
+                onPress={createUser}
+                error={buttonErrorShake}/>
         </View>
     );
 };
@@ -78,7 +100,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 15,
         borderRadius: 50,
-        marginTop: 40,
+        marginTop: 30,
         marginBottom: 10,
         width: 200,
         alignSelf: 'center'
