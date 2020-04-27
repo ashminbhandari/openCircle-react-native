@@ -6,7 +6,6 @@ import {FontAwesome} from "@expo/vector-icons";
 const Button = (observer((props) => {
     //Shake animation during error
     const [shakeAnimation] = useState(new Animated.Value(0));
-    const [colorAnimation] = useState(new Animated.Value(0));
 
     //Shake upon error
     useEffect(() => {
@@ -43,7 +42,7 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 50,
         marginTop: 20,
-        padding: 15,
+        padding: 10,
     },
     text: {
         paddingTop: 7,

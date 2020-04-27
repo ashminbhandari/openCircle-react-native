@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 let usersSchema = new mongoose.Schema({
     id: {
         type: String,
-        required: true
+        required: true,
     },
     name: {
         type: String,
@@ -11,7 +11,8 @@ let usersSchema = new mongoose.Schema({
     },
     email: {
         type: String,
-        required: true
+        required: true,
+        unique: true
     },
     password: {
         type: String,

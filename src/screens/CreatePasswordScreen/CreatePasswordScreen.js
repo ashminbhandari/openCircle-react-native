@@ -55,7 +55,7 @@ const CreatePasswordScreen = (props) => {
                     console.log('Could not save the user');
                 }
             } catch (error) {
-                setServerError('  Time expired. Restart the application.');
+                setServerError('  Hmm...do you already have an account?');
             }
         } else {
             setButtonErrorShake(true);
@@ -75,9 +75,9 @@ const CreatePasswordScreen = (props) => {
             />
 
             {serverError ? (
-                <View style={{flexDirection:'row'}}>
-                    <FontAwesome size={40} style={{color:'yellow', margin:2}} name={'clock-o'}/>
-                    <Text style={{color: 'yellow', alignSelf:'center'}}>
+                <View style={{flexDirection: 'row'}}>
+                    <FontAwesome size={40} style={{color: 'yellow', margin: 2}} name={'clock-o'}/>
+                    <Text style={{color: 'yellow', alignSelf: 'center'}}>
                         {serverError}
                     </Text>
                 </View>
@@ -92,6 +92,7 @@ const CreatePasswordScreen = (props) => {
                 faName='lock'
                 onPress={createUser}
                 error={buttonErrorShake}/>
+
         </View>
     );
 };

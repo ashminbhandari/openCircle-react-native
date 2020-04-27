@@ -1,40 +1,78 @@
 import React, {useState} from 'react';
-import {StyleSheet, TextInput, View} from "react-native";
+import {StyleSheet, TextInput, TouchableOpacity, View} from "react-native";
 import Button from "../../components/UIElements/Button";
+import {FontAwesome} from "@expo/vector-icons";
 
 const ServerConnectScreen = () => {
-    const [password, onChangePassword] = useState(null);
-
+    const [password, onChangePassword] = useState('password');
+    const [username, onChangeUsername] = useState('Username')
     return (
         <View>
-            <TextInput
-                secureTextEntry={true}
-                maxLength={16}
-                textContentType="password"
-                value={password}
-                onChangeText={pass => onChangePassword(pass)}
-                style={styles.textInput}
-                keyboardAppearance={'dark'}
-            />
+            <View style={styles.textInputContainer}>
+                <FontAwesome size={45} name={'spotify'} style={styles.textInputIcon}/>
+                <TextInput
+                    value={username}
+                    onChangeText={username => onChangeUsername(username)}
+                    style={styles.textInput}
+                    keyboardAppearance={'dark'}
+                />
+            </View>
+            <View style={styles.textInputContainer}>
+                <FontAwesome size={45} name={'bug'} style={styles.textInputIcon}/>
+                <TextInput
+                    secureTextEntry={true}
+                    maxLength={16}
+                    textContentType="password"
+                    value={password}
+                    onChangeText={pass => onChangePassword(pass)}
+                    style={styles.textInput}
+                    keyboardAppearance={'dark'}
+                />
+            </View>
             <Button
-                text={'Connect to World Server'}
-                faName='spotify'/>
+                text={'Join Server'}
+                faName='plug'
+            />
+            <TouchableOpacity style={styles.button}>
+                <FontAwesome size={20} name={'plus-circle'} style={styles.buttonIcon}/>
+            </TouchableOpacity>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    textInputContainer: {
+        width: 180,
+        flexDirection: 'row',
+        margin: 15,
+        padding: 5,
+        justifyContent:'center'
+    },
     textInput: {
-        backgroundColor: 'black',
         color: 'white',
-        fontSize: 20,
         borderColor: 'white',
         borderWidth: 1,
-        padding: 15,
+        width: 150,
         borderRadius: 50,
-        marginTop: 40,
-        width: 200,
-        alignSelf: 'center'
+        marginLeft: 10,
+        paddingLeft: 20
+    },
+    textInputIcon: {
+        color:'white',
+        padding: 5
+    },
+    button: {
+        marginTop: 50,
+        borderRadius: 100,
+        width: 50,
+        padding: 10,
+        borderWidth: 2,
+        borderColor: 'white',
+        alignSelf: 'center',
+    },
+    buttonIcon: {
+        color: 'white',
+        alignSelf: 'center',
     }
 });
 

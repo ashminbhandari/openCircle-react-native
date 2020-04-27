@@ -1,8 +1,9 @@
 import React, {useState, useEffect} from 'react';
 import RotatingImageComponent from '../../components/UIElements/RotatingImageComponent';
-import {KeyboardAvoidingView, StyleSheet, View, Text} from 'react-native';
+import {KeyboardAvoidingView, StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import AuthorizeSpotifyScreen from "../AuthorizeSpotifyScreen/AuthorizeSpotifyScreen";
 import AsyncStorage from '../../storage/AsyncStorage';
+import {FontAwesome} from "@expo/vector-icons";
 import ServerConnectScreen from "../ServerConnectScreen/ServerConnectScreen";
 
 const AuthenticationScreen = () => {
@@ -12,13 +13,12 @@ const AuthenticationScreen = () => {
         async function user() {
             let user = await AsyncStorage.getFromAsyncStorage('user');
             if (user) {
-                setUser(null);
+                setUser(user);
                 console.log('A user has been found', user);
             }
         }
         user();
     }, [user]);
-
 
     return (
         <KeyboardAvoidingView
@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-    }
+        flexDirection: 'column'
+    },
 });
 
 export default AuthenticationScreen;
