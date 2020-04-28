@@ -5,13 +5,15 @@ import AuthorizationService from '../../services/AuthorizationService';
 import CreatePasswordScreen from "../CreatePasswordScreen/CreatePasswordScreen";
 import {TouchableOpacity, View, StyleSheet, Text} from "react-native";
 import {FontAwesome} from "@expo/vector-icons";
+import ServerConnectScreen from "../ServerConnectScreen/ServerConnectScreen";
 
-const AuthorizeSpotifyScreen = observer(() => {
+const AuthorizeSpotifyScreen = observer((props) => {
     const [authCode, setAuthCode] = useState(null);
     const [error, setError] = useState(false);
 
     //Gets the authorization code
     async function getAuthCode() {
+        console.log(props);
         try {
             let code = await AuthorizationService.getAuthorizationCode();
             setAuthCode(code);
@@ -39,9 +41,6 @@ const AuthorizeSpotifyScreen = observer(() => {
                     </View>
                 )
             }
-            <TouchableOpacity style={styles.plugButton}>
-                <FontAwesome size={20} name={'plug'} style={styles.plugButtonIcon}/>
-            </TouchableOpacity>
         </View>
     );
 });

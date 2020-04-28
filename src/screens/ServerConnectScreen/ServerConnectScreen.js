@@ -5,9 +5,9 @@ import {FontAwesome} from "@expo/vector-icons";
 
 const ServerConnectScreen = () => {
     const [password, onChangePassword] = useState('password');
-    const [username, onChangeUsername] = useState('Username')
+    const [email, onChangeEmail] = useState('')
     return (
-        <View>
+        <View style={styles.container}>
             <View style={styles.textInputContainer}>
                 <FontAwesome size={45} name={'spotify'} style={[
                     styles.textInputIcon, {
@@ -15,8 +15,8 @@ const ServerConnectScreen = () => {
                     }
                 ]}/>
                 <TextInput
-                    value={username}
-                    onChangeText={username => onChangeUsername(username)}
+                    value={email}
+                    onChangeText={email => onChangeEmail(email)}
                     style={styles.textInput}
                     keyboardAppearance={'dark'}
                 />
@@ -33,24 +33,26 @@ const ServerConnectScreen = () => {
                     keyboardAppearance={'dark'}
                 />
             </View>
-            <Button
-                text={'Join Server'}
-                faName='plug'
-            />
-            <TouchableOpacity style={styles.button}>
-                <FontAwesome size={20} name={'plus-circle'} style={styles.buttonIcon}/>
-            </TouchableOpacity>
+            <View style={styles.joinServerBtn}>
+                <Button
+                    text={'Join Server'}
+                    faName='plug'
+                />
+            </View>
         </View>
     );
 };
 
 const styles = StyleSheet.create({
+    container: {
+        marginTop: 10
+    },
     textInputContainer: {
         width: 180,
         flexDirection: 'row',
-        margin: 15,
-        padding: 5,
-        justifyContent:'center'
+        justifyContent: 'center',
+        marginTop: 30,
+        marginLeft: 1
     },
     textInput: {
         color: 'white',
@@ -62,21 +64,11 @@ const styles = StyleSheet.create({
         paddingLeft: 20
     },
     textInputIcon: {
-        color:'white',
+        color: 'white',
         padding: 5
     },
-    button: {
-        marginTop: 30,
-        borderRadius: 100,
-        width: 50,
-        padding: 10,
-        borderWidth: 2,
-        borderColor: 'white',
-        alignSelf: 'center',
-    },
-    buttonIcon: {
-        color: 'white',
-        alignSelf: 'center',
+    joinServerBtn: {
+        marginTop: 35
     }
 });
 

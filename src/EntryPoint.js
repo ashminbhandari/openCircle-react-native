@@ -1,9 +1,12 @@
 //Basic react imports
 import React, {useEffect} from 'react';
 
-//Custom pages imports
+//Screen imports
 import AuthenticationScreen from "./screens/AuthenticationScreen/AuthenticationScreen";
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
+import AuthorizeSpotifyScreen from "./screens/AuthorizeSpotifyScreen/AuthorizeSpotifyScreen";
+import CreatePasswordScreen from "./screens/CreatePasswordScreen/CreatePasswordScreen";
+import ServerConnectScreen from "./screens/ServerConnectScreen/ServerConnectScreen";
 
 //MobX imports
 import {observer} from 'mobx-react';
@@ -25,10 +28,24 @@ const EntryPoint = observer(() => {
                 {
                     AuthorizationStore.isAuthenticated === false ? (
                         // No token found, user isn't signed in
-                        <Stack.Screen
-                            name="AuthenticationScreen"
-                            component={AuthenticationScreen}
-                        />
+                        <>
+                            <Stack.Screen
+                                name="AuthenticationScreen"
+                                component={AuthenticationScreen}
+                            />
+                            <Stack.Screen
+                                name="AuthorizeSpotifyScreen"
+                                component={AuthorizeSpotifyScreen}
+                            />
+                            <Stack.Screen
+                                name="CreatePasswordScreen"
+                                component={CreatePasswordScreen}
+                            />
+                            <Stack.Screen
+                                name="ServerConnectScreen"
+                                component={ServerConnectScreen}
+                            />
+                        </>
                     ) : (
                         // User is signed in
                         <Stack.Screen name="HomeScreen" component={HomeScreen}/>

@@ -75,17 +75,14 @@ const CreatePasswordScreen = (props) => {
                 style={[styles.textInput, {borderColor: error ? 'red' : 'white'}]}
                 keyboardAppearance={'dark'}
             />
-            <Text style={{color: 'red', alignSelf: 'center'}}>{error}</Text>
-            <Button
-                text={'Create a password'}
-                faName='lock'
-                onPress={createUser}
-                error={buttonErrorShake}/>
-            <Text style={{
-                color: 'red',
-                alignSelf: 'center',
-                marginTop: 20
-            }}>{creationError}</Text>
+            <Text style={{color: 'red', alignSelf: 'center', marginTop: 10}}>{error ? error : creationError}</Text>
+            <View style={styles.button}>
+                <Button
+                    text={'Create a password'}
+                    faName='lock'
+                    onPress={createUser}
+                    error={buttonErrorShake}/>
+            </View>
         </View>
     );
 };
@@ -98,10 +95,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         padding: 15,
         borderRadius: 50,
-        marginTop: 30,
-        marginBottom: 10,
+        marginTop: 40,
         width: 200,
         alignSelf: 'center'
+    },
+    button: {
+        marginTop: 20
     }
 });
 
