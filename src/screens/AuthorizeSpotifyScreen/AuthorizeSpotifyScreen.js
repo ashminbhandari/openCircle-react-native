@@ -28,23 +28,27 @@ const AuthorizeSpotifyScreen = observer(() => {
                 authCode ? (
                     <CreatePasswordScreen authCode={authCode}/>
                 ) : (
-                    <Button
-                        text={'Connect with Spotify'}
-                        faName='spotify'
-                        onPress={getAuthCode}
-                        error={error}/>
+                    <View style={styles.connectButtonAddedStyles}>
+                        <Button
+                            text={'Connect with Spotify'}
+                            faName='spotify'
+                            faColor='#1DB954'
+                            onPress={getAuthCode}
+                            error={error}
+                        />
+                    </View>
                 )
             }
-            <TouchableOpacity style={styles.button}>
-               <FontAwesome size={20} name={'plug'} style={styles.buttonIcon}/>
+            <TouchableOpacity style={styles.plugButton}>
+                <FontAwesome size={20} name={'plug'} style={styles.plugButtonIcon}/>
             </TouchableOpacity>
         </View>
     );
 });
 
 const styles = StyleSheet.create({
-    button: {
-        marginTop: 50,
+    plugButton: {
+        marginTop: 30,
         borderRadius: 100,
         width: 50,
         padding: 10,
@@ -52,9 +56,12 @@ const styles = StyleSheet.create({
         borderColor: 'white',
         alignSelf: 'center',
     },
-    buttonIcon: {
+    plugButtonIcon: {
         color: 'white',
         alignSelf: 'center',
+    },
+    connectButtonAddedStyles: {
+        marginTop: 20
     }
 });
 

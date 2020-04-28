@@ -9,7 +9,11 @@ const ServerConnectScreen = () => {
     return (
         <View>
             <View style={styles.textInputContainer}>
-                <FontAwesome size={45} name={'spotify'} style={styles.textInputIcon}/>
+                <FontAwesome size={45} name={'spotify'} style={[
+                    styles.textInputIcon, {
+                        color: '#1DB954'
+                    }
+                ]}/>
                 <TextInput
                     value={username}
                     onChangeText={username => onChangeUsername(username)}
@@ -62,7 +66,7 @@ const styles = StyleSheet.create({
         padding: 5
     },
     button: {
-        marginTop: 50,
+        marginTop: 30,
         borderRadius: 100,
         width: 50,
         padding: 10,

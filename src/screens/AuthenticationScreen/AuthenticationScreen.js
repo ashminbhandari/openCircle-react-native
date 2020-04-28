@@ -12,7 +12,7 @@ const AuthenticationScreen = () => {
     useEffect(() => {
         async function user() {
             let user = await AsyncStorage.getFromAsyncStorage('user');
-            if (user) {
+            if (null) {
                 setUser(user);
                 console.log('A user has been found', user);
             }

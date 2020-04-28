@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Text, Animated, TouchableOpacity, View, StyleSheet} from "react-native";
 import {observer} from 'mobx-react';
 import {FontAwesome} from "@expo/vector-icons";
+import * as Haptics from 'expo-haptics';
 
 const Button = (observer((props) => {
     //Shake animation during error
@@ -11,6 +12,7 @@ const Button = (observer((props) => {
     useEffect(() => {
         if (props.error) {
             startShake();
+            Haptics.impactAsync('heavy');
         }
     });
 
@@ -27,9 +29,12 @@ const Button = (observer((props) => {
         <Animated.View style={{
             transform: [{translateX: shakeAnimation}],
         }}>
-            <TouchableOpacity style={[styles.button, {borderColor: props.error ? 'red' : 'white'}]} onPress={props.onPress}>
-                <View style={{flexDirection: 'row', alignSelf:'center'}}>
-                    <FontAwesome size={32} name={props.faName} style={{color: props.error ? 'red' : 'white'}}/>
+            <TouchableOpacity style={[styles.button, {borderColor: props.error ? 'red' : 'white'}]}
+                              onPress={props.onPress}>
+                <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                    <FontAwesome size={32} name={props.faName} style={{
+                        color: props.error ? 'red' : props.faColor ? props.faColor : 'white',
+                    }}/>
                     <Text style={[styles.text, {color: props.error ? 'red' : 'white'}]}>{props.text}</Text>
                 </View>
             </TouchableOpacity>
@@ -41,7 +46,7 @@ const styles = StyleSheet.create({
     button: {
         borderWidth: 1,
         borderRadius: 50,
-        marginTop: 20,
+        marginTop: 10,
         padding: 10,
     },
     text: {

@@ -7,28 +7,29 @@ import {FontAwesome} from "@expo/vector-icons";
 
 const CreatePasswordScreen = (props) => {
     const [password, onChangePassword] = useState('');
-    const [validationError, setValidationError] = useState('');
+    const [error, setError] = useState('');
     const [buttonErrorShake, setButtonErrorShake] = useState('');
-    const [serverError, setServerError] = useState('');
+    const [creationError, setCreationError] = useState('');
 
     const validatePassword = () => {
         if (password.length == 0) {
             return false;
         } else if (password.length == 7) {
-            setValidationError(1 + ' more character');
+            setError(1 + ' more character');
             return false;
         } else if (password.length < 8) {
             let remChars = 8 - password.length;
-            setValidationError(remChars + ' more characters');
+            setError(remChars + ' more characters');
             return false;
         } else {
-            setValidationError('');
+            setError('');
             return true;
         }
     };
 
     useEffect(() => {
-        setButtonErrorShake(false); //Make sure that button doesn't shake each re-render
+        //Make sure the button does not shake every re render
+        setButtonErrorShake(false);
         validatePassword();
     });
 
@@ -55,7 +56,8 @@ const CreatePasswordScreen = (props) => {
                     console.log('Could not save the user');
                 }
             } catch (error) {
-                setServerError('  Hmm...do you already have an account?');
+                setCreationError('Do you already have an account?');
+                setButtonErrorShake(true);
             }
         } else {
             setButtonErrorShake(true);
@@ -70,29 +72,20 @@ const CreatePasswordScreen = (props) => {
                 textContentType="password"
                 value={password}
                 onChangeText={pass => onChangePassword(pass)}
-                style={[styles.textInput, {borderColor: validationError ? 'red' : 'white'}]}
+                style={[styles.textInput, {borderColor: error ? 'red' : 'white'}]}
                 keyboardAppearance={'dark'}
             />
-
-            {serverError ? (
-                <View style={{flexDirection: 'row'}}>
-                    <FontAwesome size={40} style={{color: 'yellow', margin: 2}} name={'clock-o'}/>
-                    <Text style={{color: 'yellow', alignSelf: 'center'}}>
-                        {serverError}
-                    </Text>
-                </View>
-            ) : (<></>)}
-
-            {validationError ? (
-                <Text style={{color: 'red', alignSelf: 'center'}}>{validationError}</Text>
-            ) : (<></>)}
-
+            <Text style={{color: 'red', alignSelf: 'center'}}>{error}</Text>
             <Button
                 text={'Create a password'}
                 faName='lock'
                 onPress={createUser}
                 error={buttonErrorShake}/>
-
+            <Text style={{
+                color: 'red',
+                alignSelf: 'center',
+                marginTop: 20
+            }}>{creationError}</Text>
         </View>
     );
 };

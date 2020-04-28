@@ -19,6 +19,7 @@
     "expo": "~37.0.6",
     "expo-auth-session": "^1.0.0",
     "expo-constants": "~9.0.0",
+    "expo-haptics": "^8.1.0",
     "expo-location": "~8.1.0",
     "expo-permissions": "~8.1.0",
     "http-status-codes": "^1.4.0",
