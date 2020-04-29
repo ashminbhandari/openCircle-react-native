@@ -2,14 +2,15 @@ import React, {useState, useEffect} from "react";
 import Button from '../../components/UIElements/Button';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import axios from "axios";
-import AsyncStorage from "../../storage/AsyncStorage";
 import {FontAwesome} from "@expo/vector-icons";
+import AsyncStorage from '../../storage/AsyncStorage'
 
 const CreatePasswordScreen = (props) => {
     const [password, onChangePassword] = useState('');
     const [error, setError] = useState('');
     const [buttonErrorShake, setButtonErrorShake] = useState('');
     const [creationError, setCreationError] = useState('');
+    const [user, setUser] = useState('');
 
     const validatePassword = () => {
         if (password.length == 0) {
@@ -47,13 +48,10 @@ const CreatePasswordScreen = (props) => {
                 //Our user
                 let user = response.data.user;
 
-                //Set AsyncStorage with the user's Spotify ID
-                let asyncSave = await AsyncStorage.saveToAsyncStorage('user', user);
-
-                if (asyncSave) {
-                    console.log('Saved user: ', user);
-                } else {
-                    console.log('Could not save the user');
+                //If user has successfully been created,
+                //set data in AsyncStorage
+                if (user) {
+                    await AsyncStorage.saveToAsyncStorage('user', user);
                 }
             } catch (error) {
                 setCreationError('Do you already have an account?');
@@ -66,6 +64,9 @@ const CreatePasswordScreen = (props) => {
 
     return (
         <View>
+            {
+                user ?
+            }
             <TextInput
                 secureTextEntry={true}
                 maxLength={16}
@@ -75,7 +76,11 @@ const CreatePasswordScreen = (props) => {
                 style={[styles.textInput, {borderColor: error ? 'red' : 'white'}]}
                 keyboardAppearance={'dark'}
             />
-            <Text style={{color: 'red', alignSelf: 'center', marginTop: 10}}>{error ? error : creationError}</Text>
+            <Text style={{
+                color: 'red',
+                alignSelf: 'center',
+                marginTop: 10
+            }}>{error ? error : creationError}</Text>
             <View style={styles.button}>
                 <Button
                     text={'Create a password'}

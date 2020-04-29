@@ -2,10 +2,12 @@ import React, {useState} from 'react';
 import {StyleSheet, TextInput, TouchableOpacity, View} from "react-native";
 import Button from "../../components/UIElements/Button";
 import {FontAwesome} from "@expo/vector-icons";
+import AuthorizationService from "../../services/AuthorizationService";
 
 const ServerConnectScreen = () => {
     const [password, onChangePassword] = useState('password');
-    const [email, onChangeEmail] = useState('')
+    const [email, onChangeEmail] = useState('');
+
     return (
         <View style={styles.container}>
             <View style={styles.textInputContainer}>
@@ -37,6 +39,7 @@ const ServerConnectScreen = () => {
                 <Button
                     text={'Join Server'}
                     faName='plug'
+                    onPress={AuthorizationService.joinServer}
                 />
             </View>
         </View>

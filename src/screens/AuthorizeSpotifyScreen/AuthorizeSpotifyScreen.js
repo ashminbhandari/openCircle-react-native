@@ -1,19 +1,31 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import Button from '../../components/UIElements/Button';
 import {observer} from 'mobx-react';
 import AuthorizationService from '../../services/AuthorizationService';
 import CreatePasswordScreen from "../CreatePasswordScreen/CreatePasswordScreen";
-import {TouchableOpacity, View, StyleSheet, Text} from "react-native";
+import {View, StyleSheet, Text} from "react-native";
+import AsyncStorage from '../../storage/AsyncStorage';
 import {FontAwesome} from "@expo/vector-icons";
-import ServerConnectScreen from "../ServerConnectScreen/ServerConnectScreen";
 
 const AuthorizeSpotifyScreen = observer((props) => {
     const [authCode, setAuthCode] = useState(null);
     const [error, setError] = useState(false);
+    const [user, setUser] = useState(null);
+
+    useEffect(() => {
+        //Check if there is already a user for this device
+        async function getUser() {
+            let user = await AsyncStorage.getFromAsyncStorage('user');
+            if (user) {
+                setUser(user);
+            }
+        };
+        getUser();
+    }, [user]);
+
 
     //Gets the authorization code
     async function getAuthCode() {
-        console.log(props);
         try {
             let code = await AuthorizationService.getAuthorizationCode();
             setAuthCode(code);
@@ -27,18 +39,41 @@ const AuthorizeSpotifyScreen = observer((props) => {
     return (
         <View>
             {
-                authCode ? (
-                    <CreatePasswordScreen authCode={authCode}/>
-                ) : (
-                    <View style={styles.connectButtonAddedStyles}>
-                        <Button
-                            text={'Connect with Spotify'}
-                            faName='spotify'
-                            faColor='#1DB954'
-                            onPress={getAuthCode}
-                            error={error}
+                user ? (
+                    <View style={{
+                        marginTop: 40,
+                        alignSelf: 'center'
+                    }}>
+                        <FontAwesome
+                            name={'check-circle'}
+                            color={'green'}
+                            size={40}
+                            style={{
+                                alignSelf:'center'
+                            }}
                         />
+                        <Text style={{
+                            color: 'white',
+                            fontSize: 15,
+                            marginTop: 10
+                        }}>
+                            Spotify is registered
+                        </Text>
                     </View>
+                ) : (
+                    authCode ? (
+                        <CreatePasswordScreen authCode={authCode}/>
+                    ) : (
+                        <View style={styles.connectButtonAddedStyles}>
+                            <Button
+                                text={'Connect with Spotify'}
+                                faName='spotify'
+                                faColor='#1DB954'
+                                onPress={getAuthCode}
+                                error={error}
+                            />
+                        </View>
+                    )
                 )
             }
         </View>
@@ -60,7 +95,7 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
     },
     connectButtonAddedStyles: {
-        marginTop: 20
+        marginTop: 40
     }
 });
 

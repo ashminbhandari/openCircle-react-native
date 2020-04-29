@@ -1,27 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState} from 'react';
 import RotatingImageComponent from '../../components/UIElements/RotatingImageComponent';
 import {KeyboardAvoidingView, StyleSheet, View, TouchableOpacity, Text} from 'react-native';
 import AuthorizeSpotifyScreen from "../AuthorizeSpotifyScreen/AuthorizeSpotifyScreen";
-import AsyncStorage from '../../storage/AsyncStorage';
 import ServerConnectScreen from "../ServerConnectScreen/ServerConnectScreen";
 import {FontAwesome} from "@expo/vector-icons";
-import CreatePasswordScreen from "../CreatePasswordScreen/CreatePasswordScreen";
 
 const AuthenticationScreen = () => {
-    const [user, setUser] = useState(null);
     const [isConnectingToServer, setIsConnectingToServer] = useState(false);
-
-    useEffect(() => {
-        async function user() {
-            let user = await AsyncStorage.getFromAsyncStorage('user');
-            if (null) {
-                setUser(user);
-                console.log('A user has been found', user);
-            }
-        }
-
-        user();
-    }, [user]);
 
     return (
         <View style={styles.container}>
@@ -31,7 +16,7 @@ const AuthenticationScreen = () => {
                     isConnectingToServer ? (
                         <ServerConnectScreen/>
                     ) : (
-                        <CreatePasswordScreen/>
+                        <AuthorizeSpotifyScreen/>
                     )
                 }
             </KeyboardAvoidingView>
@@ -59,7 +44,7 @@ const AuthenticationScreen = () => {
                     }
                 </TouchableOpacity>
         </View>
-    )
+    );
 };
 
 const styles = StyleSheet.create({
@@ -68,7 +53,7 @@ const styles = StyleSheet.create({
         height: '100%',
         justifyContent: 'center',
         alignItems: 'center',
-        flexDirection: 'column'
+        flexDirection: 'column',
     },
     authNavigationButton: {
         padding: 20,

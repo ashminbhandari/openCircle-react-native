@@ -49,6 +49,22 @@ export default {
             console.log(err);
             throw err;
         }
+    },
+
+    //Join server call, takes in the user email and password
+    async joinServer(email, password) {
+        try {
+            let response = axios.post('http://10.0.0.226:3000/auth/joinServer', {
+                auth: {
+                    email: email,
+                    password: password
+                }
+            });
+            console.log(response);
+        } catch (error) {
+            console.log("Error at joinServer in AuthorizationService..", error);
+        }
+
     }
 }
 

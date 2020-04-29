@@ -45,10 +45,10 @@ module.exports = {
             console.log('A new user has been created...');
 
             //Send back Spotify ID
-            result = {httpStatus: httpStatus.OK, status:'success', user: user.id};
+            result = {httpStatus: httpStatus.OK, status:'success', user: user.name};
             return result;
         } catch (error) {
-            console.error("Error creating user...", error);
+            console.log("Error creating user...", error);
             return {httpStatus: httpStatus.BAD_REQUEST, status: "failed", errorDetails: 'The request is invalid...'};
         }
     },
