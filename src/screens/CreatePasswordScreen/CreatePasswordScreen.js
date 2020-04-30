@@ -27,8 +27,6 @@ const CreatePasswordScreen = (props) => {
     };
 
     useEffect(() => {
-        //Make sure the button does not shake every re render
-        setButtonErrorShake(false);
         validatePassword();
     });
 
@@ -86,7 +84,8 @@ const CreatePasswordScreen = (props) => {
                     text={'Create a password'}
                     faName='lock'
                     onPress={createUser}
-                    error={buttonErrorShake}/>
+                    error={buttonErrorShake}
+                    setError={setButtonErrorShake}/>
             </View>
         </View>
     );

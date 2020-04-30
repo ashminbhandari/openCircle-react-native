@@ -7,9 +7,7 @@ export default {
         try {
             let cookie = await AsyncStorage.getFromAsyncStorage('cookie');
             let config = {
-                headers: {
                     Cookie: cookie
-                }
             };
             return config;
         } catch (error) {

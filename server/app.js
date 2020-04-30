@@ -50,8 +50,6 @@ app.use(session({
   }
 }));
 
-
-
 //Configure passport authentication
 passportAuth.initializePassport(passport);
 app.use(passport.initialize());

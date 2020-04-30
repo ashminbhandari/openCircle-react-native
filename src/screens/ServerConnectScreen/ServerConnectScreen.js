@@ -11,6 +11,7 @@ const ServerConnectScreen = ({navigation}) => {
     const [password, onChangePassword] = useState('password');
     const [email, onChangeEmail] = useState('Spotify email');
     const [loginError, onLoginError] = useState(null);
+    const [buttonError, setButtonError] = useState(false);
     const {AuthorizationStore} = useStores();
 
     async function joinServer() {
@@ -28,6 +29,7 @@ const ServerConnectScreen = ({navigation}) => {
         } catch (error) {
             console.log(error);
             onLoginError('Please check your credentials');
+            setButtonError(true);
         }
     }
     return (
@@ -73,7 +75,8 @@ const ServerConnectScreen = ({navigation}) => {
                             text={'Join Server'}
                             faName='plug'
                             onPress={joinServer}
-                            error={loginError}
+                            error={buttonError}
+                            setError={setButtonError}
                         />
                         {
                             loginError ? (

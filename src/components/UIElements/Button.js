@@ -14,6 +14,13 @@ const Button = (observer((props) => {
             startShake();
             Haptics.impactAsync('heavy');
         }
+
+        //After some time out disable the button shake
+        if(props.setError) {
+            setTimeout(() => {
+                props.setError(false);
+            }, 3000);
+        }
     });
 
     const startShake = () => {
