@@ -10,7 +10,7 @@ module.exports = {
 
         //Persistent sessions
         passport.serializeUser((user, done) => {
-            done(null, User._id)
+            done(null, user._id)
         });
 
 
@@ -21,10 +21,13 @@ module.exports = {
         })
 
         //Local strategy configuration
-        passport.use('joinServer', new LocalStrategy (
+        passport.use('login', new LocalStrategy({
+                usernameField: 'email',
+                passwordField: 'password'
+            },
             function (email, password, done) {
                 //Check if users database has the entry
-                User.findOne({email: email},
+                User.findOne({'email': email},
                     (err, user) => {
                         //any error, return using done
                         if (err) {
@@ -38,7 +41,7 @@ module.exports = {
                         }
 
                         //User exists but password did not match
-                        if (!isValidPassword(email, password)) {
+                        if (!isValidPassword(user, password)) {
                             console.log('Password entered was invalid...');
                             return done(null, false);
                         }

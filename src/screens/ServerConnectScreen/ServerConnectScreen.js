@@ -1,14 +1,35 @@
-import React, {useState} from 'react';
-import {StyleSheet, TextInput, KeyboardAvoidingView, View} from "react-native";
+import React, {useState, useEffect} from 'react';
+import {StyleSheet, TextInput, KeyboardAvoidingView, View, Text} from "react-native";
 import Button from "../../components/UIElements/Button";
 import {FontAwesome} from "@expo/vector-icons";
 import AuthorizationService from "../../services/AuthorizationService";
 import RotatingImageComponent from "../../components/UIElements/RotatingImageComponent";
+import {useStores} from '../../hooks/useStores';
+import cookieConfig from "../../utils/cookieConfig";
 
 const ServerConnectScreen = ({navigation}) => {
     const [password, onChangePassword] = useState('password');
     const [email, onChangeEmail] = useState('Spotify email');
+    const [loginError, onLoginError] = useState(null);
+    const {AuthorizationStore} = useStores();
 
+    async function joinServer() {
+        try {
+            let response = await AuthorizationService.joinServer(email, password);
+            if(response) {
+                AuthorizationStore.isAuthenticated = true;
+            }
+
+            //Set cookie
+            await cookieConfig.saveCookie(response.headers['set-cookie']);
+
+            console.log(response.headers['set-cookie']);
+
+        } catch (error) {
+            console.log(error);
+            onLoginError('Please check your credentials');
+        }
+    }
     return (
         <View style={styles.container}>
             <FontAwesome
@@ -51,8 +72,22 @@ const ServerConnectScreen = ({navigation}) => {
                         <Button
                             text={'Join Server'}
                             faName='plug'
-                            onPress={AuthorizationService.joinServer}
+                            onPress={joinServer}
+                            error={loginError}
                         />
+                        {
+                            loginError ? (
+                                <Text style={{
+                                    color: 'red',
+                                    marginTop: 20,
+                                    alignSelf: 'center'
+                                }}>
+                                    {loginError}
+                                </Text>
+                            ) : (
+                                <></>
+                            )
+                        }
                     </View>
                 </View>
             </KeyboardAvoidingView>

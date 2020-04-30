@@ -35,6 +35,28 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
+
+//Basic security
+app.use(helmet());
+
+//Session management
+app.use(session({
+  secret: process.env.SESSION_SECRET_KEY,
+  resave: false,
+  saveUninitialized: true,
+  store: new MongoStore({mongooseConnection: mongoose.connection}),
+  cookie: {
+    maxAge: 1000 * 60 * 60 * 24, //one day
+  }
+}));
+
+
+
+//Configure passport authentication
+passportAuth.initializePassport(passport);
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use('/auth', authRouter);
 app.use('/spotify', spotifyRouter);
 
@@ -44,26 +66,6 @@ app.use(function(req, res, next) {
   next(createError(404));
 });
 
-//Session management
-app.use(session({
-  secret: process.env.SESSION_SECRET_KEY,
-  resave: false,
-  saveUninitialized: true,
-  store: new MongoStore({mongooseConnection: mongoose.connection}),
-  cookie: {
-    maxAge: 1000 * 60 * 60 * 24 //one day
-  }
-}))
-
-//Basic security
-app.use(helmet());
-
-//Configure passport authentication
-passportAuth.initializePassport(passport);
-app.use(passport.initialize());
-app.use(passport.session());
-
-
 // error handler
 app.use(function(err, req, res, next) {
   // set locals, only providing error in development
@@ -72,7 +74,7 @@ app.use(function(err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render('error');
+  console.log(err);
 });
 
 module.exports = app;

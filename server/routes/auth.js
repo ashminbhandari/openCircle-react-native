@@ -16,15 +16,15 @@ router.get('/credentials', function (req, res) {
 router.route('/createUser').post(authController.createUser);
 
 //Join the server
-router.post('/joinServer', passport.authenticate('joinServer'), (req,res,next) => {
+router.post('/joinServer', passport.authenticate('login'), (req,res) => {
     // If this part gets executed, it means authentication was successful
     // Regenerating a new session ID after the user is authenticated
     let temp = req.session.passport;
-    req.session.regenerate((err) => {
+    req.session.regenerate(() => {
         req.session.passport = temp;
-        req.session.save((err) => {
+        req.session.save(() => {
             res.status(httpStatus.OK).send({
-                email: req.user.email,
+                name: req.user.name,
             });
         })
     });
