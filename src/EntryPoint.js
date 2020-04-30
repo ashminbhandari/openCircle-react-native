@@ -1,8 +1,7 @@
 //Basic react imports
-import React, {useEffect} from 'react';
+import React from 'react';
 
 //Screen imports
-import AuthenticationScreen from "./screens/AuthenticationScreen/AuthenticationScreen";
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import AuthorizeSpotifyScreen from "./screens/AuthorizeSpotifyScreen/AuthorizeSpotifyScreen";
 import CreatePasswordScreen from "./screens/CreatePasswordScreen/CreatePasswordScreen";
@@ -12,7 +11,7 @@ import ServerConnectScreen from "./screens/ServerConnectScreen/ServerConnectScre
 import {observer} from 'mobx-react';
 import {useStores} from './hooks/useStores';
 
-//Navigation
+//Navigation imports
 import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from "@react-navigation/stack";
 
@@ -30,8 +29,8 @@ const EntryPoint = observer(() => {
                         // No token found, user isn't signed in
                         <>
                             <Stack.Screen
-                                name="AuthenticationScreen"
-                                component={AuthenticationScreen}
+                                name="ServerConnectScreen"
+                                component={ServerConnectScreen}
                             />
                             <Stack.Screen
                                 name="AuthorizeSpotifyScreen"
@@ -40,10 +39,6 @@ const EntryPoint = observer(() => {
                             <Stack.Screen
                                 name="CreatePasswordScreen"
                                 component={CreatePasswordScreen}
-                            />
-                            <Stack.Screen
-                                name="ServerConnectScreen"
-                                component={ServerConnectScreen}
                             />
                         </>
                     ) : (

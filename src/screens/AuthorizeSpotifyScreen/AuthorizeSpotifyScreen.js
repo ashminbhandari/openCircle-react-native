@@ -3,11 +3,12 @@ import Button from '../../components/UIElements/Button';
 import {observer} from 'mobx-react';
 import AuthorizationService from '../../services/AuthorizationService';
 import CreatePasswordScreen from "../CreatePasswordScreen/CreatePasswordScreen";
-import {View, StyleSheet, Text} from "react-native";
+import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
 import AsyncStorage from '../../storage/AsyncStorage';
 import {FontAwesome} from "@expo/vector-icons";
+import RotatingImageComponent from "../../components/UIElements/RotatingImageComponent";
 
-const AuthorizeSpotifyScreen = observer((props) => {
+const AuthorizeSpotifyScreen = observer(({navigation}) => {
     const [authCode, setAuthCode] = useState(null);
     const [error, setError] = useState(false);
     const [user, setUser] = useState(null);
@@ -37,7 +38,17 @@ const AuthorizeSpotifyScreen = observer((props) => {
     }
 
     return (
-        <View>
+        <View style={styles.container}>
+            <FontAwesome
+                size={30}
+                name={'plug'}
+                style={styles.authNavigationButtonIcon}
+                color={'white'}
+                onPress={() => {
+                    navigation.push('ServerConnectScreen')
+                }}
+            />
+            <RotatingImageComponent imgSource={require('../../../assets/opencircle.png')}/>
             {
                 user ? (
                     <View style={{
@@ -49,7 +60,7 @@ const AuthorizeSpotifyScreen = observer((props) => {
                             color={'green'}
                             size={40}
                             style={{
-                                alignSelf:'center'
+                                alignSelf: 'center'
                             }}
                         />
                         <Text style={{
@@ -62,7 +73,7 @@ const AuthorizeSpotifyScreen = observer((props) => {
                     </View>
                 ) : (
                     authCode ? (
-                        <CreatePasswordScreen authCode={authCode}/>
+                        <CreatePasswordScreen authCode={authCode} navigator={navigation}/>
                     ) : (
                         <View style={styles.connectButtonAddedStyles}>
                             <Button
@@ -77,10 +88,18 @@ const AuthorizeSpotifyScreen = observer((props) => {
                 )
             }
         </View>
+
     );
 });
 
 const styles = StyleSheet.create({
+    container: {
+        backgroundColor: 'black',
+        height: '100%',
+        justifyContent: 'center',
+        flexDirection: 'column',
+        alignItems: 'center'
+    },
     plugButton: {
         marginTop: 30,
         borderRadius: 100,
@@ -96,6 +115,13 @@ const styles = StyleSheet.create({
     },
     connectButtonAddedStyles: {
         marginTop: 40
+    },
+    authNavigationButtonIcon: {
+        position: 'absolute',
+        color: 'white',
+        top: 0,
+        right: 0,
+        padding: 35
     }
 });
 

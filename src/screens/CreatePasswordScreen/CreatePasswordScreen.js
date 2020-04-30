@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import Button from '../../components/UIElements/Button';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import axios from "axios";
-import {FontAwesome} from "@expo/vector-icons";
 import AsyncStorage from '../../storage/AsyncStorage'
 
 const CreatePasswordScreen = (props) => {
@@ -10,7 +9,6 @@ const CreatePasswordScreen = (props) => {
     const [error, setError] = useState('');
     const [buttonErrorShake, setButtonErrorShake] = useState('');
     const [creationError, setCreationError] = useState('');
-    const [user, setUser] = useState('');
 
     const validatePassword = () => {
         if (password.length == 0) {
@@ -52,6 +50,11 @@ const CreatePasswordScreen = (props) => {
                 //set data in AsyncStorage
                 if (user) {
                     await AsyncStorage.saveToAsyncStorage('user', user);
+
+                    //Log new user
+                    console.log('New user:', user);
+
+                    props.navigator.push('AuthorizeSpotifyScreen');
                 }
             } catch (error) {
                 setCreationError('Do you already have an account?');
@@ -63,10 +66,7 @@ const CreatePasswordScreen = (props) => {
     };
 
     return (
-        <View>
-            {
-                user ?
-            }
+        <View style={styles.container}>
             <TextInput
                 secureTextEntry={true}
                 maxLength={16}
