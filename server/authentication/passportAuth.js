@@ -18,7 +18,7 @@ module.exports = {
             User.findById(id, function (err, user) {
                 done(err, user);
             });
-        })
+        });
 
         //Local strategy configuration
         passport.use('login', new LocalStrategy({

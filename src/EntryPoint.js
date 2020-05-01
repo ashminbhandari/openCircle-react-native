@@ -17,8 +17,6 @@ import {createStackNavigator} from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
 
-import AuthorizationService from "./services/AuthorizationService";
-
 const EntryPoint = observer(() => {
     const {AuthorizationStore} = useStores();
 
