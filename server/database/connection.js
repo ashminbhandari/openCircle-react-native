@@ -7,7 +7,8 @@ let getDBConnection = async () => {
         connection = await mongoose.connect(process.env.OPENCIRCLE_MONGODB_URL,
             {
                 useNewUrlParser: true,
-                useCreateIndex: true
+                useCreateIndex: true,
+                useUnifiedTopology: true
             }, (error) => {
                 if(error) {
                     console.log("Error establishing Mongo connection.");

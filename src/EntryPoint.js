@@ -1,5 +1,5 @@
 //Basic react imports
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 
 //Screen imports
 import HomeScreen from "./screens/HomeScreen/HomeScreen";
@@ -17,36 +17,15 @@ import {createStackNavigator} from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
 
-//Axios/cookie header config for cookie check
-import axios from 'axios';
-import cookieConfig from './utils/cookieConfig';
+import AuthorizationService from "./services/AuthorizationService";
 
 const EntryPoint = observer(() => {
     const {AuthorizationStore} = useStores();
 
-    //Validate cookie upon entry
     useEffect(() => {
-        async function getCookieConfig() {
-            //Upon rejection promise returns empty {} which will be passed into the header
-            return await cookieConfig.getCookieHeader();
-        }
-        let cookie = getCookieConfig();
-
-        //Make the axios call
-        axios.request({
-            url: 'http://10.0.0.226:3000/spotify/checkCookie',
-            method: 'get',
-            headers: {
-                cookie
-            }
-        }).then((data) => {
-            console.log(data);
-        }).catch((error) => {
-            console.log(error);
-        })
-
-
+        AuthorizationStore.checkCookie();
     });
+
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{

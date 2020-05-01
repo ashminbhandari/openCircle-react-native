@@ -4,6 +4,7 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import mapStyle from './HomeStyle';
+import axios from "axios";
 
 export default function MapPage() {
     const [userLocation, setUserLocation] = useState(null); //User's current location

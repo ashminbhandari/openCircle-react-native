@@ -42,8 +42,8 @@ app.use(helmet());
 //Session management
 app.use(session({
   secret: process.env.SESSION_SECRET_KEY,
+  saveUninitialized: false,
   resave: false,
-  saveUninitialized: true,
   store: new MongoStore({mongooseConnection: mongoose.connection}),
   cookie: {
     maxAge: 1000 * 60 * 60 * 24, //one day

@@ -10,7 +10,7 @@ router.route('/users').post(spotifyController.iAmOnline)
 
 router.get('/checkCookie', (req,res) => {
    //If we reach here, cookie is valid
-   return res.status(httpStatus.OK);
+   return res.status(httpStatus.OK).send('yes');
 });
 
 module.exports = router;

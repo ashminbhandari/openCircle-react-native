@@ -1,5 +1,6 @@
 import axios from "axios";
 import * as AuthSession from "expo-auth-session";
+import AsyncStorage from "../storage/AsyncStorage";
 
 //The scope that we will be asking the user permission for
 const scopesArr = ['user-read-email', 'user-read-currently-playing', 'user-follow-read',
@@ -63,9 +64,43 @@ export default {
             console.log("Error at joinServer in AuthorizationService..", error);
             throw error;
         }
+    },
 
+    //Get cookie from AsyncStorage
+    async getCookie() {
+        try {
+            let cookie = await AsyncStorage.getFromAsyncStorage('cookie');
+            return cookie;
+        } catch (error) {
+            return '';
+        }
+    },
+
+    //Save cookie to AsyncStorage
+    async saveCookie(cookie) {
+        try {
+            await AsyncStorage.saveToAsyncStorage('cookie', cookie);
+        } catch (error) {
+            console.log("Error saving cookie to AsyncStorage", error);
+        }
+    },
+
+    //Checks if cookie is valid by making a request to the server
+    async checkCookie(cookie) {
+        //Make the axios call
+        try {
+            await axios.request({
+                url: 'http://10.0.0.226:3000/spotify/checkCookie',
+                method: 'get',
+                headers: {
+                    Authorization: `Bearer ${cookie}`
+                }
+            });
+        } catch(error) {
+            throw error;
+        }
     }
-}
+};
 
 
 
