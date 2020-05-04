@@ -3,7 +3,7 @@ import Button from '../../components/UIElements/Button';
 import {observer} from 'mobx-react';
 import AuthorizationService from '../../services/AuthorizationService';
 import CreatePasswordScreen from "../CreatePasswordScreen/CreatePasswordScreen";
-import {View, StyleSheet, Text, TouchableOpacity} from "react-native";
+import {View, StyleSheet, Text, KeyboardAvoidingView} from "react-native";
 import AsyncStorage from '../../storage/AsyncStorage';
 import {FontAwesome} from "@expo/vector-icons";
 import RotatingImageComponent from "../../components/UIElements/RotatingImageComponent";
@@ -20,6 +20,7 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
             if (user) {
                 setUser(user);
             }
+            ;
         };
         getUser();
     }, [user]);
@@ -38,7 +39,10 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
     }
 
     return (
-        <View style={styles.container}>
+        <KeyboardAvoidingView
+            style={styles.container}
+            behavior={'padding'}
+        >
             <FontAwesome
                 size={30}
                 name={'plug'}
@@ -49,6 +53,22 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
                 }}
             />
             <RotatingImageComponent imgSource={require('../../../assets/opencircle.png')}/>
+            {
+                authCode ? (
+                    <CreatePasswordScreen authCode={authCode} navigator={navigation}/>
+                ) : (
+                    <View style={styles.connectButtonAddedStyles}>
+                        <Button
+                            text={'Connect with Spotify'}
+                            faName='spotify'
+                            faColor='#1DB954'
+                            onPress={getAuthCode}
+                            error={error}
+                        />
+                    </View>
+                )
+            }
+
             {
                 user ? (
                     <View style={{
@@ -68,27 +88,14 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
                             fontSize: 15,
                             marginTop: 10
                         }}>
-                            Spotify is registered
+                            Spotify is registered for {user}
                         </Text>
                     </View>
                 ) : (
-                    authCode ? (
-                        <CreatePasswordScreen authCode={authCode} navigator={navigation}/>
-                    ) : (
-                        <View style={styles.connectButtonAddedStyles}>
-                            <Button
-                                text={'Connect with Spotify'}
-                                faName='spotify'
-                                faColor='#1DB954'
-                                onPress={getAuthCode}
-                                error={error}
-                            />
-                        </View>
-                    )
+                    <></>
                 )
             }
-        </View>
-
+        </KeyboardAvoidingView>
     );
 });
 
@@ -121,7 +128,7 @@ const styles = StyleSheet.create({
         color: 'white',
         top: 0,
         right: 0,
-        padding: 35
+        padding: 50
     }
 });
 

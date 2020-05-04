@@ -42,7 +42,7 @@ const ServerConnectScreen = ({navigation}) => {
                     navigation.push('AuthorizeSpotifyScreen')
                 }}
             />
-            <KeyboardAvoidingView behavior={'position'}>
+            <KeyboardAvoidingView>
                 <RotatingImageComponent imgSource={require('../../../assets/opencircle.png')}/>
                 <View style={styles.formContainer}>
                     <View style={styles.textInputContainer}>
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 0,
         top: 0,
-        padding: 35
+        padding: 50
     },
 });
 

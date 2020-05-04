@@ -23,7 +23,7 @@ let getDBConnection = async () => {
 }
 
 //Initializing the models and registering them to their models
-require('./models/spotify');
+require('./models/users');
 
 //Export connection
 module.exports.dbConnection = () => getDBConnection();

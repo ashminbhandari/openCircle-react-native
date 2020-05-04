@@ -21,6 +21,7 @@ const EntryPoint = observer(() => {
     const {AuthorizationStore} = useStores();
 
     useEffect(() => {
+        //Checks cookie and if cookie exists, set isAuthenticated to true
         AuthorizationStore.checkCookie();
     });
 

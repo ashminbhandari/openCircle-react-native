@@ -5,6 +5,7 @@ import * as Location from 'expo-location';
 import * as Permissions from 'expo-permissions';
 import mapStyle from './HomeStyle';
 import MapMarker from '../../components/UIElements/MapMarker';
+import randomGen from "../../utils/randomGen"; //To generate a random location
 
 export default function MapPage() {
     const [userLocation, setUserLocation] = useState(null); //User's current location
@@ -13,7 +14,7 @@ export default function MapPage() {
     useEffect(() => {
         getLocationPermission();
         getUserLocation();
-    });
+    }, [locationPermission]);
 
     const getLocationPermission = async () => {
         //No location permission? Get permission
@@ -21,6 +22,16 @@ export default function MapPage() {
             let {status} = await Permissions.askAsync(Permissions.LOCATION);
             if (status === 'granted') {
                 setLocationPermission(true);
+            } else {
+                let longitude = randomGen(-180, 180, 3);
+                let latitude = randomGen(-90, 90, 3);
+                let location = {
+                    coords: {
+                        latitude: latitude,
+                        longitude: longitude
+                    }
+                };
+                setUserLocation(location);
             }
         }
     };
@@ -43,18 +54,19 @@ export default function MapPage() {
                              initialRegion={{
                                  latitude: userLocation.coords.latitude,
                                  longitude: userLocation.coords.longitude,
-                                 latitudeDelta: 0.0922,
-                                 longitudeDelta: 0.0421
+                                 latitudeDelta: 40,
+                                 longitudeDelta: 40
                              }}>
                         <Marker
                             coordinate={{
                                 latitude: userLocation.coords.latitude,
-                                longitude: userLocation.coords.longitude}}
+                                longitude: userLocation.coords.longitude
+                            }}
                         >
                             <MapMarker/>
                         </Marker>
                     </MapView>
-                ) : ( <View/>)
+                ) : (<View/>)
             }
         </View>
     );

@@ -2,13 +2,15 @@ const httpStatus = require('http-status-codes');
 const spotifyService = require('../services/spotifyService');
 
 module.exports = {
-    async iAmOnline(req, res) {
+
+    //Goes through the sessions collection and returns a list of online users
+    async gatherOnlineUsers(req, res) {
         try {
-            let response = await spotifyService.iAmOnline(req.body.id, req.body.location);
+            let response = await spotifyService.gatherOnlineUsers(req);
             return res.status(response.httpStatus).send(response);
         } catch (err) {
-            console.log('Error in iAmOnline in spotifyController.');
-            return res.status(httpStatus.INTERNAL_SERVER_ERROR).send('Error saving user as online.');
+            console.log('Error in gatherOnlineUsers in spotifyController.', err);
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).send('Error gathering  users.');
         }
     },
 };
