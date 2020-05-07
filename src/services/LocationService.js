@@ -1,6 +1,5 @@
 import * as Location from "expo-location";
 import * as Permissions from "expo-permissions";
-import randomGen from "../utils/randomGen";
 
 export default {
     async getLocationPermission() {
@@ -8,6 +7,9 @@ export default {
             let {status} = await Permissions.askAsync(Permissions.LOCATION);
             if (status === 'granted') {
                 return true;
+            }
+            else {
+                throw new Error('Location access not granted.');
             }
         } catch (error) {
             console.log("Error getting locationPermission ", error);
@@ -25,17 +27,4 @@ export default {
             throw error;
         }
     },
-
-    async getRandomLocation() {
-        let longitude = randomGen(-180, 180, 3);
-        let latitude = randomGen(-90, 90, 3);
-        return {
-            coords: {
-                latitude: latitude,
-                longitude: longitude
-            }
-        }
-    }
-
-
 }

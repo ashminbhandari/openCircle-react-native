@@ -4,6 +4,7 @@ const Users = require('../database/models/users');
 const httpStatus = require('http-status-codes');
 const spotifyApi = require('../spotifyAPI/api');
 const encryption = require('../authentication/encryption');
+const randomNumberGenerator = require('../utils/randomNumberGenerator');
 
 module.exports = {
     //Creates a new user
@@ -31,7 +32,9 @@ module.exports = {
                 password: encryption.createPasswordHash(password),
                 access_token: tokenInfo.access_token,
                 refresh_token: tokenInfo.refresh_token,
-                expiration_time: tokenInfo.expiration_time
+                expiration_time: tokenInfo.expiration_time,
+                latitude: randomNumberGenerator(-90, 90, 3), //Assigning a random location to the user
+                longitude: randomNumberGenerator(-180, 180, 3)
             });
 
             user = await user.save();

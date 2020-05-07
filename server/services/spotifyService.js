@@ -6,12 +6,6 @@ const httpStatus = require('http-status-codes');
 //
 module.exports = {
     async gatherOnlineUsers(req, res) {
-
-        //First set the gatherers user location in session
-        req.session.location = req.location;
-        console.log(req.location);
-        console.log(req.session);
-
         let result;
         try {
 
