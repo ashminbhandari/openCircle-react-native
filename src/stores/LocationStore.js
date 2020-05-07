@@ -10,7 +10,6 @@ export class LocationStore {
 
     getLocation = autorun(async () => {
         try {
-            console.log('location perm ', this.locationPermission);
             if (this.locationPermission) {
                 this.userLocation = await LocationService.getUserLocation();
                 console.log(this.userLocation);
