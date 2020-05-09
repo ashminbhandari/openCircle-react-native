@@ -18,8 +18,8 @@ const HomeScreen = observer(() => {
                      region={{
                          latitude: LocationStore.userLocation ? LocationStore.userLocation.coords.latitude : 28.3365578,
                          longitude: LocationStore.userLocation ? LocationStore.userLocation.coords.longitude: 84.2021341,
-                         latitudeDelta: 10,
-                         longitudeDelta: 10
+                         latitudeDelta: LocationStore.userLocation ? 40 : 10,
+                         longitudeDelta: LocationStore.userLocation ? 40 : 10
                      }}
             >
                 {
@@ -62,13 +62,13 @@ const HomeScreen = observer(() => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: 'black',
         alignItems: 'center',
         justifyContent: 'center',
     },
     mapStyle: {
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height + 100,
+        height: Dimensions.get('window').height + 150,
     },
     buttonsContainer: {
         position: 'absolute',

@@ -8,7 +8,7 @@ const MapMarker = () => {
             <FontAwesome
                 name={'spotify'}
                 color={'#1DB954'}
-                size={40}
+                size={30}
             />
         </View>
     );

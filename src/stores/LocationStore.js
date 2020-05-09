@@ -25,7 +25,7 @@ export class LocationStore {
                 containerStyle: {
                     borderWidth: 1,
                     borderColor: 'white',
-                    marginTop: 5
+                    marginTop: 20
                 }
             });
         }
