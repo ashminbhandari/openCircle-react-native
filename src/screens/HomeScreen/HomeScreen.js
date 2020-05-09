@@ -6,7 +6,6 @@ import MapMarker from '../../components/UIElements/MapMarker';
 import {useStores} from '../../hooks/useStores';
 import {FontAwesome} from '@expo/vector-icons'
 import {observer} from 'mobx-react';
-import Toast from 'react-native-root-toast';
 
 const HomeScreen = observer(() => {
     const {LocationStore} = useStores();
@@ -16,40 +15,46 @@ const HomeScreen = observer(() => {
             <MapView style={styles.mapStyle}
                      provider={PROVIDER_GOOGLE}
                      customMapStyle={mapStyle}
-                     initialRegion={{
-                         latitude: LocationStore.userLocation.coords.latitude,
-                         longitude: LocationStore.userLocation.coords.longitude,
-                         latitudeDelta: 40,
-                         longitudeDelta: 40
-                     }}>
-                <Marker
-                    coordinate={{
-                        latitude: LocationStore.userLocation.coords.latitude,
-                        longitude: LocationStore.userLocation.coords.longitude
-                    }}
-                >
-                    <MapMarker/>
-                </Marker>
+                     region={{
+                         latitude: LocationStore.userLocation ? LocationStore.userLocation.coords.latitude : 28.3365578,
+                         longitude: LocationStore.userLocation ? LocationStore.userLocation.coords.longitude: 84.2021341,
+                         latitudeDelta: 10,
+                         longitudeDelta: 10
+                     }}
+            >
+                {
+                    LocationStore.userLocation ? (
+                        <Marker
+                            coordinate={{
+                                latitude: LocationStore.userLocation.coords.latitude,
+                                longitude: LocationStore.userLocation.coords.longitude
+                            }}
+                        >
+                            <MapMarker/>
+                        </Marker>
+                    ) : (
+                        <></>
+                    )
+                }
             </MapView>
-            <TouchableOpacity>
-                <FontAwesome
-                    name={'map-marker'}
-                    size={30}
-                    color={'white'}
-                    style={{
-                        position: 'absolute',
-                        bottom: 30,
-                        right: 20,
-                        padding: 10,
-                        borderRadius: 20,
-                        borderWidth: 1,
-                        borderColor: 'white',
-                    }}
-                />
-            </TouchableOpacity>
-
-
-
+            <View style={styles.buttonsContainer}>
+                <TouchableOpacity>
+                    <FontAwesome
+                        name={'arrow-circle-down'}
+                        size={20}
+                        color={'white'}
+                        style={styles.buttonsStyle}
+                    />
+                </TouchableOpacity>
+                <TouchableOpacity onPress={LocationStore.setupLocation}>
+                    <FontAwesome
+                        name={'location-arrow'}
+                        size={20}
+                        color={'white'}
+                        style={styles.buttonsStyle}
+                    />
+                </TouchableOpacity>
+            </View>
         </View>
     )
 });
@@ -63,8 +68,21 @@ const styles = StyleSheet.create({
     },
     mapStyle: {
         width: Dimensions.get('window').width,
-        height: Dimensions.get('window').height,
+        height: Dimensions.get('window').height + 100,
     },
+    buttonsContainer: {
+        position: 'absolute',
+        bottom: 30,
+        right: 0,
+        flexDirection: 'row'
+    },
+    buttonsStyle: {
+        borderRadius: 10,
+        padding: 10,
+        borderWidth: 1,
+        borderColor: 'white',
+        marginRight: 20
+    }
 });
 
 export default HomeScreen;
