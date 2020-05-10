@@ -1,9 +1,11 @@
-import {observable, action} from 'mobx';
+import {observable, action, autorun} from 'mobx';
 import LocationService from "../services/LocationService";
 import Toast from 'react-native-root-toast';
+import axios from 'axios';
 
 export class LocationStore {
     @observable userLocation = '';
+    @observable sessionLocation = '';
 
     @action.bound async setupLocation() {
         try {
@@ -13,9 +15,17 @@ export class LocationStore {
             //If location permission is granted, gather the location
             let location = await LocationService.getUserLocation();
 
+            //Set the location for the front-end
             this.userLocation = location;
+
+            //Set the location for current session (to be sent to the server)
+            if(!this.sessionLocation) {
+                this.sessionLocation = location;
+            }
         } catch (error) {
             console.log("Location could not be established at LocationStore", error);
+
+            //Show an error Toast
             Toast.show('Go to Settings > openCircle > Location and allow location access', {
                 duration: Toast.durations.LONG,
                 position: Toast.positions.TOP,
@@ -31,5 +41,12 @@ export class LocationStore {
         }
     }
 
-
+    //Runs automatically when the location for the session is updated
+    updateSessionLocation = autorun(async () => {
+        if(this.sessionLocation) {
+            await axios.post('http://10.0.0.226:3000/spotify/updateSessionLocation', {
+                location: this.sessionLocation
+            })
+        }
+    });
 }

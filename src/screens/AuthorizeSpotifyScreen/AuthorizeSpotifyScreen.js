@@ -19,8 +19,7 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
             let user = await AsyncStorage.getFromAsyncStorage('user');
             if (user) {
                 setUser(user);
-            }
-            ;
+            };
         };
         getUser();
     }, [user]);
@@ -88,7 +87,7 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
                             fontSize: 15,
                             marginTop: 10
                         }}>
-                            Spotify is registered for {user}
+                            Spotify is registered for {user.name}
                         </Text>
                     </View>
                 ) : (

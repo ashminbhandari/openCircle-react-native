@@ -4,11 +4,11 @@ import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
 import mapStyle from './HomeStyle';
 import MapMarker from '../../components/UIElements/MapMarker';
 import {useStores} from '../../hooks/useStores';
-import {FontAwesome} from '@expo/vector-icons'
+import {FontAwesome, FontAwesome5} from '@expo/vector-icons'
 import {observer} from 'mobx-react';
 
 const HomeScreen = observer(() => {
-    const {LocationStore} = useStores();
+    const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
 
     return (
         <View style={styles.container}>
@@ -17,7 +17,7 @@ const HomeScreen = observer(() => {
                      customMapStyle={mapStyle}
                      region={{
                          latitude: LocationStore.userLocation ? LocationStore.userLocation.coords.latitude : 28.3365578,
-                         longitude: LocationStore.userLocation ? LocationStore.userLocation.coords.longitude: 84.2021341,
+                         longitude: LocationStore.userLocation ? LocationStore.userLocation.coords.longitude : 84.2021341,
                          latitudeDelta: LocationStore.userLocation ? 40 : 10,
                          longitudeDelta: LocationStore.userLocation ? 40 : 10
                      }}
@@ -30,15 +30,38 @@ const HomeScreen = observer(() => {
                                 longitude: LocationStore.userLocation.coords.longitude
                             }}
                         >
-                            <MapMarker/>
+                            <FontAwesome5
+                                name={'user-astronaut'}
+                                size={30}
+                                color={'white'}
+                            />
                         </Marker>
                     ) : (
                         <></>
                     )
                 }
+
+                {
+                    SpotifyStore.onlineUsers.map(user => (
+                        <View key={user.id.toString()}>
+                            {user.id == AuthorizationStore.user.id ? (
+                                <></>
+                            ) : (
+                                <Marker
+                                    coordinate={{
+                                        latitude: user.latitude,
+                                        longitude: user.longitude
+                                    }}
+                                >
+                                    <MapMarker/>
+                                </Marker>
+                            )}
+                        </View>
+                    ))
+                }
             </MapView>
             <View style={styles.buttonsContainer}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={SpotifyStore.gatherOnlineUsers}>
                     <FontAwesome
                         name={'arrow-circle-down'}
                         size={20}

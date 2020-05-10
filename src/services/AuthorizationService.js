@@ -89,13 +89,14 @@ export default {
     async checkCookie(cookie) {
         //Make the axios call
         try {
-            await axios.request({
+            let response = await axios.request({
                 url: 'http://10.0.0.226:3000/spotify/checkCookie',
                 method: 'get',
                 headers: {
                     Authorization: `Bearer ${cookie}`
                 }
             });
+            return response;
         } catch(error) {
             throw error;
         }

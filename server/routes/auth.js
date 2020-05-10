@@ -25,6 +25,7 @@ router.post('/joinServer', passport.authenticate('login'), (req,res) => {
         req.session.save(() => {
             res.status(httpStatus.OK).send({
                 name: req.user.name,
+                id: req.user._id,
             });
         })
     });
