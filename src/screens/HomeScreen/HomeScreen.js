@@ -3,6 +3,7 @@ import {View, StyleSheet, Dimensions, TouchableOpacity, Text} from 'react-native
 import MapView, {PROVIDER_GOOGLE, Marker, AnimatedRegion} from 'react-native-maps';
 import mapStyle from './HomeStyle';
 import MapMarker from '../../components/UIElements/MapMarker';
+import ClusterMarker from '../../components/UIElements/ClusterMarker';
 import {useStores} from '../../hooks/useStores';
 import {FontAwesome, FontAwesome5, Octicons} from '@expo/vector-icons'
 import {observer} from 'mobx-react';
@@ -128,7 +129,6 @@ const HomeScreen = observer(() => {
                     <></>
                 )
             }
-
         </View>
     )
 });
