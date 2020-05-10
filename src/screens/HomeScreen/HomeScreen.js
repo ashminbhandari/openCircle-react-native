@@ -1,25 +1,41 @@
-import React, {useState, useEffect} from "react";
-import {View, StyleSheet, Dimensions, TouchableOpacity} from 'react-native';
-import MapView, {PROVIDER_GOOGLE, Marker} from 'react-native-maps';
+import React, {useState, useEffect, useRef} from "react";
+import {View, StyleSheet, Dimensions, TouchableOpacity, Text} from 'react-native';
+import MapView, {PROVIDER_GOOGLE, Marker, AnimatedRegion} from 'react-native-maps';
 import mapStyle from './HomeStyle';
 import MapMarker from '../../components/UIElements/MapMarker';
 import {useStores} from '../../hooks/useStores';
-import {FontAwesome, FontAwesome5} from '@expo/vector-icons'
+import {FontAwesome, FontAwesome5, Octicons} from '@expo/vector-icons'
 import {observer} from 'mobx-react';
 
 const HomeScreen = observer(() => {
     const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
+    const mapRef = useRef(null);
+
+    async function setupLocation() {
+        try {
+            await LocationStore.setupLocation();
+            mapRef.current.animateToRegion({
+                latitude: LocationStore.userLocation.coords.latitude,
+                longitude: LocationStore.userLocation.coords.longitude,
+                latitudeDelta: 20,
+                longitudeDelta: 20
+            }, 1000)
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
     return (
         <View style={styles.container}>
-            <MapView style={styles.mapStyle}
+            <MapView ref={mapRef}
+                     style={styles.mapStyle}
                      provider={PROVIDER_GOOGLE}
                      customMapStyle={mapStyle}
-                     region={{
-                         latitude: LocationStore.userLocation ? LocationStore.userLocation.coords.latitude : 28.3365578,
-                         longitude: LocationStore.userLocation ? LocationStore.userLocation.coords.longitude : 84.2021341,
-                         latitudeDelta: LocationStore.userLocation ? 40 : 10,
-                         longitudeDelta: LocationStore.userLocation ? 40 : 10
+                     initialRegion={{
+                         latitude: 28.3365578,
+                         longitude: 84.2021341,
+                         latitudeDelta: 100,
+                         longitudeDelta: 100
                      }}
             >
                 {
@@ -30,11 +46,21 @@ const HomeScreen = observer(() => {
                                 longitude: LocationStore.userLocation.coords.longitude
                             }}
                         >
-                            <FontAwesome5
-                                name={'user-astronaut'}
-                                size={30}
-                                color={'white'}
-                            />
+                            <View style={{
+                                backgroundColor: 'black',
+                                borderRadius: 10,
+                                borderWidth: 1,
+                                borderColor: 'white'
+                            }}>
+                                <Octicons
+                                    name={'broadcast'}
+                                    size={20}
+                                    color={'#1DB954'}
+                                    style={{
+                                        padding: 7
+                                    }}
+                                />
+                            </View>
                         </Marker>
                     ) : (
                         <></>
@@ -44,40 +70,65 @@ const HomeScreen = observer(() => {
                 {
                     SpotifyStore.onlineUsers.map(user => (
                         <View key={user.id.toString()}>
-                            {user.id == AuthorizationStore.user.id ? (
-                                <></>
-                            ) : (
-                                <Marker
-                                    coordinate={{
-                                        latitude: user.latitude,
-                                        longitude: user.longitude
-                                    }}
-                                >
-                                    <MapMarker/>
-                                </Marker>
-                            )}
+                            <Marker
+                                coordinate={{
+                                    latitude: user.latitude,
+                                    longitude: user.longitude
+                                }}
+                            >
+                                <MapMarker/>
+                            </Marker>
                         </View>
                     ))
                 }
             </MapView>
             <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={SpotifyStore.gatherOnlineUsers}>
+                <TouchableOpacity onPress={() => {
+                    SpotifyStore.gatherOnlineUsers(LocationStore, AuthorizationStore)
+                }}>
                     <FontAwesome
-                        name={'arrow-circle-down'}
+                        name={SpotifyStore.hasDownloadedUsers ? 'refresh' : 'arrow-circle-down'}
                         size={20}
-                        color={'white'}
-                        style={styles.buttonsStyle}
+                        color={LocationStore.userLocation ? 'white' : 'grey'}
+                        style={[styles.buttonsStyle, {
+                            borderColor: LocationStore.userLocation ? 'white' : 'grey'
+                        }]
+                        }
                     />
                 </TouchableOpacity>
-                <TouchableOpacity onPress={LocationStore.setupLocation}>
-                    <FontAwesome
-                        name={'location-arrow'}
+                <TouchableOpacity onPress={setupLocation}>
+                    <Octicons
+                        name={'broadcast'}
                         size={20}
-                        color={'white'}
-                        style={styles.buttonsStyle}
+                        color={LocationStore.userLocation ? '#1DB954' : 'white'}
+                        style={[styles.buttonsStyle, {
+                            borderColor: LocationStore.userLocation ? '#1DB954' : 'white',
+                            padding: 9
+                        }]}
                     />
                 </TouchableOpacity>
             </View>
+            {
+                SpotifyStore.hasDownloadedUsers ? (
+                    <View style={styles.onlineUsersCaption}>
+                        <FontAwesome
+                            name={'globe'}
+                            size={20}
+                            color={'#1DB954'}
+                        />
+                        <Text style={{
+                            color: 'white',
+                            alignSelf: 'center',
+                            marginLeft: 4
+                        }}>
+                            {SpotifyStore.onlineUsers.length} active users
+                        </Text>
+                    </View>
+                ) : (
+                    <></>
+                )
+            }
+
         </View>
     )
 });
@@ -105,6 +156,12 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderColor: 'white',
         marginRight: 20
+    },
+    onlineUsersCaption: {
+        position: 'absolute',
+        top: 35,
+        right: 20,
+        flexDirection: 'row'
     }
 });
 

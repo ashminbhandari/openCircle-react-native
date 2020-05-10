@@ -17,6 +17,9 @@ const MapMarker = () => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'black',
+        borderWidth: 1,
+        padding: 5,
+        borderColor: 'white',
         borderRadius: 50,
     }
 });
