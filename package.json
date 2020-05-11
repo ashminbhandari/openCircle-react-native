@@ -31,7 +31,7 @@
     "react-native": "https://github.com/expo/react-native/archive/sdk-37.0.0.tar.gz",
     "react-native-gesture-handler": "~1.6.0",
     "react-native-map-clustering": "^3.2.0",
-    "react-native-maps": "0.26.1",
+    "react-native-maps": "0.27.1",
     "react-native-maps-super-cluster": "^1.6.0",
     "react-native-reanimated": "~1.8.0",
     "react-native-root-toast": "^3.2.1",
