@@ -24,4 +24,15 @@ module.exports = {
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).send('Error gathering  users.');
         }
     },
+
+    //Gets the users Spotify data
+    async getUserSpotify(req,res) {
+        try {
+            let response = await spotifyService.getUserSpotify(req.body.user);
+            return res.status(response.httpStatus).send(response);
+        } catch (error) {
+            console.log("Error in getUserSpotify in SpotifyController", error);
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).send('Error, getting user Spotify information...');
+        }
+    }
 };

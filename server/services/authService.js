@@ -19,10 +19,6 @@ module.exports = {
             //Get user information based on access token
             userInfo = await spotifyApi.getMe();
 
-            //Debuggery
-            console.log("Password sent is", password);
-            console.log('User info;', userInfo);
-
             //Coagulate the user information required
             let user = new Users({
                 id: userInfo.body.id,

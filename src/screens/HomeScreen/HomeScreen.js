@@ -1,16 +1,17 @@
 import React, {useState, useEffect, useRef} from "react";
-import {View, StyleSheet, Dimensions, TouchableOpacity, Text} from 'react-native';
-import MapView, {PROVIDER_GOOGLE, Marker, AnimatedRegion} from 'react-native-maps';
+import {View, StyleSheet, Dimensions, TouchableOpacity, Text, Button} from 'react-native';
+import MapView, { PROVIDER_GOOGLE, Marker, AnimatedRegion} from 'react-native-maps';
 import mapStyle from './HomeStyle';
 import MapMarker from '../../components/UIElements/MapMarker';
-import ClusterMarker from '../../components/UIElements/ClusterMarker';
 import {useStores} from '../../hooks/useStores';
 import {FontAwesome, FontAwesome5, Octicons} from '@expo/vector-icons'
 import {observer} from 'mobx-react';
+import UserSpotifyPopup from "../../components/UIElements/UserSpotifyPopup";
 
 const HomeScreen = observer(() => {
     const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
-    const mapRef = useRef(null);
+    let mapRef = useRef(null);
+    let currentMarkerRef = useRef(null);
 
     async function setupLocation() {
         try {
@@ -35,8 +36,8 @@ const HomeScreen = observer(() => {
                      initialRegion={{
                          latitude: 28.3365578,
                          longitude: 84.2021341,
-                         latitudeDelta: 100,
-                         longitudeDelta: 100
+                         latitudeDelta: 9,
+                         longitudeDelta: 9
                      }}
             >
                 {
@@ -70,10 +71,13 @@ const HomeScreen = observer(() => {
 
                 {
                     SpotifyStore.onlineUsers.map(user => (
-                        <View key={user.id.toString()}>
+                        <View
+                            key={user.id.toString()}
+                            onPress={() => SpotifyStore.getUserSpotify(user.id)}
+                        >
                             <Marker
                                 coordinate={{
-                                    latitude: user.latitude,
+                                     latitude: user.latitude,
                                     longitude: user.longitude
                                 }}
                             >
@@ -129,6 +133,9 @@ const HomeScreen = observer(() => {
                     <></>
                 )
             }
+            {
+                SpotifyStore.currentUserSpotifyData ? <UserSpotifyPopup/> : <></>
+            }
         </View>
     )
 });
@@ -159,7 +166,7 @@ const styles = StyleSheet.create({
     },
     onlineUsersCaption: {
         position: 'absolute',
-        top: 35,
+        bottom: 80,
         right: 20,
         flexDirection: 'row'
     }

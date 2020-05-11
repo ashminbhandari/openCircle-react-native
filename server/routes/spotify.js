@@ -19,4 +19,7 @@ router.route('/updateSessionLocation').post(spotifyController.updateSessionLocat
 //Gather all the online users
 router.route('/gatherOnlineUsers').get(spotifyController.gatherOnlineUsers);
 
+//Gets the Spotify data of a user
+router.route('/getUserSpotify').post(spotifyController.getUserSpotify);
+
 module.exports = router;
