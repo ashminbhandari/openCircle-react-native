@@ -24,7 +24,7 @@ const ServerConnectScreen = ({navigation}) => {
             }
 
             //Set cookie
-            await cookieConfig.saveCookie(response.headers['set-cookie']);
+            await AuthorizationService.saveCookie(response.headers['set-cookie']);
         } catch (error) {
             console.log(error);
             onLoginError('Please check your credentials');

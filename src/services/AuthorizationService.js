@@ -6,7 +6,7 @@ import AsyncStorage from "../storage/AsyncStorage";
 const scopesArr = ['user-read-email', 'user-read-currently-playing', 'user-follow-read',
     'app-remote-control', 'user-read-recently-played', 'streaming',
     'user-follow-modify', 'user-library-read', 'playlist-modify-public', 'user-top-read',
-    'user-read-private'
+    'user-read-private', 'user-read-playback-position', 'ugc-image-upload'
 ]; //This is the scope of accessing that we will be asking for from the user
 const scopes = scopesArr.join(' ');
 
@@ -20,7 +20,7 @@ export default {
         } catch (error) {
             console.error("Error at getCredentials in AuthorizationService...", error);
             throw error;
-        }
+        };
     },
 
     //AuthCode from session

@@ -63,6 +63,7 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
                             faColor='#1DB954'
                             onPress={getAuthCode}
                             error={error}
+                            setError={setError}
                         />
                     </View>
                 )

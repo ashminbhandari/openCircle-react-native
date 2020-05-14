@@ -19,7 +19,7 @@ const Button = (observer((props) => {
         if(props.setError) {
             setTimeout(() => {
                 props.setError(false);
-            }, 2000);
+            }, 500);
         }
     });
 
