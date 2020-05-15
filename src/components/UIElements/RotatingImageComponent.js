@@ -1,6 +1,39 @@
 import React, {useState, useEffect} from 'react';
 import {Animated, Easing} from 'react-native';
 
+/**/
+/*
+
+ RotatingImage
+
+ NAME
+
+   RotatingImage - cluster marker for the map
+
+ SYNOPSIS
+
+    const RotatingImage(props)
+
+        props.imgSource -> The source of the image that will be passed into it
+
+ DESCRIPTION
+
+    Functional React component that relates to the animated rotating image
+
+ RETURNS
+
+    The RotatingImage component
+
+ AUTHOR
+
+    Ashmin Bhandari
+
+ DATE
+
+    05/14/2020
+
+ */
+/**/
 export default function RotatingImage(props) {
     //Initial value for rotation animation
     const [rotateAnim] = useState(new Animated.Value(0));

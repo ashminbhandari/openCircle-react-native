@@ -3,16 +3,77 @@ import axios from 'axios';
 import Toast from 'react-native-root-toast';
 import SpotifyService from "../services/SpotifyService";
 
-//Spotify store
+/**/
+/*
+
+ SpotifyStore
+
+ NAME
+
+   SpotifyStore - MobX store relating to all the Spotify related stuff
+
+ DESCRIPTION
+
+    This class corresponds to a MobX store that deals with all the Spotify
+    related stuff for the application
+
+ AUTHOR
+
+    Ashmin Bhandari
+
+ DATE
+
+    05/14/2020
+
+ */
+/**/
 export class SpotifyStore {
+
+    //List of online users
     @observable onlineUsers = [];
 
+    //Flag set when the user has downloaded users
     @observable hasDownloadedUsers = false;
 
+    //The Spotify data for the user whose marker is clicked
     @observable currentUserSpotifyData = null;
 
+    //Owner of the current data being shown
     @observable dataOwner = null;
 
+    /**/
+    /*
+
+     gatherOnlineUsers
+
+     NAME
+
+       gatherOnlineUsers - A MobX action that gathers all the online users from the server
+
+     SYNOPSIS
+
+        async gatherOnlineUsers(LocationStore, AuthorizationStore)
+            LocationStore -> The MobX location store
+            AuthorizationStore -> The MobX authorization store
+
+     DESCRIPTION
+
+        MobX action that sends a GET request to the server to gather all the users that are online
+
+     RETURNS
+
+        Nothing
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     @action.bound
     async gatherOnlineUsers(LocationStore, AuthorizationStore) {
         if (LocationStore.userLocation) {
@@ -78,6 +139,38 @@ export class SpotifyStore {
         }
     }
 
+    /**/
+    /*
+
+     getUserSpotify
+
+     NAME
+
+       getUserSpotify - A MobX action that gets a specific user's Spotify information
+
+     SYNOPSIS
+
+        async getUserSpotify(user)
+            user -> The user for whom the data is being requested
+
+     DESCRIPTION
+
+        MobX action that gets a user's Spotify information by sending an HTTP request
+
+     RETURNS
+
+        Nothing
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     @action.bound async getUserSpotify(user) {
         try {
             let response = await SpotifyService.getUserSpotify(user);

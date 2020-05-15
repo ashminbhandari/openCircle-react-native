@@ -7,6 +7,39 @@ import RotatingImageComponent from "../../components/UIElements/RotatingImageCom
 import {useStores} from '../../hooks/useStores';
 import cookieConfig from "../../utils/cookieConfig";
 
+/**/
+/*
+
+ ServerConnectScreen
+
+ NAME
+
+   ServerConnectScreen - login screen
+
+ SYNOPSIS
+
+    const ServerConnectScreen({navigation})
+
+        {navigation} -> Navigation object that relates to the app's navigation
+
+ DESCRIPTION
+
+    Functional React component that relates to the login screen for the application
+
+ RETURNS
+
+    Nothing
+
+ AUTHOR
+
+    Ashmin Bhandari
+
+ DATE
+
+    05/14/2020
+
+ */
+/**/
 const ServerConnectScreen = ({navigation}) => {
     const [password, onChangePassword] = useState('password');
     const [email, onChangeEmail] = useState('Spotify email');
@@ -14,6 +47,38 @@ const ServerConnectScreen = ({navigation}) => {
     const [buttonError, setButtonError] = useState(false);
     const {AuthorizationStore} = useStores();
 
+    /**/
+    /*
+
+     joinServer
+
+     NAME
+
+       joinServer - Lets the user join the server
+
+     SYNOPSIS
+
+        async joinServer()
+
+     DESCRIPTION
+
+        Sends a post request along with a user's email and password to the server to
+        authenticate them into the application
+
+     RETURNS
+
+        HTTP response object relating to the request sent
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     async function joinServer() {
         try {
             let response = await AuthorizationService.joinServer(email, password);

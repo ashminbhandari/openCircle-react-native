@@ -1,3 +1,7 @@
+/*
+ * Style in which the map is to be displayed
+ */
+
 const mapStyle =
     [
         {

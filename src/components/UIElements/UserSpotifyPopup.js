@@ -5,6 +5,38 @@ import {observer} from 'mobx-react';
 import {AntDesign} from '@expo/vector-icons';
 import TrackDisplay from "./TrackDisplay";
 
+/**/
+/*
+
+ UserSpotifyPopup
+
+ NAME
+
+   UserSpotifyPopup - pop up that displays user's Spotify data
+
+ SYNOPSIS
+
+    const UserSpotifyPopup()
+
+ DESCRIPTION
+
+    Functional React component that relates to the pop up containing user's favorite track
+    to be displayed in app
+
+ RETURNS
+
+    The UserSpotifyPopup component
+
+ AUTHOR
+
+    Ashmin Bhandari
+
+ DATE
+
+    05/14/2020
+
+ */
+/**/
 const UserSpotifyPopup = observer(() => {
     const [close, setClose] = useState(false);
     const {SpotifyStore} = useStores();

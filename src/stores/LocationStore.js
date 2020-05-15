@@ -3,10 +3,67 @@ import LocationService from "../services/LocationService";
 import Toast from 'react-native-root-toast';
 import axios from 'axios';
 
+/**/
+/*
+
+ LocationStore
+
+ NAME
+
+    LocationStore - MobX store relating to all location related data
+
+ DESCRIPTION
+
+    This class corresponds to a MobX store that deals with all the location
+    related stuff for the application
+
+ AUTHOR
+
+    Ashmin Bhandari
+
+ DATE
+
+    05/14/2020
+
+ */
+/**/
 export class LocationStore {
     @observable userLocation = '';
     @observable sessionLocation = '';
 
+    /**/
+    /*
+
+     setupLocation
+
+     NAME
+
+       setupLocation - A MobX action that sets up the user location
+
+     SYNOPSIS
+
+        async setupLocation()
+
+     DESCRIPTION
+
+        MobX action that sets up the user location by utilizing LocationService.
+        Asks for location permission first and then sets the user location.
+        Sets the userLocation and sessionLocation members of this class.
+
+     RETURNS
+
+        Nothing
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     @action.bound async setupLocation() {
         try {
             //Get location permission first
@@ -41,6 +98,40 @@ export class LocationStore {
         }
     }
 
+    /**/
+    /*
+
+     updateSessionLocation
+
+     NAME
+
+       updateSessionLocation - A MobX action that checks whether or not a cookie is valid
+
+     SYNOPSIS
+
+        async updateSessionLocation()
+
+     DESCRIPTION
+
+        A MobX autorun: when the session location member of this class changes then
+        this function "autoruns" to send a post request to the server
+        to set the location for this current session of the user.
+        Only one location per session, no live updates.
+
+     RETURNS
+
+        Nothing
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     //Runs automatically when the location for the session is updated
     updateSessionLocation = autorun(async () => {
         if(this.sessionLocation) {

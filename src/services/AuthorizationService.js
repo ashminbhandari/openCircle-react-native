@@ -11,6 +11,38 @@ const scopesArr = ['user-read-email', 'user-read-currently-playing', 'user-follo
 const scopes = scopesArr.join(' ');
 
 export default {
+
+    /**/
+    /*
+
+     getCredentials
+
+     NAME
+
+       getCredentials - Gets the Spotify client credentials
+
+     SYNOPSIS
+
+        async getCredentials()
+
+     DESCRIPTION
+
+        Gets the Spotify client credentials by sending an appropriate HTTP request to the server
+
+     RETURNS
+
+        Javascript object containing Spotify credentials
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     //Get Spotify credentials from the server to initiate an auth session
     async getCredentials() {
         try {
@@ -23,6 +55,37 @@ export default {
         };
     },
 
+    /**/
+    /*
+
+     getAuthorizationCode
+
+     NAME
+
+       getAuthorizationCode - Gets the user's Spotify authorization code
+
+     SYNOPSIS
+
+        async getAuthorizationCode()
+
+     DESCRIPTION
+
+        Gets the user's Spotify authorization code by initiating a expo auth-session
+
+     RETURNS
+
+        Authorization code as a string
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     //AuthCode from session
     async getAuthorizationCode() {
         try {
@@ -52,6 +115,38 @@ export default {
         }
     },
 
+    /**/
+    /*
+
+     joinServer
+
+     NAME
+
+       joinServer - Lets the user join the server
+
+     SYNOPSIS
+
+        async joinServer()
+
+     DESCRIPTION
+
+        Sends a post request along with a user's email and password to the server to
+        authenticate them into the application
+
+     RETURNS
+
+        HTTP response object relating to the request sent
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     //Join server call, takes in the user email and password
     async joinServer(email, password) {
         try {
@@ -66,6 +161,37 @@ export default {
         }
     },
 
+    /**/
+    /*
+
+     getCookie
+
+     NAME
+
+       getCookie - Gets the cookie from AsyncStorage
+
+     SYNOPSIS
+
+        async getCookie()
+
+     DESCRIPTION
+
+        Gets the cookie which is stored in the in-phone persistent AsyncStorage
+
+     RETURNS
+
+        The cookie string
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     //Get cookie from AsyncStorage
     async getCookie() {
         try {
@@ -76,6 +202,38 @@ export default {
         }
     },
 
+    /**/
+    /*
+
+     saveCookie
+
+     NAME
+
+       saveCookie - Saves a cookie to AsyncStorage
+
+     SYNOPSIS
+
+        async saveCookie(cookie)
+            cookie -> The cookie to be saved (string)
+
+     DESCRIPTION
+
+        Saves the cookie passed in to the persistent AsyncStorage
+
+     RETURNS
+
+        Nothing
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     //Save cookie to AsyncStorage
     async saveCookie(cookie) {
         try {
@@ -85,6 +243,39 @@ export default {
         }
     },
 
+    /**/
+    /*
+
+     checkCookie
+
+     NAME
+
+       checkCookie - Checks cookie against server
+
+     SYNOPSIS
+
+        async checkCookie(cookie)
+            cookie -> The cookie to be checked
+
+     DESCRIPTION
+
+        Sends the cookie to be checked over to the checkCookie endpoint on
+        the openCircle server
+
+     RETURNS
+
+        Javascript response object or throws an error object if one
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     //Checks if cookie is valid by making a request to the server
     async checkCookie(cookie) {
         //Make the axios call
