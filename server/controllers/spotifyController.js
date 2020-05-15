@@ -3,6 +3,40 @@ const spotifyService = require('../services/spotifyService');
 
 module.exports = {
 
+    /**/
+    /*
+
+     updateSessionLocation
+
+     NAME
+
+       updateSessionLocation - updates session location for the user
+
+     SYNOPSIS
+
+        const updateSessionLocation(req, res)
+
+            req -> request object
+            res -> response object
+
+     DESCRIPTION
+
+        Forwards request over to service
+
+     RETURNS
+
+       Response object with status code and message
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     //Update session location for the user
     async updateSessionLocation(req, res) {
       try {
@@ -14,6 +48,40 @@ module.exports = {
       }
     },
 
+    /**/
+    /*
+
+     gatherOnlineUsers
+
+     NAME
+
+       gatherOnlineUsers - gather online users controller
+
+     SYNOPSIS
+
+        const gatherOnlineUsers(req, res)
+
+            req -> request object
+            res -> response object
+
+     DESCRIPTION
+
+        Forwards request over to service
+
+     RETURNS
+
+       Response object with status code and message
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     //Goes through the sessions collection and returns a list of online users
     async gatherOnlineUsers(req, res) {
         try {
@@ -25,6 +93,40 @@ module.exports = {
         }
     },
 
+    /**/
+    /*
+
+     getUserSpotify
+
+     NAME
+
+       getUserSpotify - get user Spotify controller
+
+     SYNOPSIS
+
+        const getUserSpotify(req, res)
+
+            req -> request object
+            res -> response object
+
+     DESCRIPTION
+
+        Forwards request over to service
+
+     RETURNS
+
+       Response object with status code and message
+
+     AUTHOR
+
+        Ashmin Bhandari
+
+     DATE
+
+        05/14/2020
+
+     */
+    /**/
     //Gets the users Spotify data
     async getUserSpotify(req,res) {
         try {

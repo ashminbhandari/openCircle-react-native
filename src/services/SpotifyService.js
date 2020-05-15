@@ -55,7 +55,7 @@ export default {
 
      NAME
 
-       getCredentials - Gets a user's Spotify data
+       getUserSpotify - Gets a user's Spotify data
 
      SYNOPSIS
 
