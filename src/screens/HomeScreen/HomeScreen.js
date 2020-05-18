@@ -146,6 +146,7 @@ const HomeScreen = observer(() => {
             </View>
         )
     }
+    
     return (
         <View style={styles.container}>
             <MapView ref={mapRef}
