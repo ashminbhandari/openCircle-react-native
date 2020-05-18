@@ -4,40 +4,6 @@ const httpStatus = require('http-status-codes');
 const User = require('../database/models/users');
 
 module.exports = {
-
-    /**/
-    /*
-
-     initializePassport
-
-     NAME
-
-       initializePassport - initializes the passport module
-
-     SYNOPSIS
-
-        const initializePassport(passport)
-
-            passport -> The module itself
-
-     DESCRIPTION
-
-        Serializers/deserializers, strategy initiation for the passport module
-
-     RETURNS
-
-       Nothing
-
-     AUTHOR
-
-        Ashmin Bhandari
-
-     DATE
-
-        05/14/2020
-
-     */
-    /**/
     //Configures passport
     initializePassport(passport) {
 

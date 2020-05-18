@@ -8,37 +8,6 @@ import {FontAwesome, FontAwesome5, Octicons} from '@expo/vector-icons'
 import {observer} from 'mobx-react';
 import UserSpotifyPopup from "../../components/UIElements/UserSpotifyPopup";
 
-/**/
-/*
-
- HomeScreen
-
- NAME
-
-   HomeScreen - login screen
-
- SYNOPSIS
-
-    const HomeScreen()
-
- DESCRIPTION
-
-    Functional React component that relates to the home screen for the application
-
- RETURNS
-
-    Nothing
-
- AUTHOR
-
-    Ashmin Bhandari
-
- DATE
-
-    05/14/2020
-
- */
-/**/
 const HomeScreen = observer(() => {
     const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
     let mapRef = useRef(null);

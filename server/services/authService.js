@@ -6,40 +6,6 @@ const spotifyApi = require('../spotifyAPI/api');
 const encryption = require('../authentication/encryption');
 
 module.exports = {
-    /**/
-    /*
-
-     createUser
-
-     NAME
-
-       createUser - create new user
-
-     SYNOPSIS
-
-        const createUser(code, password)
-
-            code -> authorization code
-            password -> password to be set
-
-     DESCRIPTION
-
-        Forwards request over to service
-
-     RETURNS
-
-       Response object with status code and message
-
-     AUTHOR
-
-        Ashmin Bhandari
-
-     DATE
-
-        05/14/2020
-
-     */
-    /**/
     //Creates a new user
     async createUser(code, password) {
         let result;
@@ -87,40 +53,6 @@ module.exports = {
         }
     },
 
-    /**/
-    /*
-
-     getAccessToken
-
-     NAME
-
-       getAccessToken - gets Spotify access token
-
-     SYNOPSIS
-
-        const getAccessToken(code)
-
-            code -> authorization code
-
-     DESCRIPTION
-
-        Gets a user's access token by making a request to Spotify API
-        using the Authorization code
-
-     RETURNS
-
-       Response object with status code and message
-
-     AUTHOR
-
-        Ashmin Bhandari
-
-     DATE
-
-        05/14/2020
-
-     */
-    /**/
     //Given an authorization code, gets an access token
     async getAccessToken(authorizationCode) {
         console.log('here');

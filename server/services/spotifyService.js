@@ -8,38 +8,6 @@ const axios = require('axios');
 //Extracting the user id
 //
 module.exports = {
-
-    /**/
-    /*
-
-     updateSessionLocation
-
-     NAME
-
-       updateSessionLocation - updates a user's session location
-
-     SYNOPSIS
-
-        async updateSessionLocation()
-
-     DESCRIPTION
-
-        Updates a user' session location in the MongoDB sessions database
-
-     RETURNS
-
-        HTTP response object with status code
-
-     AUTHOR
-
-        Ashmin Bhandari
-
-     DATE
-
-        05/14/2020
-
-     */
-    /**/
     async updateSessionLocation(req) {
         let result;
         try {
@@ -70,37 +38,6 @@ module.exports = {
         }
     },
 
-    /**/
-    /*
-
-     gatherOnlineUsers
-
-     NAME
-
-       gatherOnlineUsers - Gathers all the online users
-
-     SYNOPSIS
-
-        async gatherOnlineUsers()
-
-     DESCRIPTION
-
-        Gets all the online users as an array
-
-     RETURNS
-
-        List of all online users
-
-     AUTHOR
-
-        Ashmin Bhandari
-
-     DATE
-
-        05/14/2020
-
-     */
-    /**/
     async gatherOnlineUsers() {
         let result;
         try {
@@ -141,39 +78,6 @@ module.exports = {
         }
     },
 
-    /**/
-    /*
-
-     getUserSpotify
-
-     NAME
-
-       getUserSpotify - Gets a user's Spotify data
-
-     SYNOPSIS
-
-        async getUserSpotify(user)
-
-            user-> The userID for which to get the Spotify data for
-
-     DESCRIPTION
-
-        Gets the Spotify data for the user by sending an appropriate HTTP response to the client
-
-     RETURNS
-
-        Javascript object containing Spotify data as well as the name of the user who requested the data
-
-     AUTHOR
-
-        Ashmin Bhandari
-
-     DATE
-
-        05/14/2020
-
-     */
-    /**/
     async getUserSpotify(user) {
         try {
             //Find the user by their ID

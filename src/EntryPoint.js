@@ -17,37 +17,6 @@ import {createStackNavigator} from "@react-navigation/stack";
 
 const Stack = createStackNavigator();
 
-/**/
-/*
- EntryPoint
-
- NAME
-
-    EntryPoint
-
- SYNOPSIS
-
-    EntryPoint() - application entry point
-
- DESCRIPTION
-
-    This functional component is the entry point to the application called by it's
-    parent app component.
-
-    This component is a MobX observer which observes changes to MobX observables.
-
- RETURNS
-
-    NavigationContainer component with all the app screens
-
- AUTHOR
-
-    Ashmin Bhandari
-
- DATE
-    05/14/2020
- */
-/**/
 const EntryPoint = observer(() => {
     const {AuthorizationStore} = useStores();
 

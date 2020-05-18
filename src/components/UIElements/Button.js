@@ -4,39 +4,6 @@ import {observer} from 'mobx-react';
 import {FontAwesome} from "@expo/vector-icons";
 import * as Haptics from 'expo-haptics';
 
-/**/
-/*
-
- Button
-
- NAME
-
-   Button - button component
-
- SYNOPSIS
-
-    const Button(props)
-
-        props -> React.props to be passed into it (error and setError)
-
- DESCRIPTION
-
-    Button React component that relates to the button which takes in error and setError props
-
- RETURNS
-
-    The Button component
-
- AUTHOR
-
-    Ashmin Bhandari
-
- DATE
-
-    05/14/2020
-
- */
-/**/
 const Button = (observer((props) => {
     //Shake animation during error
     const [shakeAnimation] = useState(new Animated.Value(0));
@@ -56,37 +23,6 @@ const Button = (observer((props) => {
         }
     });
 
-    /**/
-    /*
-
-     startShake
-
-     NAME
-
-       startShake - haptic shake
-
-     SYNOPSIS
-
-        const startShake()
-
-     DESCRIPTION
-
-        Starts a haptic shake animation
-
-     RETURNS
-
-        Nothing
-
-     AUTHOR
-
-        Ashmin Bhandari
-
-     DATE
-
-        05/14/2020
-
-     */
-    /**/
     const startShake = () => {
         Animated.sequence([
             Animated.timing(shakeAnimation, {toValue: 10, duration: 100, useNativeDriver: true}),

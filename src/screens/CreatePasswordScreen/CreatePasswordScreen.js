@@ -4,77 +4,12 @@ import {View, Text, TextInput, StyleSheet} from 'react-native';
 import axios from "axios";
 import AsyncStorage from '../../storage/AsyncStorage'
 
-/**/
-/*
-
- CreatePasswordScreen
-
- NAME
-
-   CreatePasswordScreen - create a password screen
-
- SYNOPSIS
-
-    const CreatePasswordScreen(props)
-
-        props -> React.props to be passed into it
-
- DESCRIPTION
-
-    Functional React component that relates to the create a password screen for the application
-    in which the user will create their password
-
- RETURNS
-
-    The CreatePasswordScreen component
-
- AUTHOR
-
-    Ashmin Bhandari
-
- DATE
-
-    05/14/2020
-
- */
-/**/
 const CreatePasswordScreen = (props) => {
     const [password, onChangePassword] = useState('');
     const [error, setError] = useState('');
     const [buttonErrorShake, setButtonErrorShake] = useState('');
     const [creationError, setCreationError] = useState('');
 
-    /**/
-    /*
-
-     validatePassword
-
-     NAME
-
-       validatePassword - Validates password for length
-
-     SYNOPSIS
-
-        validatePassword()
-
-     DESCRIPTION
-
-        Checks whether or not the password is of the proper length i.e. 8
-
-     RETURNS
-
-        True or false boolean according to the validity of the password
-
-     AUTHOR
-
-        Ashmin Bhandari
-
-     DATE
-
-        05/14/2020
-
-     */
-    /**/
     const validatePassword = () => {
         if (password.length == 0) {
             return false;
@@ -96,38 +31,7 @@ const CreatePasswordScreen = (props) => {
         validatePassword();
     });
 
-    /**/
-    /*
 
-     createUser
-
-     NAME
-
-       createUsers - Creates a new user
-
-     SYNOPSIS
-
-        async createUser()
-
-     DESCRIPTION
-
-        Sends a post request along with a user's email and password to the server to
-        have them join the application or sign up
-
-     RETURNS
-
-        Nothing
-
-     AUTHOR
-
-        Ashmin Bhandari
-
-     DATE
-
-        05/14/2020
-
-     */
-    /**/
     const createUser = async () => {
         if (validatePassword()) {
             try {

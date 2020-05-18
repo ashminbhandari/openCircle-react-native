@@ -8,40 +8,6 @@ import AsyncStorage from '../../storage/AsyncStorage';
 import {FontAwesome} from "@expo/vector-icons";
 import RotatingImageComponent from "../../components/UIElements/RotatingImageComponent";
 
-/**/
-/*
-
- AuthorizeSpotifyScreen
-
- NAME
-
-   AuthorizeSpotifyScreen - screen relating to Spotify authorization
-
- SYNOPSIS
-
-    const AuthorizeSpotifyScreen({navigation})
-
-        {navigation} -> navigation object to be passed into it
-
- DESCRIPTION
-
-    Functional React component that relates to the authorize Spotify for the application
-    in which the user will be able to connect to Spotify
-
- RETURNS
-
-    The AuthorizeSpotifyScreen component
-
- AUTHOR
-
-    Ashmin Bhandari
-
- DATE
-
-    05/14/2020
-
- */
-/**/
 const AuthorizeSpotifyScreen = observer(({navigation}) => {
     const [authCode, setAuthCode] = useState(null);
     const [error, setError] = useState(false);
@@ -59,37 +25,6 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
         getUser();
     }, [user]);
 
-    /**/
-    /*
-
-     getAuthorizationCode
-
-     NAME
-
-       getAuthorizationCode - Gets the user's Spotify authorization code
-
-     SYNOPSIS
-
-        async getAuthorizationCode()
-
-     DESCRIPTION
-
-        Gets the user's Spotify authorization code by initiating a expo auth-session
-
-     RETURNS
-
-        Authorization code as a string
-
-     AUTHOR
-
-        Ashmin Bhandari
-
-     DATE
-
-        05/14/2020
-
-     */
-    /**/
     //Gets the authorization code
     async function getAuthCode() {
         try {

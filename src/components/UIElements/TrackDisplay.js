@@ -1,39 +1,6 @@
 import React from 'react';
 import {View, StyleSheet, Image, Text} from 'react-native';
 
-/**/
-/*
-
- TrackDisplay
-
- NAME
-
-   TrackDisplay - the UI display for user's favorite track
-
- SYNOPSIS
-
-    const TrackDisplay(props)
-
-        props -> Props including track image, artist name and so on
-
- DESCRIPTION
-
-    Functional React component that relates to the user's favorite track to be displayed in app
-
- RETURNS
-
-    The TrackDisplay component
-
- AUTHOR
-
-    Ashmin Bhandari
-
- DATE
-
-    05/14/2020
-
- */
-/**/
 const TrackDisplay = (props) => {
     return (
         <View style={styles.container}>
