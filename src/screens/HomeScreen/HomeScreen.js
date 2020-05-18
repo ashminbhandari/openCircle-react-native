@@ -1,6 +1,6 @@
 import React, {useState, useEffect, useRef} from "react";
 import {View, StyleSheet, Dimensions, TouchableOpacity, Text, Button} from 'react-native';
-import MapView, { PROVIDER_GOOGLE, Marker, AnimatedRegion} from 'react-native-maps';
+import MapView, {PROVIDER_GOOGLE, Marker, AnimatedRegion} from 'react-native-maps';
 import mapStyle from './HomeStyle';
 import MapMarker from '../../components/UIElements/MapMarker';
 import {useStores} from '../../hooks/useStores';
@@ -11,7 +11,6 @@ import UserSpotifyPopup from "../../components/UIElements/UserSpotifyPopup";
 const HomeScreen = observer(() => {
     const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
     let mapRef = useRef(null);
-    let currentMarkerRef = useRef(null);
 
     async function setupLocation() {
         try {
@@ -27,6 +26,126 @@ const HomeScreen = observer(() => {
         }
     }
 
+    //Displays all the online users
+    function displayOnlineUsers() {
+        let userMarkers = [];
+
+        SpotifyStore.onlineUsers.map(user => {
+            userMarkers.push(
+                <View
+                    key={user.id.toString()}
+                    onPress={() => SpotifyStore.getUserSpotify(user.id)}
+                >
+                    <Marker
+                        coordinate={{
+                            latitude: user.latitude,
+                            longitude: user.longitude
+                        }}
+                    >
+                        <MapMarker/>
+                    </Marker>
+                </View>
+            );
+        });
+
+        return userMarkers;
+    }
+
+    //Displays the current user
+    function displayUser() {
+
+        //Only display if userLocation exists
+        if (LocationStore.userLocation) {
+            return (
+                <Marker
+                    coordinate={{
+                        latitude: LocationStore.userLocation.coords.latitude,
+                        longitude: LocationStore.userLocation.coords.longitude
+                    }}
+                >
+                    <View style={{
+                        backgroundColor: 'black',
+                        borderRadius: 10,
+                        borderWidth: 1,
+                        borderColor: 'white'
+                    }}>
+                        <Octicons
+                            name={'broadcast'}
+                            size={20}
+                            color={'#1DB954'}
+                            style={{
+                                padding: 7
+                            }}
+                        />
+                    </View>
+                </Marker>
+            );
+        }
+
+        return <></>;
+    }
+
+    //Display number of active users
+    function displayNumberOfActiveUsers() {
+        if (SpotifyStore.hasDownloadedUsers) {
+            return (
+                <View style={styles.onlineUsersCaption}>
+                    <FontAwesome
+                        name={'globe'}
+                        size={20}
+                        color={'#1DB954'}
+                    />
+                    <Text style={{
+                        color: 'white',
+                        alignSelf: 'center',
+                        marginLeft: 4
+                    }}>
+                        {SpotifyStore.onlineUsers.length} active users
+                    </Text>
+                </View>
+            );
+        }
+
+        return <></>;
+    }
+
+    //Display utility buttons
+    function displayUtilityButtons() {
+        return (
+            <View style={styles.buttonsContainer}>
+                {
+                    //Download button
+                }
+                <TouchableOpacity onPress={() => {
+                    SpotifyStore.gatherOnlineUsers(LocationStore, AuthorizationStore)
+                }}>
+                    <FontAwesome
+                        name={SpotifyStore.hasDownloadedUsers ? 'refresh' : 'arrow-circle-down'}
+                        size={20}
+                        color={LocationStore.userLocation ? 'white' : 'grey'}
+                        style={[styles.buttonsStyle, {
+                            borderColor: LocationStore.userLocation ? 'white' : 'grey'
+                        }]
+                        }
+                    />
+                </TouchableOpacity>
+                {
+                    //Broadcast button
+                }
+                <TouchableOpacity onPress={setupLocation}>
+                    <Octicons
+                        name={'broadcast'}
+                        size={20}
+                        color={LocationStore.userLocation ? '#1DB954' : 'white'}
+                        style={[styles.buttonsStyle, {
+                            borderColor: LocationStore.userLocation ? '#1DB954' : 'white',
+                            padding: 9
+                        }]}
+                    />
+                </TouchableOpacity>
+            </View>
+        )
+    }
     return (
         <View style={styles.container}>
             <MapView ref={mapRef}
@@ -41,100 +160,20 @@ const HomeScreen = observer(() => {
                      }}
             >
                 {
-                    LocationStore.userLocation ? (
-                        <Marker
-                            coordinate={{
-                                latitude: LocationStore.userLocation.coords.latitude,
-                                longitude: LocationStore.userLocation.coords.longitude
-                            }}
-                        >
-                            <View style={{
-                                backgroundColor: 'black',
-                                borderRadius: 10,
-                                borderWidth: 1,
-                                borderColor: 'white'
-                            }}>
-                                <Octicons
-                                    name={'broadcast'}
-                                    size={20}
-                                    color={'#1DB954'}
-                                    style={{
-                                        padding: 7
-                                    }}
-                                />
-                            </View>
-                        </Marker>
-                    ) : (
-                        <></>
-                    )
+                    displayUser()
                 }
-
                 {
-                    SpotifyStore.onlineUsers.map(user => (
-                        <View
-                            key={user.id.toString()}
-                            onPress={() => SpotifyStore.getUserSpotify(user.id)}
-                        >
-                            <Marker
-                                coordinate={{
-                                     latitude: user.latitude,
-                                    longitude: user.longitude
-                                }}
-                            >
-                                <MapMarker/>
-                            </Marker>
-                        </View>
-                    ))
+                    displayOnlineUsers()
                 }
             </MapView>
-            <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={() => {
-                    SpotifyStore.gatherOnlineUsers(LocationStore, AuthorizationStore)
-                }}>
-                    <FontAwesome
-                        name={SpotifyStore.hasDownloadedUsers ? 'refresh' : 'arrow-circle-down'}
-                        size={20}
-                        color={LocationStore.userLocation ? 'white' : 'grey'}
-                        style={[styles.buttonsStyle, {
-                            borderColor: LocationStore.userLocation ? 'white' : 'grey'
-                        }]
-                        }
-                    />
-                </TouchableOpacity>
-                <TouchableOpacity onPress={setupLocation}>
-                    <Octicons
-                        name={'broadcast'}
-                        size={20}
-                        color={LocationStore.userLocation ? '#1DB954' : 'white'}
-                        style={[styles.buttonsStyle, {
-                            borderColor: LocationStore.userLocation ? '#1DB954' : 'white',
-                            padding: 9
-                        }]}
-                    />
-                </TouchableOpacity>
-            </View>
             {
-                SpotifyStore.hasDownloadedUsers ? (
-                    <View style={styles.onlineUsersCaption}>
-                        <FontAwesome
-                            name={'globe'}
-                            size={20}
-                            color={'#1DB954'}
-                        />
-                        <Text style={{
-                            color: 'white',
-                            alignSelf: 'center',
-                            marginLeft: 4
-                        }}>
-                            {SpotifyStore.onlineUsers.length} active users
-                        </Text>
-                    </View>
-                ) : (
-                    <></>
-                )
+                SpotifyStore.userMarkerSpotifyData ? <UserSpotifyPopup/> : <></>
             }
             {
-                SpotifyStore.currentUserSpotifyData ? <UserSpotifyPopup/> : <></>
+                displayUtilityButtons()
+            }
+            {
+                displayNumberOfActiveUsers()
             }
         </View>
     )
