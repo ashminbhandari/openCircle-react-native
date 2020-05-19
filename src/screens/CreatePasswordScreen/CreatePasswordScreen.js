@@ -9,6 +9,7 @@ const CreatePasswordScreen = (props) => {
     const [error, setError] = useState('');
     const [buttonErrorShake, setButtonErrorShake] = useState('');
     const [creationError, setCreationError] = useState('');
+    const [buttonIsLoading, setButtonIsLoading] = useState(null);
 
     const validatePassword = () => {
         if (password.length == 0) {
@@ -35,12 +36,14 @@ const CreatePasswordScreen = (props) => {
     const createUser = async () => {
         if (validatePassword()) {
             try {
+                setButtonIsLoading(true);
                 let response = await axios.post('https://intense-journey-83343.herokuapp.com/auth/createUser', {
                     code: props.authCode,
                     auth: {
                         password: password
                     }
                 });
+                setButtonIsLoading(false);
 
                 //Our user
                 let user = response.data.user;
@@ -56,6 +59,7 @@ const CreatePasswordScreen = (props) => {
                     props.navigator.push('AuthorizeSpotifyScreen');
                 }
             } catch (error) {
+                setButtonIsLoading(false);
                 setCreationError('Do you already have an account?');
                 setButtonErrorShake(true);
             }
@@ -86,7 +90,8 @@ const CreatePasswordScreen = (props) => {
                     faName='lock'
                     onPress={createUser}
                     error={buttonErrorShake}
-                    setError={setButtonErrorShake}/>
+                    setError={setButtonErrorShake}
+                    isLoading={buttonIsLoading}/>
             </View>
         </View>
     );

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {Text, Animated, TouchableOpacity, View, StyleSheet} from "react-native";
+import {Text, Animated, TouchableOpacity, View, StyleSheet, ActivityIndicator} from "react-native";
 import {observer} from 'mobx-react';
 import {FontAwesome} from "@expo/vector-icons";
 import * as Haptics from 'expo-haptics';
@@ -13,15 +13,14 @@ const Button = (observer((props) => {
         if (props.error) {
             startShake();
             Haptics.impactAsync('heavy');
+            //After some time out disable the button shake
+            if (props.setError) {
+                setTimeout(() => {
+                    props.setError(false);
+                }, 500);
+            }
         }
-
-        //After some time out disable the button shake
-        if(props.setError) {
-            setTimeout(() => {
-                props.setError(false);
-            }, 500);
-        }
-    });
+    }, []);
 
     const startShake = () => {
         Animated.sequence([
@@ -33,19 +32,26 @@ const Button = (observer((props) => {
     };
 
     return (
-        <Animated.View style={{
-            transform: [{translateX: shakeAnimation}],
-        }}>
-            <TouchableOpacity style={[styles.button, {borderColor: props.error ? 'red' : 'white'}]}
-                              onPress={props.onPress}>
-                <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                    <FontAwesome size={32} name={props.faName} style={{
-                        color: props.error ? 'red' : props.faColor ? props.faColor : 'white',
-                    }}/>
-                    <Text style={[styles.text, {color: props.error ? 'red' : 'white'}]}>{props.text}</Text>
-                </View>
-            </TouchableOpacity>
-        </Animated.View>
+        <>
+            {
+                props.isLoading ? (<ActivityIndicator size="small" color="#1DB954"/>) :
+                    (<Animated.View style={{
+                            transform: [{translateX: shakeAnimation}],
+                        }}>
+                            <TouchableOpacity style={[styles.button, {borderColor: props.error ? 'red' : 'white'}]}
+                                              onPress={props.onPress}>
+                                <View style={{flexDirection: 'row', alignSelf: 'center'}}>
+                                    <FontAwesome size={32} name={props.faName} style={{
+                                        color: props.error ? 'red' : props.faColor ? props.faColor : 'white',
+                                    }}/>
+                                    <Text
+                                        style={[styles.text, {color: props.error ? 'red' : 'white'}]}>{props.text}</Text>
+                                </View>
+                            </TouchableOpacity>
+                        </Animated.View>
+                    )
+            }
+        </>
     );
 }));
 

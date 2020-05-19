@@ -91,7 +91,7 @@ export default {
         //Make the axios call
         try {
             let response = await axios.request({
-                url: 'http://10.0.0.226:3000/spotify/checkCookie',
+                url: 'https://intense-journey-83343.herokuapp.com/spotify/checkCookie',
                 method: 'get',
                 headers: {
                     Authorization: `Bearer ${cookie}`

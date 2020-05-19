@@ -10,8 +10,9 @@ import RotatingImageComponent from "../../components/UIElements/RotatingImageCom
 
 const AuthorizeSpotifyScreen = observer(({navigation}) => {
     const [authCode, setAuthCode] = useState(null);
-    const [error, setError] = useState(false);
+    const [error, setError] = useState(null);
     const [user, setUser] = useState(null);
+    const [buttonIsLoading, setButtonIsLoading] = useState(null);
 
     //useEffect hook given by React architecture
     useEffect(() => {
@@ -28,10 +29,13 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
     //Gets the authorization code
     async function getAuthCode() {
         try {
+            setButtonIsLoading(true);
             let code = await AuthorizationService.getAuthorizationCode();
+            setButtonIsLoading(false);
             setAuthCode(code);
             console.log("Code received as..", code);
         } catch (error) {
+            setButtonIsLoading(false);
             console.log("Error getting/setting auth code in LandingPage.js");
             setError(true);
         }
@@ -64,6 +68,7 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
                             onPress={getAuthCode}
                             error={error}
                             setError={setError}
+                            isLoading={buttonIsLoading}
                         />
                     </View>
                 )

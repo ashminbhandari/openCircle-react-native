@@ -20,12 +20,6 @@ const Stack = createStackNavigator();
 const EntryPoint = observer(() => {
     const {AuthorizationStore} = useStores();
 
-    //Utilizing the useEffect hook
-    useEffect(() => {
-        //Checks cookie and if cookie exists, set isAuthenticated to true
-        AuthorizationStore.checkCookie();
-    });
-
     return (
         <NavigationContainer>
             <Stack.Navigator screenOptions={{

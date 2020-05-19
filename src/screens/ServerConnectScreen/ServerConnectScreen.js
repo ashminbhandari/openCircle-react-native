@@ -1,23 +1,37 @@
 import React, {useState, useEffect} from 'react';
-import {StyleSheet, TextInput, KeyboardAvoidingView, View, Text} from "react-native";
+import {StyleSheet, TextInput, KeyboardAvoidingView, View, Text, ActivityIndicator} from "react-native";
 import Button from "../../components/UIElements/Button";
 import {FontAwesome} from "@expo/vector-icons";
 import AuthorizationService from "../../services/AuthorizationService";
 import RotatingImageComponent from "../../components/UIElements/RotatingImageComponent";
 import {useStores} from '../../hooks/useStores';
-import cookieConfig from "../../utils/cookieConfig";
 
 const ServerConnectScreen = ({navigation}) => {
     const [password, onChangePassword] = useState('password');
     const [email, onChangeEmail] = useState('Spotify email');
     const [loginError, onLoginError] = useState(null);
-    const [buttonError, setButtonError] = useState(false);
+    const [buttonError, setButtonError] = useState(null);
+    const [buttonIsLoading, setButtonIsLoading] = useState(null);
     const {AuthorizationStore} = useStores();
+    const [checkingCookie, setCheckingCookie] = useState(null);
+
+    //Utilizing the useEffect hook to check if the cookie saved is valid
+    useEffect(() => {
+        async function checkCookie() {
+            setCheckingCookie(true);
+            //Checks cookie and if cookie exists, set isAuthenticated to true
+            await AuthorizationStore.checkCookie();
+            setCheckingCookie(false);
+        }
+        checkCookie();
+    },[]);
 
     async function joinServer() {
         try {
+            setButtonIsLoading(true);
             let response = await AuthorizationService.joinServer(email, password);
-            if(response) {
+            setButtonIsLoading(false);
+            if (response) {
                 AuthorizationStore.isAuthenticated = true;
                 AuthorizationStore.user = response.data;
             }
@@ -27,10 +41,12 @@ const ServerConnectScreen = ({navigation}) => {
 
         } catch (error) {
             console.log(error);
+            setButtonIsLoading(false);
             onLoginError('Please check your credentials');
             setButtonError(true);
         }
     }
+
     return (
         <View style={styles.container}>
             <FontAwesome
@@ -76,6 +92,7 @@ const ServerConnectScreen = ({navigation}) => {
                             onPress={joinServer}
                             error={buttonError}
                             setError={setButtonError}
+                            isLoading={buttonIsLoading}
                         />
                         {
                             loginError ? (
@@ -93,6 +110,20 @@ const ServerConnectScreen = ({navigation}) => {
                     </View>
                 </View>
             </KeyboardAvoidingView>
+            {
+                checkingCookie ? (
+                    <View style={{
+                        flexDirection: 'row',
+                        marginTop: 35,
+                    }}>
+                        <ActivityIndicator size="small" color="#1DB954"/>
+                        <Text style={{
+                            color: 'white',
+                            marginLeft: 10
+                        }}>Checking for an existing session</Text>
+                    </View>
+                ) : <></>
+            }
         </View>
     );
 };

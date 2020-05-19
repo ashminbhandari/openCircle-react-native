@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useRef} from "react";
-import {View, StyleSheet, Dimensions, TouchableOpacity, Text, Button} from 'react-native';
+import {View, StyleSheet, Dimensions, TouchableOpacity, Text, Button, ActivityIndicator} from 'react-native';
 import MapView, {PROVIDER_GOOGLE, Marker, AnimatedRegion} from 'react-native-maps';
 import mapStyle from './HomeStyle';
 import MapMarker from '../../components/UIElements/MapMarker';
@@ -10,11 +10,17 @@ import UserSpotifyPopupScreen from '../UserSpotifyPopupScreen/UserSpotifyPopupSc
 
 const HomeScreen = observer(() => {
     const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
+    const [locationLoading, setLocationLoading] = useState(null);
+    const [usersLoading, setUsersLoading] = useState(null);
+    const [loadingDataForId, setLoadingDataForId] = useState(null);
+
     let mapRef = useRef(null);
 
     async function setupLocation() {
         try {
+            setLocationLoading(true);
             await LocationStore.setupLocation();
+            setLocationLoading(false);
             mapRef.current.animateToRegion({
                 latitude: LocationStore.userLocation.coords.latitude,
                 longitude: LocationStore.userLocation.coords.longitude,
@@ -26,15 +32,21 @@ const HomeScreen = observer(() => {
         }
     }
 
+    //Gather online users
+    async function gatherOnlineUsers() {
+        setUsersLoading(true);
+        await SpotifyStore.gatherOnlineUsers(LocationStore, AuthorizationStore)
+        setUsersLoading(false);
+    }
+
     //Displays all the online users
     function displayOnlineUsers() {
         let userMarkers = [];
-
         SpotifyStore.onlineUsers.map(user => {
             userMarkers.push(
                 <View
                     key={user.id.toString()}
-                    onPress={() => SpotifyStore.getUserSpotify(user.id)}
+                    onPress={() => getUserSpotify(user.id)}
                 >
                     <Marker
                         coordinate={{
@@ -42,7 +54,10 @@ const HomeScreen = observer(() => {
                             longitude: user.longitude
                         }}
                     >
-                        <MapMarker/>
+                        <MapMarker
+                            loadingDataForId={loadingDataForId}
+                            userId={user.id}
+                        />
                     </Marker>
                 </View>
             );
@@ -57,7 +72,7 @@ const HomeScreen = observer(() => {
         if (LocationStore.userLocation) {
             return (
                 <View key={AuthorizationStore.user.id.toString()}
-                      onPress={() => SpotifyStore.getUserSpotify(AuthorizationStore.user.id)}>
+                      onPress={() => getUserSpotify(AuthorizationStore.user.id)}>
                     <Marker
                         coordinate={{
                             latitude: LocationStore.userLocation.coords.latitude,
@@ -116,38 +131,58 @@ const HomeScreen = observer(() => {
     function displayUtilityButtons() {
         return (
             <View style={styles.buttonsContainer}>
-                {
-                    //Download button
-                }
-                <TouchableOpacity onPress={() => {
-                    SpotifyStore.gatherOnlineUsers(LocationStore, AuthorizationStore)
-                }}>
-                    <FontAwesome
-                        name={SpotifyStore.hasDownloadedUsers ? 'refresh' : 'arrow-circle-down'}
-                        size={20}
-                        color={LocationStore.userLocation ? 'white' : 'grey'}
-                        style={[styles.buttonsStyle, {
-                            borderColor: LocationStore.userLocation ? 'white' : 'grey'
-                        }]
-                        }
-                    />
+                <TouchableOpacity onPress={gatherOnlineUsers}>
+                    {
+                        usersLoading ? (
+                            <ActivityIndicator
+                                style={styles.buttonsStyle}
+                                size="small"
+                                color="#1DB954"/>
+                        ) : (
+                            <FontAwesome
+                                name={SpotifyStore.hasDownloadedUsers ? 'refresh' : 'arrow-circle-down'}
+                                size={20}
+                                color={LocationStore.userLocation ? 'white' : 'grey'}
+                                style={[styles.buttonsStyle, {
+                                    borderColor: LocationStore.userLocation ? 'white' : 'grey'
+                                }]
+                                }
+                            />
+                        )
+                    }
                 </TouchableOpacity>
                 {
                     //Broadcast button
                 }
                 <TouchableOpacity onPress={setupLocation}>
-                    <Octicons
-                        name={'broadcast'}
-                        size={20}
-                        color={LocationStore.userLocation ? '#1DB954' : 'white'}
-                        style={[styles.buttonsStyle, {
-                            borderColor: LocationStore.userLocation ? '#1DB954' : 'white',
-                            padding: 9
-                        }]}
-                    />
+                    {
+                        locationLoading ? (
+                            <ActivityIndicator
+                                style={styles.buttonsStyle}
+                                size="small"
+                                color="#1DB954"/>
+                        ) : (
+                            <Octicons
+                                name={'broadcast'}
+                                size={20}
+                                color={LocationStore.userLocation ? '#1DB954' : 'white'}
+                                style={[styles.buttonsStyle, {
+                                    borderColor: LocationStore.userLocation ? '#1DB954' : 'white',
+                                    padding: 9
+                                }]}
+                            />
+                        )
+                    }
                 </TouchableOpacity>
             </View>
         )
+    }
+
+    //Gets a user's Spotify data
+    async function getUserSpotify(user) {
+        setLoadingDataForId(user);
+        await SpotifyStore.getUserSpotify(user);
+        setLoadingDataForId(null);
     }
 
     return (
