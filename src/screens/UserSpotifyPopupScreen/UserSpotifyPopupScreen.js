@@ -2,21 +2,23 @@ import React, {useState} from 'react';
 import {View, StyleSheet, Text} from 'react-native';
 import {observer} from 'mobx-react';
 import {AntDesign} from '@expo/vector-icons';
-import TrackDisplay from "./TrackDisplay";
+import TrackDisplay from "../../components/UIElements/TrackDisplay";
+import {useStores} from '../../hooks/useStores';
 
-const UserSpotifyPopup = observer(({markerData, markerOwner}) => {
+const UserSpotifyPopupScreen = observer(() => {
     const [close, setClose] = useState(false);
+    const {SpotifyStore} = useStores();
 
     function closeUser() {
         setClose(close);
-        markerData = null;
-        markerOwner = null;
+        SpotifyStore.selectedMarkerSpotifyData= null;
+        SpotifyStore.selectedMarkerOwner = null;
     }
 
     return (
         <>
             {
-                close ? <></> : (
+                close || !SpotifyStore.selectedMarkerSpotifyData ? <></> : (
                     <View style={styles.container}>
                         <View style={{
                             flexDirection: 'row',
@@ -27,7 +29,7 @@ const UserSpotifyPopup = observer(({markerData, markerOwner}) => {
                                 marginLeft: 15,
                                 alignSelf: 'center',
                             }}>
-                                {SpotifyStore.markerOwner}'s Top 5 tracks
+                                {SpotifyStore.selectedMarkerOwner}'s Top 5 tracks
                             </Text>
                             <AntDesign name={'closecircle'}
                                        onPress={closeUser}
@@ -39,7 +41,7 @@ const UserSpotifyPopup = observer(({markerData, markerOwner}) => {
                             />
                         </View>
                         {
-                            SpotifyStore.markerData.map((track, index) => (
+                            SpotifyStore.selectedMarkerSpotifyData.map((track, index) => (
                                 <View key={index}>
                                     <TrackDisplay
                                         imgSource={track.image}
@@ -68,4 +70,4 @@ const styles = StyleSheet.create({
     }
 });
 
-export default UserSpotifyPopup;
+export default UserSpotifyPopupScreen;

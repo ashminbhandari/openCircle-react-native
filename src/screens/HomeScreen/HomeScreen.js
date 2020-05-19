@@ -6,7 +6,7 @@ import MapMarker from '../../components/UIElements/MapMarker';
 import {useStores} from '../../hooks/useStores';
 import {FontAwesome, FontAwesome5, Octicons} from '@expo/vector-icons'
 import {observer} from 'mobx-react';
-import UserSpotifyPopup from "../../components/UIElements/UserSpotifyPopup";
+import UserSpotifyPopupScreen from '../UserSpotifyPopupScreen/UserSpotifyPopupScreen';
 
 const HomeScreen = observer(() => {
     const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
@@ -112,17 +112,6 @@ const HomeScreen = observer(() => {
         return <></>;
     }
 
-    //Displays popup with the selected user(marker) data
-    function displayPopupWithUserData() {
-        let markerData = SpotifyStore.selectedMarkerSpotifyData;
-        let markerOwner = SpotifyStore.selectedMarkerOwner;
-        return (
-            <UserSpotifyPopup markerData={markerData}
-                              markerOwner={markerOwner}
-            />
-        )
-    }
-
     //Display utility buttons
     function displayUtilityButtons() {
         return (
@@ -188,7 +177,7 @@ const HomeScreen = observer(() => {
                 displayNumberOfActiveUsers()
             }
             {
-                SpotifyStore.selectedMarkerSpotifyData ? displayPopupWithUserData() : <></>
+                <UserSpotifyPopupScreen/>
             }
         </View>
     )

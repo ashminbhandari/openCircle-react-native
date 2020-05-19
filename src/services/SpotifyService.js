@@ -2,18 +2,6 @@
 import axios from "axios";
 
 export default {
-    async gatherOnlineUsers(myLocation) {
-        try {
-            let response = await axios.post('https://intense-journey-83343.herokuapp.com/spotify/users', {
-                location: myLocation
-            });
-            return response.data.data;
-        } catch (error) {
-            console.log('At gatherOnlineUsers in SpotifyService');
-            throw error;
-        }
-    },
-
     async getUserSpotify(user) {
         try {
             let response = await axios.post('https://intense-journey-83343.herokuapp.com/spotify/getUserSpotify', {
