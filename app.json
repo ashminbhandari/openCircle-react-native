@@ -2,7 +2,7 @@
   "expo": {
     "name": "openCircle",
     "slug": "openCircle",
-    "scheme": "openCircle",
+    "scheme": "open-circle",
     "platforms": [
       "ios",
       "android",
@@ -10,11 +10,11 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/opencircle.png",
+    "icon": "./assets/opencircle-icon.png",
     "splash": {
-      "image": "./assets/opencircle.png",
+      "image": "./assets/opencircle-splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#000000"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -24,7 +24,10 @@
     ],
     "ios": {
       "supportsTablet": true,
-      "bundleIdentifier": "cp.opencircle.bi"
+      "bundleIdentifier": "cp.opencircle.bi",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "openCircle uses your location to display you on the world map."
+      }
     }
   }
 }
