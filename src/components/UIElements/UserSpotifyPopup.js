@@ -1,18 +1,16 @@
 import React, {useState} from 'react';
-import {useStores} from '../../hooks/useStores';
 import {View, StyleSheet, Text} from 'react-native';
 import {observer} from 'mobx-react';
 import {AntDesign} from '@expo/vector-icons';
 import TrackDisplay from "./TrackDisplay";
 
-const UserSpotifyPopup = observer(() => {
+const UserSpotifyPopup = observer(({markerData, markerOwner}) => {
     const [close, setClose] = useState(false);
-    const {SpotifyStore} = useStores();
 
     function closeUser() {
         setClose(close);
-        SpotifyStore.currentUserSpotifyData = null;
-        SpotifyStore.dataOwner = null;
+        markerData = null;
+        markerOwner = null;
     }
 
     return (
@@ -29,7 +27,7 @@ const UserSpotifyPopup = observer(() => {
                                 marginLeft: 15,
                                 alignSelf: 'center',
                             }}>
-                                {SpotifyStore.dataOwner}'s Top 5 tracks
+                                {SpotifyStore.markerOwner}'s Top 5 tracks
                             </Text>
                             <AntDesign name={'closecircle'}
                                        onPress={closeUser}
@@ -41,7 +39,7 @@ const UserSpotifyPopup = observer(() => {
                             />
                         </View>
                         {
-                            SpotifyStore.currentUserSpotifyData.map((track, index) => (
+                            SpotifyStore.markerData.map((track, index) => (
                                 <View key={index}>
                                     <TrackDisplay
                                         imgSource={track.image}

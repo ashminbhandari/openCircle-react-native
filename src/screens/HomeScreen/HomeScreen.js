@@ -53,32 +53,35 @@ const HomeScreen = observer(() => {
 
     //Displays the current user
     function displayUser() {
-
         //Only display if userLocation exists
         if (LocationStore.userLocation) {
             return (
-                <Marker
-                    coordinate={{
-                        latitude: LocationStore.userLocation.coords.latitude,
-                        longitude: LocationStore.userLocation.coords.longitude
-                    }}
-                >
-                    <View style={{
-                        backgroundColor: 'black',
-                        borderRadius: 10,
-                        borderWidth: 1,
-                        borderColor: 'white'
-                    }}>
-                        <Octicons
-                            name={'broadcast'}
-                            size={20}
-                            color={'#1DB954'}
-                            style={{
-                                padding: 7
-                            }}
-                        />
-                    </View>
-                </Marker>
+                <View key={AuthorizationStore.user.id.toString()}
+                      onPress={() => SpotifyStore.getUserSpotify(AuthorizationStore.user.id)}>
+                    <Marker
+                        coordinate={{
+                            latitude: LocationStore.userLocation.coords.latitude,
+                            longitude: LocationStore.userLocation.coords.longitude
+                        }}
+                    >
+                        <View style={{
+                            backgroundColor: 'black',
+                            borderRadius: 10,
+                            borderWidth: 1,
+                            borderColor: 'white'
+                        }}>
+                            <Octicons
+                                name={'broadcast'}
+                                size={20}
+                                color={'#1DB954'}
+                                style={{
+                                    padding: 7
+                                }}
+                            />
+                        </View>
+                    </Marker>
+                </View>
+
             );
         }
 
@@ -107,6 +110,17 @@ const HomeScreen = observer(() => {
         }
 
         return <></>;
+    }
+
+    //Displays popup with the selected user(marker) data
+    function displayPopupWithUserData() {
+        let markerData = SpotifyStore.selectedMarkerSpotifyData;
+        let markerOwner = SpotifyStore.selectedMarkerOwner;
+        return (
+            <UserSpotifyPopup markerData={markerData}
+                              markerOwner={markerOwner}
+            />
+        )
     }
 
     //Display utility buttons
@@ -146,7 +160,7 @@ const HomeScreen = observer(() => {
             </View>
         )
     }
-    
+
     return (
         <View style={styles.container}>
             <MapView ref={mapRef}
@@ -168,13 +182,13 @@ const HomeScreen = observer(() => {
                 }
             </MapView>
             {
-                SpotifyStore.userMarkerSpotifyData ? <UserSpotifyPopup/> : <></>
-            }
-            {
                 displayUtilityButtons()
             }
             {
                 displayNumberOfActiveUsers()
+            }
+            {
+                SpotifyStore.selectedMarkerSpotifyData ? displayPopupWithUserData() : <></>
             }
         </View>
     )

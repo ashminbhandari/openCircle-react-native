@@ -19,12 +19,12 @@ const ServerConnectScreen = ({navigation}) => {
             let response = await AuthorizationService.joinServer(email, password);
             if(response) {
                 AuthorizationStore.isAuthenticated = true;
-                AuthorizationStore.username = response.data.name;
-                AuthorizationStore.userID = response.data.userID;
+                AuthorizationStore.user = response.data;
             }
 
             //Set cookie
             await AuthorizationService.saveCookie(response.headers['set-cookie']);
+
         } catch (error) {
             console.log(error);
             onLoginError('Please check your credentials');
