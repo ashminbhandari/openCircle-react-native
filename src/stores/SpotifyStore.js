@@ -22,7 +22,7 @@ export class SpotifyStore {
     async gatherOnlineUsers(LocationStore, AuthorizationStore) {
         if (LocationStore.userLocation) {
             try {
-                let response = await axios.get('http://10.0.0.226:3000/spotify/gatherOnlineUsers');
+                let response = await axios.get('https://intense-journey-83343.herokuapp.com//spotify/gatherOnlineUsers');
                 this.onlineUsers = response.data.data;
 
                 //Filter online users

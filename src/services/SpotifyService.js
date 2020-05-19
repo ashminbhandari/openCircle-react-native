@@ -4,7 +4,7 @@ import axios from "axios";
 export default {
     async gatherOnlineUsers(myLocation) {
         try {
-            let response = await axios.post('http://10.0.0.226:3000/spotify/users', {
+            let response = await axios.post('https://intense-journey-83343.herokuapp.com/spotify/users', {
                 location: myLocation
             });
             return response.data.data;
@@ -16,7 +16,7 @@ export default {
 
     async getUserSpotify(user) {
         try {
-            let response = await axios.post('http://10.0.0.226:3000/spotify/getUserSpotify', {
+            let response = await axios.post('https://intense-journey-83343.herokuapp.com/spotify/getUserSpotify', {
                 user: user
             });
 

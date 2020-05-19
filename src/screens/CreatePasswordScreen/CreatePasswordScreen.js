@@ -35,7 +35,7 @@ const CreatePasswordScreen = (props) => {
     const createUser = async () => {
         if (validatePassword()) {
             try {
-                let response = await axios.post('http://10.0.0.226:3000/auth/createUser', {
+                let response = await axios.post('https://intense-journey-83343.herokuapp.com/auth/createUser', {
                     code: props.authCode,
                     auth: {
                         password: password

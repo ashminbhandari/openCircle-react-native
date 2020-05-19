@@ -44,7 +44,7 @@ export class LocationStore {
     //Runs automatically when the location for the session is updated
     updateSessionLocation = autorun(async () => {
         if(this.sessionLocation) {
-            await axios.post('http://10.0.0.226:3000/spotify/updateSessionLocation', {
+            await axios.post('https://intense-journey-83343.herokuapp.com/spotify/updateSessionLocation', {
                 location: this.sessionLocation
             })
         }

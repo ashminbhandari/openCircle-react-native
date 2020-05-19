@@ -15,7 +15,7 @@ export default {
     //Get Spotify credentials from the server to initiate an auth session
     async getCredentials() {
         try {
-            const res = await axios.get('http://10.0.0.226:3000/auth/credentials');
+            const res = await axios.get('https://intense-journey-83343.herokuapp.com/auth/credentials');
             const credentials = res.data;
             return credentials;
         } catch (error) {
@@ -56,7 +56,7 @@ export default {
     //Join server call, takes in the user email and password
     async joinServer(email, password) {
         try {
-            let response = await axios.post('http://10.0.0.226:3000/auth/joinServer', {
+            let response = await axios.post('https://intense-journey-83343.herokuapp.com/auth/joinServer', {
                 email: email,
                 password: password
             });
