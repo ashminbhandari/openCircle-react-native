@@ -1,18 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import {View, StyleSheet, ActivityIndicator} from 'react-native';
-import {FontAwesome} from '@expo/vector-icons';
+import {MaterialCommunityIcons} from '@expo/vector-icons';
 
-const MapMarker = ({loadingDataForId, userId}) => {
+const MapMarker = ({loadingDataForId, userId, iconName}) => {
     return (
         <View style={styles.container}>
             {
                 loadingDataForId == userId ? (
                 <ActivityIndicator style={{padding:5}} size="small" color="#1DB954"/>
             ) : (
-                <FontAwesome
-                    name={'spotify'}
+                <MaterialCommunityIcons
+                    name={iconName}
                     color={'#1DB954'}
-                    size={30}
+                    size={25}
                 />
             )}
         </View>
@@ -22,8 +22,9 @@ const MapMarker = ({loadingDataForId, userId}) => {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: 'black',
-        borderWidth: 1,
-        padding: 5,
+        borderWidth: 1.5,
+        padding: 2,
+        paddingBottom: 1,
         borderColor: 'white',
         borderRadius: 50,
     }

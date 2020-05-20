@@ -6,6 +6,7 @@ import HomeScreen from "./screens/HomeScreen/HomeScreen";
 import AuthorizeSpotifyScreen from "./screens/AuthorizeSpotifyScreen/AuthorizeSpotifyScreen";
 import CreatePasswordScreen from "./screens/CreatePasswordScreen/CreatePasswordScreen";
 import ServerConnectScreen from "./screens/ServerConnectScreen/ServerConnectScreen";
+import UserSpotifyPopupScreen from "./screens/UserSpotifyPopupScreen/UserSpotifyPopupScreen";
 
 //MobX imports
 import {observer} from 'mobx-react';
@@ -43,8 +44,11 @@ const EntryPoint = observer(() => {
                             />
                         </>
                     ) : (
-                        // User is signed in
-                        <Stack.Screen name="HomeScreen" component={HomeScreen}/>
+                        <>
+                            // User is signed in
+                            <Stack.Screen name="HomeScreen" component={HomeScreen}/>
+                            <Stack.Screen name="UserSpotifyPopupScreen" component={UserSpotifyPopupScreen}/>
+                        </>
                     )}
             </Stack.Navigator>
         </NavigationContainer>

@@ -12,7 +12,7 @@ const HomeScreen = observer(() => {
     const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
     const [locationLoading, setLocationLoading] = useState(null);
     const [usersLoading, setUsersLoading] = useState(null);
-    const [loadingDataForId, setLoadingDataForId] = useState(null);
+    const [loadForUser, setLoadForUser] = useState(null);
 
     let mapRef = useRef(null);
 
@@ -26,7 +26,7 @@ const HomeScreen = observer(() => {
                 longitude: LocationStore.userLocation.coords.longitude,
                 latitudeDelta: 20,
                 longitudeDelta: 20
-            }, 1000)
+            }, 2000)
         } catch (error) {
             console.log(error);
         }
@@ -38,6 +38,11 @@ const HomeScreen = observer(() => {
         await SpotifyStore.gatherOnlineUsers(LocationStore, AuthorizationStore)
         setUsersLoading(false);
     }
+
+    //Gets a user's Spotify data
+    async function getUserSpotify(user) {
+        setLoadForUser(user);
+    };
 
     //Displays all the online users
     function displayOnlineUsers() {
@@ -55,8 +60,9 @@ const HomeScreen = observer(() => {
                         }}
                     >
                         <MapMarker
-                            loadingDataForId={loadingDataForId}
+                            loadingDataForId={loadForUser}
                             userId={user.id}
+                            iconName={'spotify'}
                         />
                     </Marker>
                 </View>
@@ -71,29 +77,21 @@ const HomeScreen = observer(() => {
         //Only display if userLocation exists
         if (LocationStore.userLocation) {
             return (
-                <View key={AuthorizationStore.user.id.toString()}
-                      onPress={() => getUserSpotify(AuthorizationStore.user.id)}>
+                <View
+                    key={AuthorizationStore.user.id.toString()}
+                    onPress={()=>{getUserSpotify(AuthorizationStore.user.id)}}
+                >
                     <Marker
                         coordinate={{
                             latitude: LocationStore.userLocation.coords.latitude,
                             longitude: LocationStore.userLocation.coords.longitude
                         }}
                     >
-                        <View style={{
-                            backgroundColor: 'black',
-                            borderRadius: 10,
-                            borderWidth: 1,
-                            borderColor: 'white'
-                        }}>
-                            <Octicons
-                                name={'broadcast'}
-                                size={20}
-                                color={'#1DB954'}
-                                style={{
-                                    padding: 7
-                                }}
-                            />
-                        </View>
+                        <MapMarker
+                            loadingDataForId={loadForUser}
+                            userId={AuthorizationStore.user.id}
+                            iconName={'radio-tower'}
+                        />
                     </Marker>
                 </View>
 
@@ -178,13 +176,6 @@ const HomeScreen = observer(() => {
         )
     }
 
-    //Gets a user's Spotify data
-    async function getUserSpotify(user) {
-        setLoadingDataForId(user);
-        await SpotifyStore.getUserSpotify(user);
-        setLoadingDataForId(null);
-    }
-
     return (
         <View style={styles.container}>
             <MapView ref={mapRef}
@@ -211,9 +202,7 @@ const HomeScreen = observer(() => {
             {
                 displayNumberOfActiveUsers()
             }
-            {
-                <UserSpotifyPopupScreen/>
-            }
+            {loadForUser ? <UserSpotifyPopupScreen user={loadForUser}/> : <></>}
         </View>
     )
 });

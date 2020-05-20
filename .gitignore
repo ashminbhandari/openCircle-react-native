@@ -11,6 +11,5 @@ web-build/
 web-report/
 server/.env
 server/certificate
-app.json
 # macOS
 .DS_Store
