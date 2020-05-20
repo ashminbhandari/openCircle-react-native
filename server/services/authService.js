@@ -10,6 +10,7 @@ module.exports = {
     async createUser(code, password) {
         let result;
         try {
+            console.log('as');
             //Get the token information
             tokenInfo = await this.getAccessToken(code);
 
