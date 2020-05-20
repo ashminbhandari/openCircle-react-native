@@ -8,6 +8,7 @@ import {FontAwesome, FontAwesome5, Octicons} from '@expo/vector-icons'
 import {observer} from 'mobx-react';
 import UserSpotifyPopupScreen from '../UserSpotifyPopupScreen/UserSpotifyPopupScreen';
 
+//VsCode testing 
 const HomeScreen = observer(() => {
     const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
     const [locationLoading, setLocationLoading] = useState(null);
