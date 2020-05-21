@@ -45,7 +45,6 @@ const EntryPoint = observer(() => {
                         </>
                     ) : (
                         <>
-                            // User is signed in
                             <Stack.Screen name="HomeScreen" component={HomeScreen}/>
                             <Stack.Screen name="UserSpotifyPopupScreen" component={UserSpotifyPopupScreen}/>
                         </>

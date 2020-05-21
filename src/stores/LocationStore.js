@@ -2,6 +2,7 @@ import {observable, action, autorun} from 'mobx';
 import LocationService from "../services/LocationService";
 import Toast from 'react-native-root-toast';
 import axios from 'axios';
+import env from '../../env';
 
 export class LocationStore {
     @observable userLocation = '';
@@ -44,7 +45,7 @@ export class LocationStore {
     //Runs automatically when the location for the session is updated
     updateSessionLocation = autorun(async () => {
         if(this.sessionLocation) {
-            await axios.post('https://intense-journey-83343.herokuapp.com/spotify/updateSessionLocation', {
+            await axios.post(env.API_URL + '/spotify/updateSessionLocation', {
                 location: this.sessionLocation
             })
         }

@@ -3,6 +3,7 @@ import Button from '../../components/UIElements/Button';
 import {View, Text, TextInput, StyleSheet} from 'react-native';
 import axios from "axios";
 import AsyncStorage from '../../storage/AsyncStorage'
+import env from '../../../env';
 
 const CreatePasswordScreen = (props) => {
     const [password, onChangePassword] = useState('');
@@ -37,7 +38,7 @@ const CreatePasswordScreen = (props) => {
         if (validatePassword()) {
             try {
                 setButtonIsLoading(true);
-                let response = await axios.post('https://intense-journey-83343.herokuapp.com/auth/createUser', {
+                let response = await axios.post(env.API_URL + '/auth/createUser', {
                     code: props.authCode,
                     auth: {
                         password: password

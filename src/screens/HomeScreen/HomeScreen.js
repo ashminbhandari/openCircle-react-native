@@ -9,7 +9,7 @@ import {observer} from 'mobx-react';
 import UserSpotifyPopupScreen from '../UserSpotifyPopupScreen/UserSpotifyPopupScreen';
 
 //VsCode test 
-const HomeScreen = observer(() => {
+const HomeScreen = observer(({navigation}) => {
     const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
     const [locationLoading, setLocationLoading] = useState(null);
     const [usersLoading, setUsersLoading] = useState(null);
@@ -42,7 +42,15 @@ const HomeScreen = observer(() => {
 
     //Gets a user's Spotify data
     async function getUserSpotify(user) {
+        //Load data for user
         setLoadForUser(user);
+        await SpotifyStore.getUserSpotify(user);
+        setLoadForUser(null);
+
+        //Open up Spotify data screen
+        navigation.navigate('UserSpotifyPopupScreen', {
+            user: user
+        });
     };
 
     //Displays all the online users

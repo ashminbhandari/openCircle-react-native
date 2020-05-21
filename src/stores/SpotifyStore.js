@@ -2,7 +2,7 @@ import {observable, action, autorun} from 'mobx';
 import axios from 'axios';
 import Toast from 'react-native-root-toast';
 import SpotifyService from "../services/SpotifyService";
-
+import env from '../../env';
 /**/
 export class SpotifyStore {
 
@@ -22,7 +22,7 @@ export class SpotifyStore {
     async gatherOnlineUsers(LocationStore, AuthorizationStore) {
         if (LocationStore.userLocation) {
             try {
-                let response = await axios.get('https://intense-journey-83343.herokuapp.com/spotify/gatherOnlineUsers');
+                let response = await axios.get(env.API_URL + '/spotify/gatherOnlineUsers');
                 this.onlineUsers = response.data.data;
 
                 //Filter online users

@@ -1,10 +1,11 @@
 //Send your location, get all online users and their location
 import axios from "axios";
+import env from '../../env'
 
 export default {
     async getUserSpotify(user) {
         try {
-            let response = await axios.post('https://intense-journey-83343.herokuapp.com/spotify/getUserSpotify', {
+            let response = await axios.post(env.API_URL + '/spotify/getUserSpotify', {
                 user: user
             });
 

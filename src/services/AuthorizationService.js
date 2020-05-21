@@ -1,6 +1,7 @@
 import axios from "axios";
 import * as AuthSession from "expo-auth-session";
 import AsyncStorage from "../storage/AsyncStorage";
+import env from '../../env';
 
 //The scope that we will be asking the user permission for
 const scopesArr = ['user-read-email', 'user-read-currently-playing', 'user-follow-read',
@@ -15,13 +16,13 @@ export default {
     //Get Spotify credentials from the server to initiate an auth session
     async getCredentials() {
         try {
-            const res = await axios.get('https://intense-journey-83343.herokuapp.com/auth/credentials');
+            const res = await axios.get(env.API_URL + '/auth/credentials');
             const credentials = res.data;
             return credentials;
         } catch (error) {
-            console.error("Error at getCredentials in AuthorizationService...", error);
+            console.log("Error at getCredentials in AuthorizationService...", error);
             throw error;
-        };
+        }post
     },
 
     //AuthCode from session
@@ -56,7 +57,7 @@ export default {
     //Join server call, takes in the user email and password
     async joinServer(email, password) {
         try {
-            let response = await axios.post('https://intense-journey-83343.herokuapp.com/auth/joinServer', {
+            let response = await axios.post(env.API_URL + '/auth/joinServer', {
                 email: email,
                 password: password
             });
@@ -91,7 +92,7 @@ export default {
         //Make the axios call
         try {
             let response = await axios.request({
-                url: 'https://intense-journey-83343.herokuapp.com/spotify/checkCookie',
+                url: env.API_URL + '/spotify/checkCookie',
                 method: 'get',
                 headers: {
                     Authorization: `Bearer ${cookie}`
