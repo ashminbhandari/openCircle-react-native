@@ -7,6 +7,9 @@ const logger = require('morgan');
 const helmet = require('helmet');
 const mongoose = require('mongoose');
 
+//Environment file
+require('dotenv').config();
+
 //Session management imports
 const session = require('express-session');
 const MongoStore = require('connect-mongo')(session);
@@ -17,9 +20,6 @@ const passportAuth = require("./authentication/passportAuth");
 
 //DB connection imports
 const db = require('./database/connection');
-
-//Environment file
-require('dotenv').config();
 
 //Establish database connection
 db.dbConnection();
