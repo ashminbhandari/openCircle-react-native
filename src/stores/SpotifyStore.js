@@ -12,11 +12,10 @@ export class SpotifyStore {
     //Flag set when the user has downloaded users
     @observable hasDownloadedUsers = false;
 
-    //The Spotify data for the user whose marker is clicked
-    @observable selectedMarkerSpotifyData = null;
-
     //Owner of the current data being shown
-    @observable selectedMarkerOwner = null;
+    @observable spotifyOF = null;
+
+    @observable topTracks = null;
 
     @action.bound
     async gatherOnlineUsers(LocationStore, AuthorizationStore) {
@@ -36,7 +35,7 @@ export class SpotifyStore {
 
                 this.hasDownloadedUsers = true;
 
-                //Show an error Toast
+                //Show a success toast
                 Toast.show('Downloaded ' + this.onlineUsers.length + ' users', {
                     duration: Toast.durations.LONG,
                     position: Toast.positions.TOP,
@@ -83,13 +82,27 @@ export class SpotifyStore {
         }
     }
 
-    @action.bound async getUserSpotify(user) {
+    @action.bound async getTopTracks(user) {
         try {
-            let response = await SpotifyService.getUserSpotify(user);
-            this.selectedMarkerSpotifyData = response.spotifyData;
-            this.selectedMarkerOwner = response.userName;
+            let response = await SpotifyService.getTopTracks(user);
+            this.topTracks = response.spotifyData;
+            this.spotifyOF = response.userName;
+            console.log(this.spotifyOF);
         } catch (error) {
-            console.debug('Error at spotifyStore at getUserSpotify',error);
+            //Show an error Toast
+            Toast.show('ooops, could not download top tracks', {
+                duration: Toast.durations.LONG,
+                position: Toast.positions.CENTER,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+                containerStyle: {
+                    borderWidth: 1,
+                    borderColor: 'red',
+                    marginTop: 20
+                }
+            });
+            console.debug('Error at spotifyStore at getTopTracks',error);
         }
     }
 }

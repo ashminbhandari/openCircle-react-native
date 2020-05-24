@@ -10,211 +10,211 @@ import UserSpotifyPopupScreen from '../UserSpotifyPopupScreen/UserSpotifyPopupSc
 
 //VsCode test 
 const HomeScreen = observer(({navigation}) => {
-    const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
-    const [locationLoading, setLocationLoading] = useState(null);
-    const [usersLoading, setUsersLoading] = useState(null);
-    const [loadForUser, setLoadForUser] = useState(null);
+        const {LocationStore, SpotifyStore, AuthorizationStore} = useStores();
+        const [locationLoading, setLocationLoading] = useState(null);
+        const [usersLoading, setUsersLoading] = useState(null);
+        const [loadForUser, setLoadForUser] = useState(null);
 
-    let mapRef = useRef(null);
+        let mapRef = useRef(null);
 
-    async function setupLocation() {
-        try {
-            setLocationLoading(true);
-            await LocationStore.setupLocation();
-            setLocationLoading(false);
-            mapRef.current.animateToRegion({
-                latitude: LocationStore.userLocation.coords.latitude,
-                longitude: LocationStore.userLocation.coords.longitude,
-                latitudeDelta: 20,
-                longitudeDelta: 20
-            }, 2000)
-        } catch (error) {
-            console.log(error);
+        async function setupLocation() {
+            try {
+                setLocationLoading(true);
+                await LocationStore.setupLocation();
+                setLocationLoading(false);
+                mapRef.current.animateToRegion({
+                    latitude: LocationStore.userLocation.coords.latitude,
+                    longitude: LocationStore.userLocation.coords.longitude,
+                    latitudeDelta: 20,
+                    longitudeDelta: 20
+                }, 2000)
+            } catch (error) {
+                console.log(error);
+            }
         }
-    }
 
-    //Gather online users
-    async function gatherOnlineUsers() {
-        setUsersLoading(true);
-        await SpotifyStore.gatherOnlineUsers(LocationStore, AuthorizationStore)
-        setUsersLoading(false);
-    }
+        //Gather online users
+        async function gatherOnlineUsers() {
+            setUsersLoading(true);
+            await SpotifyStore.gatherOnlineUsers(LocationStore, AuthorizationStore)
+            setUsersLoading(false);
+        }
 
-    //Gets a user's Spotify data
-    async function getUserSpotify(user) {
-        //Load data for user
-        setLoadForUser(user);
-        await SpotifyStore.getUserSpotify(user);
-        setLoadForUser(null);
+        //Gets a user's Spotify data
+        async function toSpotifyScreen(user) {
+            setLoadForUser(user);
+            await SpotifyStore.getTopTracks(user);
+            setLoadForUser(null);
 
-        //Open up Spotify data screen
-        navigation.navigate('UserSpotifyPopupScreen', {
-            user: user
-        });
-    };
+            //Open up Spotify data screen
+            navigation.push('UserSpotifyPopupScreen', {
+                user: user
+            });
+        }
 
-    //Displays all the online users
-    function displayOnlineUsers() {
-        let userMarkers = [];
-        SpotifyStore.onlineUsers.map(user => {
-            userMarkers.push(
-                <View
-                    key={user.id.toString()}
-                    onPress={() => getUserSpotify(user.id)}
-                >
-                    <Marker
-                        coordinate={{
-                            latitude: user.latitude,
-                            longitude: user.longitude
-                        }}
+        //Displays all the online users
+        function displayOnlineUsers() {
+            let userMarkers = [];
+            SpotifyStore.onlineUsers.map(user => {
+                userMarkers.push(
+                    <View
+                        key={user.id.toString()}
+                        onPress={()=>toSpotifyScreen(user.id)}
                     >
-                        <MapMarker
-                            loadingDataForId={loadForUser}
-                            userId={user.id}
-                            iconName={'spotify'}
-                        />
-                    </Marker>
-                </View>
-            );
-        });
+                        <Marker
+                            coordinate={{
+                                latitude: user.latitude,
+                                longitude: user.longitude
+                            }}
+                        >
+                            <MapMarker
+                                loadingDataForId={loadForUser}
+                                userId={user.id}
+                                iconName={'spotify'}
+                            />
+                        </Marker>
+                    </View>
+                );
+            });
 
-        return userMarkers;
-    }
+            return userMarkers;
+        }
 
-    //Displays the current user
-    function displayUser() {
-        //Only display if userLocation exists
-        if (LocationStore.userLocation) {
-            return (
-                <View
-                    key={AuthorizationStore.user.id.toString()}
-                    onPress={()=>{getUserSpotify(AuthorizationStore.user.id)}}
-                >
-                    <Marker
-                        coordinate={{
-                            latitude: LocationStore.userLocation.coords.latitude,
-                            longitude: LocationStore.userLocation.coords.longitude
-                        }}
+        //Displays the current user
+        function displayUser() {
+            //Only display if userLocation exists
+            if (LocationStore.userLocation) {
+                return (
+                    <View
+                        key={AuthorizationStore.user.id.toString()}
+                        onPress={()=>toSpotifyScreen(AuthorizationStore.user.id)}
                     >
-                        <MapMarker
-                            loadingDataForId={loadForUser}
-                            userId={AuthorizationStore.user.id}
-                            iconName={'radio-tower'}
+                        <Marker
+                            coordinate={{
+                                latitude: LocationStore.userLocation.coords.latitude,
+                                longitude: LocationStore.userLocation.coords.longitude
+                            }}
+                        >
+                            <MapMarker
+                                loadingDataForId={loadForUser}
+                                userId={AuthorizationStore.user.id}
+                                iconName={'radio-tower'}
+                            />
+                        </Marker>
+                    </View>
+
+                );
+            }
+
+            return <></>;
+        }
+
+        //Display number of active users
+        function displayNumberOfActiveUsers() {
+            if (SpotifyStore.hasDownloadedUsers) {
+                return (
+                    <View style={styles.onlineUsersCaption}>
+                        <FontAwesome
+                            name={'globe'}
+                            size={20}
+                            color={'#1DB954'}
                         />
-                    </Marker>
-                </View>
+                        <Text style={{
+                            color: 'white',
+                            alignSelf: 'center',
+                            marginLeft: 4
+                        }}>
+                            {SpotifyStore.onlineUsers.length} active users
+                        </Text>
+                    </View>
+                );
+            }
 
-            );
+            return <></>;
         }
 
-        return <></>;
-    }
-
-    //Display number of active users
-    function displayNumberOfActiveUsers() {
-        if (SpotifyStore.hasDownloadedUsers) {
+        //Display utility buttons
+        function displayUtilityButtons() {
             return (
-                <View style={styles.onlineUsersCaption}>
-                    <FontAwesome
-                        name={'globe'}
-                        size={20}
-                        color={'#1DB954'}
-                    />
-                    <Text style={{
-                        color: 'white',
-                        alignSelf: 'center',
-                        marginLeft: 4
-                    }}>
-                        {SpotifyStore.onlineUsers.length} active users
-                    </Text>
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity onPress={gatherOnlineUsers}>
+                        {
+                            usersLoading ? (
+                                <ActivityIndicator
+                                    style={styles.buttonsStyle}
+                                    size="small"
+                                    color="#1DB954"/>
+                            ) : (
+                                <FontAwesome
+                                    name={SpotifyStore.hasDownloadedUsers ? 'refresh' : 'arrow-circle-down'}
+                                    size={20}
+                                    color={LocationStore.userLocation ? 'white' : 'grey'}
+                                    style={[styles.buttonsStyle, {
+                                        borderColor: LocationStore.userLocation ? 'white' : 'grey'
+                                    }]
+                                    }
+                                />
+                            )
+                        }
+                    </TouchableOpacity>
+                    {
+                        //Broadcast button
+                    }
+                    <TouchableOpacity onPress={setupLocation}>
+                        {
+                            locationLoading ? (
+                                <ActivityIndicator
+                                    style={styles.buttonsStyle}
+                                    size="small"
+                                    color="#1DB954"/>
+                            ) : (
+                                <Octicons
+                                    name={'broadcast'}
+                                    size={20}
+                                    color={LocationStore.userLocation ? '#1DB954' : 'white'}
+                                    style={[styles.buttonsStyle, {
+                                        borderColor: LocationStore.userLocation ? '#1DB954' : 'white',
+                                        padding: 9
+                                    }]}
+                                />
+                            )
+                        }
+                    </TouchableOpacity>
                 </View>
-            );
+            )
         }
 
-        return <></>;
-    }
-
-    //Display utility buttons
-    function displayUtilityButtons() {
         return (
-            <View style={styles.buttonsContainer}>
-                <TouchableOpacity onPress={gatherOnlineUsers}>
+            <View style={styles.container}>
+                <MapView ref={mapRef}
+                         style={styles.mapStyle}
+                         provider={PROVIDER_GOOGLE}
+                         customMapStyle={mapStyle}
+                         initialRegion={{
+                             latitude: 28.3365578,
+                             longitude: 84.2021341,
+                             latitudeDelta: 9,
+                             longitudeDelta: 9
+                         }}
+                >
                     {
-                        usersLoading ? (
-                            <ActivityIndicator
-                                style={styles.buttonsStyle}
-                                size="small"
-                                color="#1DB954"/>
-                        ) : (
-                            <FontAwesome
-                                name={SpotifyStore.hasDownloadedUsers ? 'refresh' : 'arrow-circle-down'}
-                                size={20}
-                                color={LocationStore.userLocation ? 'white' : 'grey'}
-                                style={[styles.buttonsStyle, {
-                                    borderColor: LocationStore.userLocation ? 'white' : 'grey'
-                                }]
-                                }
-                            />
-                        )
+                        displayUser()
                     }
-                </TouchableOpacity>
+                    {
+                        displayOnlineUsers()
+                    }
+                </MapView>
                 {
-                    //Broadcast button
+                    displayUtilityButtons()
                 }
-                <TouchableOpacity onPress={setupLocation}>
-                    {
-                        locationLoading ? (
-                            <ActivityIndicator
-                                style={styles.buttonsStyle}
-                                size="small"
-                                color="#1DB954"/>
-                        ) : (
-                            <Octicons
-                                name={'broadcast'}
-                                size={20}
-                                color={LocationStore.userLocation ? '#1DB954' : 'white'}
-                                style={[styles.buttonsStyle, {
-                                    borderColor: LocationStore.userLocation ? '#1DB954' : 'white',
-                                    padding: 9
-                                }]}
-                            />
-                        )
-                    }
-                </TouchableOpacity>
+                {
+                    displayNumberOfActiveUsers()
+                }
+                {loadForUser ? <UserSpotifyPopupScreen user={loadForUser}/> : <></>}
             </View>
         )
     }
-
-    return (
-        <View style={styles.container}>
-            <MapView ref={mapRef}
-                     style={styles.mapStyle}
-                     provider={PROVIDER_GOOGLE}
-                     customMapStyle={mapStyle}
-                     initialRegion={{
-                         latitude: 28.3365578,
-                         longitude: 84.2021341,
-                         latitudeDelta: 9,
-                         longitudeDelta: 9
-                     }}
-            >
-                {
-                    displayUser()
-                }
-                {
-                    displayOnlineUsers()
-                }
-            </MapView>
-            {
-                displayUtilityButtons()
-            }
-            {
-                displayNumberOfActiveUsers()
-            }
-            {loadForUser ? <UserSpotifyPopupScreen user={loadForUser}/> : <></>}
-        </View>
-    )
-});
+);
 
 const styles = StyleSheet.create({
     container: {

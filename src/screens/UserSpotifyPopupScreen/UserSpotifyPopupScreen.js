@@ -1,48 +1,76 @@
 import React, {useState, useEffect, useRef} from 'react';
-import {View, StyleSheet, Text, Linking} from 'react-native';
+import {View, StyleSheet, Text, Linking, ActivityIndicator, ScrollView} from 'react-native';
 import {observer} from 'mobx-react';
-import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {ListItem} from 'react-native-elements';
 import {useStores} from '../../hooks/useStores';
-import TouchableScale from 'react-native-touchable-scale'; // https://github.com/kohver/react-native-touchable-scale
-import Toast from 'react-native-root-toast';
+import TouchableScale from 'react-native-touchable-scale';
+import { Dimensions } from 'react-native';
 
-const Tab = createBottomTabNavigator();
 
-const UserSpotifyPopupScreen = observer(({user}) => {
+const UserSpotifyPopupScreen = observer(({navigation, route}) => {
     const {SpotifyStore} = useStores();
-    const [currentlyViewing, setCurrentlyViewing] = useState('Top Tracks');
+    const [currentTab, setCurrentTab] = useState('Top Tracks');
+    const [loading, setLoading] = useState(false);
+
+    function displayTopTracks() {
+        if (SpotifyStore.topTracks) {
+            return (
+                <ScrollView>
+                    {
+                        SpotifyStore.topTracks.map((track, index) => (
+                            <ListItem
+                                key={index}
+                                containerStyle={{
+                                    backgroundColor: index % 2 === 0 ? 'black' : '#0a0a0a',
+                                }}
+                                leftAvatar={{source: {uri: track.image}}}
+                                title={track.trackName}
+                                titleStyle={{
+                                    color: 'white'
+                                }}
+                                subtitle={track.artist}
+                                subtitleStyle={{
+                                    color: 'white'
+                                }}
+                            />
+                        ))
+                    }
+                </ScrollView>
+            )
+
+        }
+    }
 
     async function openUserSpotify() {
         await Linking.openURL('https://open.spotify.com/album/0sNOF9WDwhWunNAHPD3Baj');
     }
 
-    function recentlyPlayed() {
-        console.log('clicked');
+    function toRecentlyPlayed() {
+        setCurrentTab('Recently Played');
     }
 
-    function topTracks() {
-        console.log('clicked');
+    function toTopArtists() {
+        setCurrentTab('Top Artists');
     }
 
-    function topArtists() {
-        console.log('clicked');
+    function toTopTracks() {
+        setCurrentTab('Top Tracks');
     }
 
     function TabNavigation() {
         let tabs = [{
             iconName: 'album',
             name: 'Top Tracks',
-            onPress: topTracks
+            onPress: toTopTracks
         }, {
             iconName: 'artist',
             name: 'Top Artists',
-            onPress: topArtists
+            onPress: toTopArtists
         }, {
             iconName: 'disc-player',
             name: 'Recently Played',
-            onPress: recentlyPlayed
+            onPress: toRecentlyPlayed
         }];
 
         let TabNavigation = [];
@@ -80,16 +108,28 @@ const UserSpotifyPopupScreen = observer(({user}) => {
                     size: 50,
                     iconStyle: {marginTop: 7}
                 }}
-                title={SpotifyStore.selectedMarkerOwner}
+                title={SpotifyStore.spotifyOF}
                 titleStyle={{color: 'white', fontWeight: 'bold'}}
-                subtitle={currentlyViewing}
+                subtitle={currentTab}
                 subtitleStyle={{color: 'white'}}
                 onPress={openUserSpotify}
                 chevron
-                chevronStyle={{color:'white'}}
+                chevronStyle={{color: 'white'}}
             />
             <View style={styles.tabNavigation}>
                 {TabNavigation()}
+            </View>
+            <View style={{height: Dimensions.get('window').height - 150}}>
+                {
+                    loading ? (
+                        <ActivityIndicator
+                            style={styles.buttonsStyle}
+                            size="small"
+                            color="#1DB954"/>
+                    ) : (
+                        displayTopTracks()
+                    )
+                }
             </View>
         </View>
     )
@@ -108,7 +148,8 @@ const styles = StyleSheet.create({
         bottom: 0,
         padding: 10,
         width: '100%',
-        backgroundColor: '#0c0c0c'
+        backgroundColor: '#0c0c0c',
+        zIndex: 1
     },
 
     tabNavigationContent: {
@@ -124,6 +165,11 @@ const styles = StyleSheet.create({
         alignSelf: 'center',
         color: 'white',
         marginTop: 3
+    },
+
+    listItem: {
+        backgroundColor: 'black',
+        color: 'white'
     }
 
 

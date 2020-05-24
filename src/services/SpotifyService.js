@@ -3,9 +3,9 @@ import axios from "axios";
 import env from '../../env'
 
 export default {
-    async getUserSpotify(user) {
+    async getTopTracks(user) {
         try {
-            let response = await axios.post(env.API_URL + '/spotify/getUserSpotify', {
+            let response = await axios.post(env.API_URL + '/spotify/getTopTracks', {
                 user: user
             });
 
