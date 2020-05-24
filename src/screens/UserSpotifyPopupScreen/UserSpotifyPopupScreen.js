@@ -6,10 +6,12 @@ import {ListItem} from 'react-native-elements';
 import {useStores} from '../../hooks/useStores';
 import TouchableScale from 'react-native-touchable-scale';
 import {Dimensions} from 'react-native';
+import moment from 'moment';
+import RotatingImageComponent from "../../components/UIElements/RotatingImageComponent";
 
 const UserSpotifyPopupScreen = observer(({navigation, route}) => {
     const {SpotifyStore} = useStores();
-    const [currentTab, setCurrentTab] = useState('Top Tracks');
+    const [currentTab, setCurrentTab] = useState('Recently Played');
 
     function displayTopTracks() {
         if (SpotifyStore.topTracks) {
@@ -29,7 +31,7 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                                 }}
                                 subtitle={track.artist}
                                 subtitleStyle={{
-                                    marginTop:5,
+                                    marginTop: 5,
                                     color: 'white'
                                 }}
                             />
@@ -51,20 +53,59 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                                 containerStyle={{
                                     backgroundColor: index % 2 === 0 ? 'black' : '#0a0a0a',
                                 }}
-                                leftAvatar={{source: {uri: track.trackImage}, size:75}}
+                                leftAvatar={{source: {uri: track.trackImage}, size: 75}}
                                 title={track.trackName}
                                 titleStyle={{
                                     color: 'white'
                                 }}
-                                subtitle={track.trackArtist}
-                                subtitleStyle={{
-                                    color: 'white',
-                                    marginTop: 5
-                                }}
+                                subtitle={
+                                    <View>
+                                        <Text style={{color: 'white', marginTop: 5}}>{track.trackArtist}</Text>
+                                        <Text style={{
+                                            color: 'white',
+                                            marginTop: 5,
+                                            fontSize: 12
+                                        }}>{moment(track.trackPlayedAt).fromNow()}</Text>
+                                    </View>
+                                }
                             />
                         ))
                     }
                 </ScrollView>
+            )
+        }
+    }
+
+    function displayCurrentlyPlaying() {
+        if (SpotifyStore.currentlyPlaying) {
+            return (
+                <ListItem
+                    containerStyle={{
+                        backgroundColor: '#0a0a0a'
+                    }}
+                    leftAvatar={{source: {uri: SpotifyStore.currentlyPlaying.trackImage}, size: 75}}
+                    title={SpotifyStore.currentlyPlaying.trackName}
+                    titleStyle={{
+                        color: 'white'
+                    }}
+                    subtitle={
+                        <View>
+                            <Text style={{
+                                color: 'white',
+                                marginTop: 5,
+                                marginBottom: 10
+                            }}>{SpotifyStore.currentlyPlaying.trackArtist}</Text>
+                            <View style={{flexDirection: 'row'}}>
+                                <RotatingImageComponent
+                                    imgSource={require('../../../assets/vinyl.png')}
+                                    height={25}
+                                    width={25}
+                                />
+                                <Text style={{alignSelf: 'center', color: 'white', marginLeft: 5}}>Now Playing</Text>
+                            </View>
+                        </View>
+                    }
+                />
             )
         }
     }
@@ -80,7 +121,7 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                                 containerStyle={{
                                     backgroundColor: index % 2 === 0 ? 'black' : '#0a0a0a',
                                 }}
-                                leftAvatar={{source: {uri: artist.artistImage}, size:75}}
+                                leftAvatar={{source: {uri: artist.artistImage}, size: 75}}
                                 title={artist.artistName}
                                 titleStyle={{
                                     color: 'white'
@@ -99,6 +140,40 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
         }
     }
 
+    function displaySavedTracks() {
+        if (SpotifyStore.savedTracks) {
+            return (
+                <ScrollView>
+                    {
+                        SpotifyStore.savedTracks.map((track, index) => (
+                            <ListItem
+                                key={index}
+                                containerStyle={{
+                                    backgroundColor: index % 2 === 0 ? 'black' : '#0a0a0a',
+                                }}
+                                leftAvatar={{source: {uri: track.image}, size: 75}}
+                                title={track.trackName}
+                                titleStyle={{
+                                    color: 'white'
+                                }}
+                                subtitle={
+                                    <View>
+                                        <Text style={{color: 'white', marginTop: 5}}>{track.artist}</Text>
+                                        <Text style={{
+                                            color: 'white',
+                                            marginTop: 5,
+                                            fontSize: 12
+                                        }}>{moment(track.time).fromNow()}</Text>
+                                    </View>
+                                }
+                            />
+                        ))
+                    }
+                </ScrollView>
+            )
+        }
+    }
+
     function toDisplay(what) {
         if (what === 'Top Tracks') {
             return displayTopTracks();
@@ -106,6 +181,8 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
             return displayRecentlyPlayed();
         } else if (what === 'Top Artists') {
             return displayTopArtists();
+        } else if (what === 'Saved Tracks') {
+            return displaySavedTracks();
         }
     }
 
@@ -121,20 +198,32 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
         setCurrentTab('Top Tracks');
     }
 
+    function toSavedTracks() {
+        setCurrentTab('Saved Tracks');
+    }
+
     function TabNavigation() {
-        let tabs = [{
-            iconName: 'album',
-            name: 'Top Tracks',
-            onPress: toTopTracks
-        }, {
-            iconName: 'artist',
-            name: 'Top Artists',
-            onPress: toTopArtists
-        }, {
-            iconName: 'disc-player',
-            name: 'Recently Played',
-            onPress: toRecentlyPlayed
-        }];
+
+        let tabs = [
+            {
+                iconName: 'play',
+                name: 'Recently Played',
+                onPress: toRecentlyPlayed
+            },
+            {
+                iconName: 'cards-heart',
+                name: 'Saved Tracks',
+                onPress: toSavedTracks
+            },
+            {
+                iconName: 'album',
+                name: 'Top Tracks',
+                onPress: toTopTracks
+            }, {
+                iconName: 'artist',
+                name: 'Top Artists',
+                onPress: toTopArtists
+            }];
 
         let TabNavigation = [];
         for (let index = 0; index < tabs.length; index++) {
@@ -164,6 +253,11 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
         return TabNavigation;
     }
 
+    function goBack() {
+        SpotifyStore.clearCurrentUserData();
+        navigation.goBack();
+    }
+
     return (
         <View style={styles.container}>
             <ListItem
@@ -183,13 +277,14 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                 titleStyle={{color: 'white', fontWeight: 'bold'}}
                 subtitle={currentTab}
                 subtitleStyle={{color: 'white'}}
-                onPress={() => navigation.goBack()}
+                onPress={goBack}
                 rightIcon={{name: 'arrow-back', color: 'white', type: 'ionicons'}}
             />
             <View style={styles.tabNavigation}>
                 {TabNavigation()}
             </View>
             <View style={{height: Dimensions.get('window').height - 150}}>
+                {displayCurrentlyPlaying()}
                 {toDisplay(currentTab)}
             </View>
         </View>
@@ -210,11 +305,11 @@ const styles = StyleSheet.create({
         padding: 10,
         width: '100%',
         backgroundColor: '#0c0c0c',
-        zIndex: 1
+        zIndex: 1,
+        justifyContent: 'space-evenly'
     },
 
     tabNavigationContent: {
-        marginLeft: 40,
         color: 'white'
     },
 
@@ -226,15 +321,14 @@ const styles = StyleSheet.create({
     tabNavigationText: {
         alignSelf: 'center',
         color: 'white',
-        marginTop: 3
+        marginTop: 3,
+        fontSize: 11
     },
 
     listItem: {
         backgroundColor: 'black',
         color: 'white'
-    }
-
-
+    },
 });
 
 export default UserSpotifyPopupScreen;

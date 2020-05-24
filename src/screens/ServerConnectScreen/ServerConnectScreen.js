@@ -58,7 +58,7 @@ const ServerConnectScreen = ({navigation}) => {
                 }}
             />
             <KeyboardAvoidingView behavior={'position'}>
-                <RotatingImageComponent imgSource={require('../../../assets/opencircle.png')}/>
+                <RotatingImageComponent imgSource={require('../../../assets/vinyl.png')}/>
                 <View style={styles.formContainer}>
                     <View style={styles.textInputContainer}>
                         <FontAwesome size={45} name={'spotify'} style={[

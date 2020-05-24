@@ -13,7 +13,9 @@ export default {
                 userName: response.data.userName,
                 topTracks: response.data.topTracks,
                 topArtists: response.data.topArtists,
-                recentlyPlayed: response.data.recentlyPlayed
+                recentlyPlayed: response.data.recentlyPlayed,
+                currentlyPlaying: response.data.currentlyPlaying,
+                savedTracks: response.data.savedTracks
             };
 
             //Return the gathered Spotify data

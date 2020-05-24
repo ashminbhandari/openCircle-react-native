@@ -5,7 +5,6 @@ import SpotifyService from "../services/SpotifyService";
 import env from '../../env';
 /**/
 export class SpotifyStore {
-
     //List of online users
     @observable onlineUsers = [];
 
@@ -20,6 +19,8 @@ export class SpotifyStore {
     @observable topArtists = null;
 
     @observable recentlyPlayed = null;
+
+    @observable saveTracks = null;
 
     @action.bound
     async gatherOnlineUsers(LocationStore, AuthorizationStore) {
@@ -86,20 +87,18 @@ export class SpotifyStore {
         }
     }
 
-    @action.bound async getTopTracks(user) {
+    @action.bound async getUserSpotifyData(user) {
         try {
             let response = await SpotifyService.getUserSpotifyData(user);
             this.topTracks = response.topTracks;
             this.recentlyPlayed = response.recentlyPlayed;
             this.topArtists = response.topArtists;
             this.spotifyOF = response.userName;
-
-            console.log(this.recentlyPlayed);
-
+            this.currentlyPlaying = response.currentlyPlaying;
+            this.savedTracks = response.savedTracks;
         } catch (error) {
             //Show an error Toast
-            Toast.show('ooops, could not download top tracks', {
-                duration: Toast.durations.LONG,
+            Toast.show('User data could not be collected right now. Please try again later.', {
                 position: Toast.positions.CENTER,
                 shadow: true,
                 animation: true,
@@ -110,8 +109,16 @@ export class SpotifyStore {
                     marginTop: 20
                 }
             });
-            console.debug('Error at spotifyStore at getTopTracks',error);
+            throw error;
         }
+    }
+
+    @action.bound clearCurrentUserData () {
+        this.recentlyPlayed = null;
+        this.spotifyOF = null;
+        this.topArtists = null;
+        this.topTracks = null;
+        this.currentlyPlaying = null;
     }
 }
 

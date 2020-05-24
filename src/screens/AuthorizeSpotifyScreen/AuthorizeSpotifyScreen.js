@@ -55,7 +55,7 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
                     navigation.push('ServerConnectScreen')
                 }}
             />
-            <RotatingImageComponent imgSource={require('../../../assets/opencircle.png')}/>
+            <RotatingImageComponent imgSource={require('../../../assets/vinyl.png')}/>
             {
                 authCode ? (
                     <CreatePasswordScreen authCode={authCode} navigator={navigation}/>

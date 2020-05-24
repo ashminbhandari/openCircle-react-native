@@ -42,14 +42,18 @@ const HomeScreen = observer(({navigation}) => {
 
         //Gets a user's Spotify data
         async function toSpotifyScreen(user) {
-            setLoadForUser(user);
-            await SpotifyStore.getTopTracks(user);
-            setLoadForUser(false);
-
-            //Open up Spotify data screen
-            navigation.push('UserSpotifyPopupScreen', {
-                user: user
-            });
+            try {
+                setLoadForUser(user);
+                await SpotifyStore.getUserSpotifyData(user);
+                setLoadForUser(false);
+                //Open up Spotify data screen
+                navigation.push('UserSpotifyPopupScreen', {
+                    user: user
+                });
+            } catch(error) {
+                setLoadForUser(false);
+                console.debug("Error navigating Spotify Screen",error);
+            }
         }
 
         //Displays all the online users
