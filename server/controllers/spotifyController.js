@@ -25,9 +25,9 @@ module.exports = {
     },
 
     //Gets the users Spotify data
-    async getUserSpotify(req,res) {
+    async getUserSpotifyData(req,res) {
         try {
-            let response = await spotifyService.getUserSpotify(req.body.user);
+            let response = await spotifyService.getUserSpotifyData(req.body.user);
             return res.status(response.httpStatus).send(response);
         } catch (error) {
             console.log("Error in getUserSpotify in SpotifyController", error);

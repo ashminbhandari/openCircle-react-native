@@ -13,69 +13,6 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
     const {SpotifyStore} = useStores();
     const [currentTab, setCurrentTab] = useState('Recently Played');
 
-    function displayTopTracks() {
-        if (SpotifyStore.topTracks) {
-            return (
-                <ScrollView>
-                    {
-                        SpotifyStore.topTracks.map((track, index) => (
-                            <ListItem
-                                key={index}
-                                containerStyle={{
-                                    backgroundColor: index % 2 === 0 ? 'black' : '#0a0a0a',
-                                }}
-                                leftAvatar={{source: {uri: track.image}, size: 75}}
-                                title={track.trackName}
-                                titleStyle={{
-                                    color: 'white'
-                                }}
-                                subtitle={track.artist}
-                                subtitleStyle={{
-                                    marginTop: 5,
-                                    color: 'white'
-                                }}
-                            />
-                        ))
-                    }
-                </ScrollView>
-            )
-        }
-    }
-
-    function displayRecentlyPlayed() {
-        if (SpotifyStore.recentlyPlayed) {
-            return (
-                <ScrollView>
-                    {
-                        SpotifyStore.recentlyPlayed.map((track, index) => (
-                            <ListItem
-                                key={index}
-                                containerStyle={{
-                                    backgroundColor: index % 2 === 0 ? 'black' : '#0a0a0a',
-                                }}
-                                leftAvatar={{source: {uri: track.trackImage}, size: 75}}
-                                title={track.trackName}
-                                titleStyle={{
-                                    color: 'white'
-                                }}
-                                subtitle={
-                                    <View>
-                                        <Text style={{color: 'white', marginTop: 5}}>{track.trackArtist}</Text>
-                                        <Text style={{
-                                            color: 'white',
-                                            marginTop: 5,
-                                            fontSize: 12
-                                        }}>{moment(track.trackPlayedAt).fromNow()}</Text>
-                                    </View>
-                                }
-                            />
-                        ))
-                    }
-                </ScrollView>
-            )
-        }
-    }
-
     function displayCurrentlyPlaying() {
         if (SpotifyStore.currentlyPlaying) {
             return (
@@ -110,80 +47,47 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
         }
     }
 
-    function displayTopArtists() {
-        if (SpotifyStore.topArtists) {
-            return (
-                <ScrollView>
-                    {
-                        SpotifyStore.topArtists.map((artist, index) => (
-                            <ListItem
-                                key={index}
-                                containerStyle={{
-                                    backgroundColor: index % 2 === 0 ? 'black' : '#0a0a0a',
-                                }}
-                                leftAvatar={{source: {uri: artist.artistImage}, size: 75}}
-                                title={artist.artistName}
-                                titleStyle={{
-                                    color: 'white'
-                                }}
-                                subtitle={artist.artistGenre.join(', ')}
-                                subtitleStyle={{
-                                    color: 'white',
-                                    marginTop: 5,
-                                    textTransform: 'capitalize'
-                                }}
-                            />
-                        ))
-                    }
-                </ScrollView>
-            )
-        }
-    }
-
-    function displaySavedTracks() {
-        if (SpotifyStore.savedTracks) {
-            return (
-                <ScrollView>
-                    {
-                        SpotifyStore.savedTracks.map((track, index) => (
-                            <ListItem
-                                key={index}
-                                containerStyle={{
-                                    backgroundColor: index % 2 === 0 ? 'black' : '#0a0a0a',
-                                }}
-                                leftAvatar={{source: {uri: track.image}, size: 75}}
-                                title={track.trackName}
-                                titleStyle={{
-                                    color: 'white'
-                                }}
-                                subtitle={
-                                    <View>
-                                        <Text style={{color: 'white', marginTop: 5}}>{track.artist}</Text>
-                                        <Text style={{
-                                            color: 'white',
-                                            marginTop: 5,
-                                            fontSize: 12
-                                        }}>{moment(track.time).fromNow()}</Text>
-                                    </View>
-                                }
-                            />
-                        ))
-                    }
-                </ScrollView>
-            )
-        }
-    }
-
     function toDisplay(what) {
+        let dataList = [];
         if (what === 'Top Tracks') {
-            return displayTopTracks();
+            dataList = SpotifyStore.topTracks;
         } else if (what === 'Recently Played') {
-            return displayRecentlyPlayed();
+            dataList = SpotifyStore.recentlyPlayed;
         } else if (what === 'Top Artists') {
-            return displayTopArtists();
+            dataList = SpotifyStore.topArtists;
         } else if (what === 'Saved Tracks') {
-            return displaySavedTracks();
+            dataList = SpotifyStore.savedTracks;
         }
+
+        return (
+            <ScrollView>
+                {
+                    dataList ? dataList.map((item, index) => (
+                        <ListItem
+                            key={index}
+                            containerStyle={{
+                                backgroundColor: index % 2 === 0 ? 'black' : '#0a0a0a',
+                            }}
+                            leftAvatar={{source: {uri: item.image}, size: 75}}
+                            title={item.title}
+                            titleStyle={{
+                                color: 'white'
+                            }}
+                            subtitle={
+                                <View>
+                                    <Text style={{color: 'white', marginTop: 5, textTransform: 'capitalize'}}>{item.subtitle}</Text>
+                                    <Text style={{
+                                        color: 'white',
+                                        marginTop: 5,
+                                        fontSize: 12,
+                                    }}>{item.time ? moment(item.time).fromNow() : ''}</Text>
+                                </View>
+                            }
+                        />
+                    )) : <></>
+                }
+            </ScrollView>
+        );
     }
 
     function toRecentlyPlayed() {
@@ -236,7 +140,6 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                     <MaterialCommunityIcons
                         name={tabs[index].iconName}
                         size={25}
-
                         style={[
                             styles.tabNavigationIcons, {
                                 color: currentTab === tabs[index].name ? '#1DB954' : 'white'

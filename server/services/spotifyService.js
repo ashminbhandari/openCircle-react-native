@@ -78,7 +78,7 @@ module.exports = {
         }
     },
 
-    async getUserSpotify(user) {
+    async getUserSpotifyData(user) {
         try {
             //Find the user by their ID
             let theUser = await User.findById(user);
@@ -91,29 +91,95 @@ module.exports = {
             spotifyApi.setAccessToken(accessToken);
 
             let topTracks = await spotifyApi.getMyTopTracks({
-               time_range: 'long_term',
-                limit: 5
+                time_range: 'long_term',
+                limit: 20
+            });
+
+            let topArtists = await spotifyApi.getMyTopArtists({
+                time_range: 'long_term',
+                limit: 20
+            });
+
+            let recentlyPlayed = await spotifyApi.getMyRecentlyPlayedTracks({
+                limit: 20
+            });
+
+            let savedTracks = await spotifyApi.getMySavedTracks({
+                limit: 20
+            });
+
+            let currentlyPlaying = await spotifyApi.getMyCurrentPlayingTrack();
+
+            let filterTopArtists = topArtists.body.items.map((artist) => {
+                return ({
+                    title: artist.name ? artist.name : '',
+                    id: artist.id ? artist.id : '',
+                    image: artist.images[0].url ? artist.images[0].url : '',
+                    subtitle: artist.genres ? artist.genres.slice(0, Math.min(artist.genres.length, 3)).join(", ") : []
+                })
             });
 
             let filterTopTracks = topTracks.body.items.map((track) => {
                 return ({
-                    trackName: track.name,
-                    albumName: track.album.name,
-                    image: track.album.images[0].url,
-                    artist: track.artists[0].name,
+                    title: track.name ? track.name : '',
+                    id: track.id ? track.id : '',
+                    image: track.album.images[0].url ? track.album.images[0].url : '',
+                    subtitle: track.artists[0].name ? track.artists[0].name : '',
                 })
             });
+
+            let filterRecentlyPlayed = recentlyPlayed.body.items.map((item) => {
+                if (item.track) {
+                    return ({
+                        title: item.track.name ? item.track.name : '',
+                        image: item.track.album.images[0].url ? item.track.album.images[0].url : '',
+                        id: item.track.id ? item.track.id : '',
+                        time: item.played_at ? item.played_at : '',
+                        subtitle: item.track.artists[0].name ? item.track.artists[0].name : '',
+                    })
+                }
+            })
+
+            let filterCurrentlyPlaying = '';
+            if (currentlyPlaying.body.item) {
+                filterCurrentlyPlaying = {
+                    title: currentlyPlaying.body.item.name ? currentlyPlaying.body.item.name : '',
+                    id: currentlyPlaying.body.item.id ? currentlyPlaying.body.item.id : '',
+                    image: currentlyPlaying.body.item.album.images[0].url ? currentlyPlaying.body.item.album.images[0].url : '',
+                    subtitle: currentlyPlaying.body.item.artists[0].name ? currentlyPlaying.body.item.artists[0].name : '',
+                }
+            }
+
+            let filterSavedTracks = savedTracks.body.items.map((item) => {
+                return ({
+                    title: item.track.name ? item.track.name : '',
+                    id: item.track.id ? item.track.id : '',
+                    url: item.track.external_urls.spotify ? item.track.external_urls.spotify : '',
+                    image: item.track.album.images[0].url ? item.track.album.images[0].url : '',
+                    subtitle: item.track.artists[0].name ? item.track.artists[0].name : '',
+                    time: item.added_at ? item.added_at : ''
+                })
+            })
 
             let result = {
                 httpStatus: httpStatus.OK,
                 status: 'success',
                 userName: theUser.name,
-                spotifyData: filterTopTracks
+                topTracks: filterTopTracks,
+                topArtists: filterTopArtists,
+                recentlyPlayed: filterRecentlyPlayed,
+                currentlyPlaying: filterCurrentlyPlaying,
+                savedTracks: filterSavedTracks
             };
+
             return result;
         } catch (error) {
             console.debug('Error at getUserSpotify in spotifyService', error);
-            return {httpStatus: httpStatus.INTERNAL_SERVER_ERROR, status:'failed', errorDetails:'INTERNAL SERVER ERROR'}
+            return {
+                httpStatus: httpStatus.INTERNAL_SERVER_ERROR,
+                status: 'failed',
+                errorDetails: 'INTERNAL SERVER ERROR'
+            }
         }
     }
 };
