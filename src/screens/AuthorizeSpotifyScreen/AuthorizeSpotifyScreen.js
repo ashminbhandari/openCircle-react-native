@@ -67,7 +67,6 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
                             faColor='#1DB954'
                             onPress={getAuthCode}
                             error={error}
-                            setError={setError}
                             isLoading={buttonIsLoading}
                         />
                     </View>
@@ -133,7 +132,7 @@ const styles = StyleSheet.create({
         color: 'white',
         top: 0,
         right: 0,
-        padding: 50
+        padding: 40
     }
 });
 

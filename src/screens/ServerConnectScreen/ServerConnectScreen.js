@@ -42,8 +42,8 @@ const ServerConnectScreen = ({navigation}) => {
         } catch (error) {
             console.log(error);
             setButtonIsLoading(false);
-            onLoginError('Please check your credentials');
             setButtonError(true);
+            onLoginError('Please check your credentials');
         }
     }
 
@@ -91,7 +91,6 @@ const ServerConnectScreen = ({navigation}) => {
                             faName='plug'
                             onPress={joinServer}
                             error={buttonError}
-                            setError={setButtonError}
                             isLoading={buttonIsLoading}
                         />
                         {
@@ -168,7 +167,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         right: 0,
         top: 0,
-        padding: 50
+        padding: 40
     },
 });
 

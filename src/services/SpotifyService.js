@@ -3,15 +3,17 @@ import axios from "axios";
 import env from '../../env'
 
 export default {
-    async getTopTracks(user) {
+    async getUserSpotifyData(user) {
         try {
-            let response = await axios.post(env.API_URL + '/spotify/getTopTracks', {
+            let response = await axios.post(env.API_URL + '/spotify/getUserSpotifyData', {
                 user: user
             });
 
             let returnObj = {
                 userName: response.data.userName,
-                spotifyData: response.data.spotifyData
+                topTracks: response.data.topTracks,
+                topArtists: response.data.topArtists,
+                recentlyPlayed: response.data.recentlyPlayed
             };
 
             //Return the gathered Spotify data

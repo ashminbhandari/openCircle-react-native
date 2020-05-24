@@ -91,7 +91,6 @@ const CreatePasswordScreen = (props) => {
                     faName='lock'
                     onPress={createUser}
                     error={buttonErrorShake}
-                    setError={setButtonErrorShake}
                     isLoading={buttonIsLoading}/>
             </View>
         </View>

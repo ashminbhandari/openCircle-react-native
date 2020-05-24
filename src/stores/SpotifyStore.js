@@ -17,6 +17,10 @@ export class SpotifyStore {
 
     @observable topTracks = null;
 
+    @observable topArtists = null;
+
+    @observable recentlyPlayed = null;
+
     @action.bound
     async gatherOnlineUsers(LocationStore, AuthorizationStore) {
         if (LocationStore.userLocation) {
@@ -84,10 +88,14 @@ export class SpotifyStore {
 
     @action.bound async getTopTracks(user) {
         try {
-            let response = await SpotifyService.getTopTracks(user);
-            this.topTracks = response.spotifyData;
+            let response = await SpotifyService.getUserSpotifyData(user);
+            this.topTracks = response.topTracks;
+            this.recentlyPlayed = response.recentlyPlayed;
+            this.topArtists = response.topArtists;
             this.spotifyOF = response.userName;
-            console.log(this.spotifyOF);
+
+            console.log(this.recentlyPlayed);
+
         } catch (error) {
             //Show an error Toast
             Toast.show('ooops, could not download top tracks', {

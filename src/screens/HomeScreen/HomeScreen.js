@@ -44,7 +44,7 @@ const HomeScreen = observer(({navigation}) => {
         async function toSpotifyScreen(user) {
             setLoadForUser(user);
             await SpotifyStore.getTopTracks(user);
-            setLoadForUser(null);
+            setLoadForUser(false);
 
             //Open up Spotify data screen
             navigation.push('UserSpotifyPopupScreen', {
@@ -210,7 +210,6 @@ const HomeScreen = observer(({navigation}) => {
                 {
                     displayNumberOfActiveUsers()
                 }
-                {loadForUser ? <UserSpotifyPopupScreen user={loadForUser}/> : <></>}
             </View>
         )
     }
