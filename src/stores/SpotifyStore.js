@@ -24,6 +24,12 @@ export class SpotifyStore {
 
     @observable savedTracks = null;
 
+    @observable playbackState = false;
+
+    soundObject = new Audio.Sound();
+
+    playingSong = null;
+
     @action.bound
     async gatherOnlineUsers(LocationStore, AuthorizationStore) {
         if (LocationStore.userLocation) {
