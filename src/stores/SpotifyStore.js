@@ -3,6 +3,8 @@ import axios from 'axios';
 import Toast from 'react-native-root-toast';
 import SpotifyService from "../services/SpotifyService";
 import env from '../../env';
+import {Audio} from 'expo-av';
+
 /**/
 export class SpotifyStore {
     //List of online users
@@ -20,7 +22,7 @@ export class SpotifyStore {
 
     @observable recentlyPlayed = null;
 
-    @observable saveTracks = null;
+    @observable savedTracks = null;
 
     @action.bound
     async gatherOnlineUsers(LocationStore, AuthorizationStore) {
