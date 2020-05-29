@@ -60,7 +60,7 @@ export class SpotifyStore {
                 console.log("Error gathering users at SpotifyStore", error);
 
                 //Show an error Toast
-                Toast.show('YABALAPOSSKA, online users could not be downloaded right now...', {
+                Toast.show('Fooosh, online users could not be downloaded right now...', {
                     duration: Toast.durations.LONG,
                     position: Toast.positions.TOP,
                     shadow: true,
@@ -75,7 +75,7 @@ export class SpotifyStore {
             }
         } else {
             //Show an error Toast
-            Toast.show('WAGADARUBBAPU, please broadcast yourself before downloading online users', {
+            Toast.show('Hoopaa, please broadcast yourself before downloading online users', {
                 duration: Toast.durations.LONG,
                 position: Toast.positions.TOP,
                 shadow: true,
@@ -101,7 +101,7 @@ export class SpotifyStore {
             this.savedTracks = response.savedTracks;
         } catch (error) {
             //Show an error Toast
-            Toast.show('HURUHAPPA, user data could not be collected right now. Please try again later.', {
+            Toast.show('Dingnibit, user data could not be collected right now. Please try again later.', {
                 position: Toast.positions.CENTER,
                 shadow: true,
                 animation: true,
