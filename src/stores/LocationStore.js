@@ -27,7 +27,7 @@ export class LocationStore {
             console.log("Location could not be established at LocationStore", error);
 
             //Show an error Toast
-            Toast.show('Go to Settings > openCircle > Location and allow location access', {
+            Toast.show('HIJIHANGABABOO, please go to Settings > openCircle > Location and allow location access', {
                 duration: Toast.durations.LONG,
                 position: Toast.positions.TOP,
                 shadow: true,

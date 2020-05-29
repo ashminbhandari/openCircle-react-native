@@ -50,9 +50,9 @@ const HomeScreen = observer(({navigation}) => {
                 navigation.push('UserSpotifyPopupScreen', {
                     user: user
                 });
-            } catch(error) {
+            } catch (error) {
                 setLoadForUser(false);
-                console.debug("Error navigating Spotify Screen",error);
+                console.debug("Error navigating Spotify Screen", error);
             }
         }
 
@@ -60,10 +60,10 @@ const HomeScreen = observer(({navigation}) => {
         function displayOnlineUsers() {
             let userMarkers = [];
             SpotifyStore.onlineUsers.map(user => {
-                userMarkers.push(
+                if (user.latitude && user.longitude) userMarkers.push(
                     <View
                         key={user.id.toString()}
-                        onPress={()=>toSpotifyScreen(user.id)}
+                        onPress={() => toSpotifyScreen(user.id)}
                     >
                         <Marker
                             coordinate={{
@@ -91,7 +91,7 @@ const HomeScreen = observer(({navigation}) => {
                 return (
                     <View
                         key={AuthorizationStore.user.id.toString()}
-                        onPress={()=>toSpotifyScreen(AuthorizationStore.user.id)}
+                        onPress={() => toSpotifyScreen(AuthorizationStore.user.id)}
                     >
                         <Marker
                             coordinate={{

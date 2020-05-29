@@ -1,57 +1,52 @@
-import React, {useState, useMemo} from 'react';
+import React, {useState} from 'react';
 import {
     View,
     StyleSheet,
-    FlatList,
     Text,
     TouchableOpacity,
-    ActivityIndicator,
     ScrollView,
-    VirtualizedList
+    Image
 } from 'react-native';
 import {observer} from 'mobx-react';
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import {MaterialCommunityIcons, MaterialIcons} from "@expo/vector-icons";
 import {ListItem} from 'react-native-elements';
 import {useStores} from '../../hooks/useStores';
 import TouchableScale from 'react-native-touchable-scale';
 import {Dimensions} from 'react-native';
 import moment from 'moment';
 import RotatingImageComponent from "../../components/UIElements/RotatingImageComponent";
-import Toast from "react-native-root-toast";
+import Toast from 'react-native-root-toast';
+import {Audio} from 'expo-av';
+
+const soundObject = new Audio.Sound();
 
 const UserSpotifyPopupScreen = observer(({navigation, route}) => {
     const {SpotifyStore} = useStores();
     const [currentTab, setCurrentTab] = useState('Recently Played');
-    const [playbackState, setPlaybackState] = useState(false);
+    const [playbackState, setPlaybackState] = useState(null);
 
     async function playSound(uri, id) {
-
         try {
-            SpotifyStore.playingSong = id;
-            let status = await SpotifyStore.soundObject.getStatusAsync();
-            if(!status.isPlaying) {
-                await SpotifyStore.soundObject.loadAsync({uri:uri});
-                await SpotifyStore.soundObject.playAsync();
-                SpotifyStore.playingSong = id;
-                setPlaybackState(true);
-            } else if (status.isPlaying && status.isLoaded) {
-                await SpotifyStore.soundObject.stopAsync();
-                await SpotifyStore.soundObject.unloadAsync();
-                await SpotifyStore.soundObject.loadAsync({uri:uri});
-                await SpotifyStore.soundObject.playAsync();
-                setPlaybackState(true);
-            }
-            else if (status.isPlaying) {
-                await SpotifyStore.soundObject.stopAsync();
-                await SpotifyStore.soundObject.unloadAsync();
+            if (uri) {
+                if (!playbackState) {
+                    await soundObject.loadAsync({uri: uri});
+                    await soundObject.playAsync();
+                    await setPlaybackState(true);
+                } else {
+                    await soundObject.stopAsync();
+                    await soundObject.unloadAsync();
+                    setPlaybackState(false);
+                }
+            } else {
+                await soundObject.stopAsync();
+                await soundObject.unloadAsync();
                 setPlaybackState(false);
             }
         } catch (error) {
             console.log(error);
-            //Show an error Toast
-            Toast.show('Oops...the track can not be played right now...', {
-                duration: Toast.durations.CENTER,
-                position: Toast.positions.TOP,
+            Toast.show('WADABABOO, preview unavailable...', {
+                duration: 500,
+                position: Toast.positions.CENTER,
                 shadow: true,
                 animation: true,
                 hideOnPress: true,
@@ -76,6 +71,13 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                     titleStyle={{
                         color: 'white'
                     }}
+                    rightElement={
+                        SpotifyStore.currentlyPlaying.preview ?
+                            <View style={{flexDirection: 'row'}}>
+                                <MaterialIcons color={'white'} name={'touch-app'} size={30}/>
+                            </View>
+                            : <></>
+                    }
                     subtitle={
                         <View>
                             <Text style={{
@@ -89,7 +91,8 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                                     height={25}
                                     width={25}
                                 />
-                                <Text style={{alignSelf: 'center', color: 'white', marginLeft: 5}}>Now Playing</Text>
+                                <Text style={{alignSelf: 'center', color: 'white', marginLeft: 5}}>Now
+                                    Playing</Text>
                             </View>
                         </View>
                     }
@@ -98,61 +101,64 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
         }
     }
 
-    function toDisplay (what) {
+    function toDisplay(what) {
         let dataList = [];
-        if (what === 'Top Tracks') {
-            dataList = SpotifyStore.topTracks;
-        } else if (what === 'Recently Played') {
-            dataList = SpotifyStore.recentlyPlayed;
-        } else if (what === 'Top Artists') {
-            dataList = SpotifyStore.topArtists;
-        } else if (what === 'Saved Tracks') {
-            dataList = SpotifyStore.savedTracks;
-        }
+
+        if (what === 'Top Tracks') dataList = SpotifyStore.topTracks
+        else if (what === 'Recently Played') dataList = SpotifyStore.recentlyPlayed
+        else if (what === 'Top Artists') dataList = SpotifyStore.topArtists
+        else if (what === 'Saved Tracks') dataList = SpotifyStore.savedTracks
 
         return (
             <ScrollView>
                 {
-                    dataList ? dataList.map((item,index) =>
+                    dataList ? dataList.map((item, index) =>
                         <ListItem
+                            Component={TouchableScale}
+                            friction={60} //
+                            tension={30} // These props are passed to the parent component (here TouchableScale)
+                            activeScale={1.3} //
                             key={index + item.id}
                             containerStyle={{
-                                backgroundColor: index % 2 === 0 ? 'black' : '#0a0a0a',
+                                backgroundColor: index % 2 === 0 ? 'black' : '#111111',
                             }}
-                            leftAvatar={{source: {uri: item.image}, size: 75}}
+                            onPress={() => playSound(item.preview, item.id)}
+                            leftAvatar={<Image
+                                style={{
+                                    width: 100,
+                                    height: 100,
+                                    borderRadius: 50
+                                }}
+                                source={{uri: item.image}}
+                            />}
                             title={item.title}
                             titleStyle={{
                                 color: 'white'
                             }}
+                            rightElement={
+                                item.preview ?
+                                    <View style={{flexDirection: 'row'}}>
+                                        <MaterialIcons color={'white'} name={'touch-app'} size={30}/>
+                                    </View>
+                                    : <></>
+                            }
                             subtitle={
                                 <View>
-                                    <Text style={{
-                                        color: 'white',
-                                        marginTop: 5,
-                                        textTransform: 'capitalize'
-                                    }}>{item.subtitle}</Text>
-                                    <Text style={{
-                                        color: 'white',
-                                        marginTop: 5,
-                                        fontSize: 12,
-                                    }}>{item.time ? moment(item.time).fromNow() : ''}</Text>
+                                    {
+                                        item.subtitle ? <Text style={{
+                                            color: 'white',
+                                            marginTop: 5,
+                                            textTransform: 'capitalize'
+                                        }}>{item.subtitle}</Text> : <></>
+                                    }
+                                    {
+                                        item.time ? <Text style={{
+                                            color: 'white',
+                                            marginTop: 5,
+                                            fontSize: 12,
+                                        }}>{moment(item.time).fromNow()}</Text> : <></>
+                                    }
                                 </View>
-                            }
-                            rightSubtitle={
-                                item.preview ? (
-                                    <TouchableOpacity>
-                                        <MaterialCommunityIcons
-                                            name={SpotifyStore.playingSong === item.id && playbackState ? 'stop' : 'play'}
-                                            color={'white'}
-                                            style={{
-                                                borderWidth: 1.5,
-                                                borderRadius: 10,
-                                                borderColor: 'white'
-                                            }}
-                                            size={30}
-                                            onPress={() => playSound(item.preview, item.id)}
-                                        />
-                                    </TouchableOpacity>) : <></>
                             }
                         />
                     ) : <></>

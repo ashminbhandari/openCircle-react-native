@@ -1,9 +1,8 @@
-import {observable, action, autorun} from 'mobx';
+import {observable, action} from 'mobx';
 import axios from 'axios';
 import Toast from 'react-native-root-toast';
 import SpotifyService from "../services/SpotifyService";
 import env from '../../env';
-import {Audio} from 'expo-av';
 
 /**/
 export class SpotifyStore {
@@ -25,10 +24,6 @@ export class SpotifyStore {
     @observable savedTracks = null;
 
     @observable playbackState = false;
-
-    soundObject = new Audio.Sound();
-
-    playingSong = null;
 
     @action.bound
     async gatherOnlineUsers(LocationStore, AuthorizationStore) {
@@ -65,7 +60,7 @@ export class SpotifyStore {
                 console.log("Error gathering users at SpotifyStore", error);
 
                 //Show an error Toast
-                Toast.show('Sorry, online users could not be downloaded right now...', {
+                Toast.show('YABALAPOSSKA, online users could not be downloaded right now...', {
                     duration: Toast.durations.LONG,
                     position: Toast.positions.TOP,
                     shadow: true,
@@ -80,7 +75,7 @@ export class SpotifyStore {
             }
         } else {
             //Show an error Toast
-            Toast.show('Please broadcast yourself before downloading online users', {
+            Toast.show('WAGADARUBBAPU, please broadcast yourself before downloading online users', {
                 duration: Toast.durations.LONG,
                 position: Toast.positions.TOP,
                 shadow: true,
@@ -88,7 +83,7 @@ export class SpotifyStore {
                 hideOnPress: true,
                 containerStyle: {
                     borderWidth: 1,
-                    borderColor: 'red',
+                    borderColor: 'yellow',
                     marginTop: 20
                 }
             });
@@ -106,7 +101,7 @@ export class SpotifyStore {
             this.savedTracks = response.savedTracks;
         } catch (error) {
             //Show an error Toast
-            Toast.show('User data could not be collected right now. Please try again later.', {
+            Toast.show('HURUHAPPA, user data could not be collected right now. Please try again later.', {
                 position: Toast.positions.CENTER,
                 shadow: true,
                 animation: true,
