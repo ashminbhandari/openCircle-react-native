@@ -30,7 +30,7 @@ const ServerConnectScreen = ({navigation}) => {
         try {
             setButtonIsLoading(true);
             let response = await AuthorizationService.joinServer(email, password);
-            setButtonIsLoading(false);
+
             if (response) {
                 AuthorizationStore.isAuthenticated = true;
                 AuthorizationStore.user = response.data;
@@ -58,7 +58,7 @@ const ServerConnectScreen = ({navigation}) => {
                 }}
             />
             <KeyboardAvoidingView behavior={'position'}>
-                <RotatingImageComponent imgSource={require('../../../assets/vinyl.png')}/>
+                <RotatingImageComponent imgSource={require('../../../assets/opencircle.png')}/>
                 <View style={styles.formContainer}>
                     <View style={styles.textInputContainer}>
                         <FontAwesome size={45} name={'spotify'} style={[

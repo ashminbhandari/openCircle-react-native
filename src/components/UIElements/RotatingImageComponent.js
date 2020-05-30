@@ -25,8 +25,8 @@ export default function RotatingImage(props) {
         <Animated.Image
             style={{
                 transform: [{rotate: spin}],
-                height: props.height || 200,
-                width: props.width || 200,
+                height: props.height || 210,
+                width: props.width || 210,
             }}
             source={props.imgSource}/>
     )

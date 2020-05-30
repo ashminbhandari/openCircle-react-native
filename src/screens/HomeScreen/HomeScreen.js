@@ -197,8 +197,8 @@ const HomeScreen = observer(({navigation}) => {
                          initialRegion={{
                              latitude: 28.3365578,
                              longitude: 84.2021341,
-                             latitudeDelta: 9,
-                             longitudeDelta: 9
+                             latitudeDelta: 100,
+                             longitudeDelta: 100
                          }}
                 >
                     {

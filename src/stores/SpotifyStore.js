@@ -13,17 +13,27 @@ export class SpotifyStore {
     @observable hasDownloadedUsers = false;
 
     //Owner of the current data being shown
-    @observable spotifyOF = null;
+    spotifyOF = null;
 
-    @observable topTracks = null;
+    topTracks = null;
 
-    @observable topArtists = null;
+    topArtists = null;
 
-    @observable recentlyPlayed = null;
+    recentlyPlayed = null;
 
-    @observable savedTracks = null;
+    savedTracks = null;
 
     @observable playbackState = false;
+
+    @observable newTracksSaved = [];
+
+    @observable topTracksRender = null;
+
+    @observable topArtistsRender = null;
+
+    @observable recentlyPlayedRender = null;
+
+    @observable savedTracksRender = null;
 
     @action.bound
     async gatherOnlineUsers(LocationStore, AuthorizationStore) {
@@ -90,7 +100,8 @@ export class SpotifyStore {
         }
     }
 
-    @action.bound async getUserSpotifyData(user) {
+    @action.bound
+    async getUserSpotifyData(user) {
         try {
             let response = await SpotifyService.getUserSpotifyData(user);
             this.topTracks = response.topTracks;
@@ -116,7 +127,7 @@ export class SpotifyStore {
         }
     }
 
-    @action.bound clearCurrentUserData () {
+    @action.bound clearCurrentUserData() {
         this.recentlyPlayed = null;
         this.spotifyOF = null;
         this.topArtists = null;

@@ -15,16 +15,16 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
     const [buttonIsLoading, setButtonIsLoading] = useState(null);
 
     //useEffect hook given by React architecture
-    useEffect(() => {
-        //Check if there is already a user for this device
-        async function getUser() {
-            let user = await AsyncStorage.getFromAsyncStorage('user');
-            if (user) {
-                setUser(user);
-            };
-        };
-        getUser();
-    }, [user]);
+    /* useEffect(() => {
+         //Check if there is already a user for this device
+         async function getUser() {
+             let user = await AsyncStorage.getFromAsyncStorage('user');
+             if (user) {
+                 setUser(user);
+             };
+         };
+         getUser();
+     }, [user]); */
 
     //Gets the authorization code
     async function getAuthCode() {
@@ -55,7 +55,7 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
                     navigation.push('ServerConnectScreen')
                 }}
             />
-            <RotatingImageComponent imgSource={require('../../../assets/vinyl.png')}/>
+            <RotatingImageComponent imgSource={require('../../../assets/opencircle.png')}/>
             {
                 authCode ? (
                     <CreatePasswordScreen authCode={authCode} navigator={navigation}/>
@@ -87,13 +87,17 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
                                 alignSelf: 'center'
                             }}
                         />
-                        <Text style={{
-                            color: 'white',
-                            fontSize: 15,
-                            marginTop: 10
-                        }}>
-                            Spotify is registered for {user.name}
-                        </Text>
+                        {
+                            /*
+                            <Text style={{
+                                color: 'white',
+                                fontSize: 15,
+                                marginTop: 10
+                            }}>
+                                Spotify is registered for {user.name}
+                            </Text>
+                            */
+                        }
                     </View>
                 ) : (
                     <></>

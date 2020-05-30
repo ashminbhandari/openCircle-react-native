@@ -23,9 +23,9 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
         const {SpotifyStore} = useStores();
         const [currentTab, setCurrentTab] = useState('Recently Played');
         const [playingSong, setPlayingSong] = useState(null);
+        const [savedTracks, setSavedTracks] = useState([]);
 
         async function playSound(uri, id) {
-
             let status = await soundObject.getStatusAsync();
             if (uri) {
                 if (!status.isLoaded) {
@@ -46,6 +46,9 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
             }
         }
 
+        function saveTrack(id) {
+            SpotifyStore.newTracksSaved.push(id);
+        }
         const displayCurrentlyPlaying = () => {
             if (SpotifyStore.currentlyPlaying) {
                 return (
@@ -57,7 +60,8 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                         containerStyle={{
                             backgroundColor: '#0a0a0a'
                         }}
-                        leftAvatar={<Image
+                        leftAvatar={
+                            <Image
                             style={{
                                 width: 100,
                                 height: 100,
@@ -69,13 +73,12 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                         titleStyle={{
                             color: 'white'
                         }}
-                        onPress={()=>playSound(SpotifyStore.currentlyPlaying.preview, SpotifyStore.currentlyPlaying.id)}
+                        onPress={() => playSound(SpotifyStore.currentlyPlaying.preview, SpotifyStore.currentlyPlaying.id)}
+                        onLongPress={() => saveTrack(SpotifyStore.currentlyPlaying.id)}
                         rightElement={
-                            SpotifyStore.currentlyPlaying.preview ?
-                                <View style={{flexDirection: 'row'}}>
-                                    <MaterialCommunityIcons color={'white'} name={'gesture-double-tap'} size={25}/>
-                                </View>
-                                : <></>
+                            <View style={{flexDirection: 'row'}}>
+                                <MaterialCommunityIcons color={SpotifyStore.newTracksSaved.includes(SpotifyStore.currentlyPlaying.id) ? '#1DB954' : 'white'} name={'heart'} size={25}/>
+                            </View>
                         }
                         subtitle={
                             <View>
@@ -93,6 +96,9 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                                     <Text style={{alignSelf: 'center', color: 'white', marginLeft: 5}}>Now
                                         Playing</Text>
                                 </View>
+                                {
+                                    SpotifyStore.currentlyPlaying.preview ? <MaterialCommunityIcons style ={{marginTop: 5}} color={SpotifyStore.currentlyPlaying.id === playingSong ? '#1DB954' : 'white'} name={'gesture-tap'} size={25}/> : <></>
+                                }
                             </View>
                         }
                     />
@@ -122,6 +128,7 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                                     backgroundColor: index % 2 === 0 ? 'black' : '#111111',
                                 }}
                                 onPress={() => playSound(item.preview, item.id)}
+                                onLongPress={() => saveTrack(item.id)}
                                 leftAvatar={<Image
                                     style={{
                                         width: 100,
@@ -135,12 +142,9 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                                     color: 'white'
                                 }}
                                 rightElement={
-                                    item.preview ?
-                                        <View style={{flexDirection: 'row'}}>
-                                            <MaterialCommunityIcons color={'white'} name={'gesture-double-tap'}
-                                                                    size={25}/>
-                                        </View>
-                                        : <></>
+                                    <View style={{flexDirection: 'row'}}>
+                                        <MaterialCommunityIcons color={SpotifyStore.newTracksSaved.includes(item.id) ? '#1DB954' : 'white'} name={'heart'} size={25}/>
+                                    </View>
                                 }
                                 subtitle={
                                     <View>
@@ -157,6 +161,9 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                                                 marginTop: 5,
                                                 fontSize: 12,
                                             }}>{moment(item.time).fromNow()}</Text> : <></>
+                                        }
+                                        {
+                                            item.preview ? <MaterialCommunityIcons style ={{marginTop: 5}} color={item.id === playingSong ? '#1DB954' : 'white'} name={'gesture-tap'} size={25}/> : <></>
                                         }
                                     </View>
                                 }
