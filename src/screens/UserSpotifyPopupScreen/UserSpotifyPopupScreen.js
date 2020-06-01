@@ -8,7 +8,7 @@ import {
     Image
 } from 'react-native';
 import {observer} from 'mobx-react';
-import {MaterialCommunityIcons, MaterialIcons} from "@expo/vector-icons";
+import {MaterialCommunityIcons, AntDesign} from "@expo/vector-icons";
 import {ListItem} from 'react-native-elements';
 import {useStores} from '../../hooks/useStores';
 import TouchableScale from 'react-native-touchable-scale';
@@ -20,34 +20,42 @@ import {Audio} from 'expo-av';
 const soundObject = new Audio.Sound();
 
 const UserSpotifyPopupScreen = observer(({navigation, route}) => {
-        const {SpotifyStore} = useStores();
+        const {SpotifyStore, AuthorizationStore} = useStores();
         const [currentTab, setCurrentTab] = useState('Recently Played');
         const [playingSong, setPlayingSong] = useState(null);
-        const [savedTracks, setSavedTracks] = useState([]);
 
         async function playSound(uri, id) {
             let status = await soundObject.getStatusAsync();
-            if (uri) {
-                if (!status.isLoaded) {
-                    await soundObject.loadAsync({uri: uri});
-                    await soundObject.playAsync();
-                    await setPlayingSong(id);
-                } else if (status.isLoaded && id === playingSong) {
+            try {
+                if (uri) {
+                    if (!status.isLoaded) {
+                        await setPlayingSong(id);
+                        await soundObject.loadAsync({uri: uri});
+                        await soundObject.playAsync();
+
+                    } else if (status.isLoaded && id === playingSong) {
+                        setPlayingSong(null);
+                        await soundObject.stopAsync();
+                        await soundObject.unloadAsync();
+                    } else if (status.isLoaded && id != playingSong) {
+                        setPlayingSong(id);
+                        await soundObject.stopAsync();
+                        await soundObject.unloadAsync();
+                        await soundObject.loadAsync({uri: uri});
+                        await soundObject.playAsync();
+                    }
+                }
+            } catch (error) {
+                console.debug('Error playing song with error',error);
+                if (status.isLoaded) {
                     await soundObject.stopAsync();
                     await soundObject.unloadAsync();
-                    setPlayingSong(null);
-                } else if (status.isLoaded && id != playingSong) {
-                    await soundObject.stopAsync();
-                    await soundObject.unloadAsync();
-                    await soundObject.loadAsync({uri: uri});
-                    await soundObject.playAsync();
-                    setPlayingSong(id);
                 }
             }
         }
 
         function saveTrack(id) {
-            SpotifyStore.newTracksSaved.push(id);
+            SpotifyStore.tracksToSave.push(id);
         }
         const displayCurrentlyPlaying = () => {
             if (SpotifyStore.currentlyPlaying) {
@@ -77,7 +85,7 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                         onLongPress={() => saveTrack(SpotifyStore.currentlyPlaying.id)}
                         rightElement={
                             <View style={{flexDirection: 'row'}}>
-                                <MaterialCommunityIcons color={SpotifyStore.newTracksSaved.includes(SpotifyStore.currentlyPlaying.id) ? '#1DB954' : 'white'} name={'heart'} size={25}/>
+                                <MaterialCommunityIcons color={SpotifyStore.tracksToSave.includes(SpotifyStore.currentlyPlaying.id) ? '#1DB954' : 'white'} name={'heart'} size={25}/>
                             </View>
                         }
                         subtitle={
@@ -142,9 +150,12 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
                                     color: 'white'
                                 }}
                                 rightElement={
-                                    <View style={{flexDirection: 'row'}}>
-                                        <MaterialCommunityIcons color={SpotifyStore.newTracksSaved.includes(item.id) ? '#1DB954' : 'white'} name={'heart'} size={25}/>
-                                    </View>
+                                    what != 'Top Artists' ?
+                                        <View style={{flexDirection: 'row'}}>
+                                            <AntDesign color={'white'}
+                                                       name={SpotifyStore.tracksToSave.includes(item.id) ? 'heart' : 'hearto'}
+                                                       size={20}/>
+                                        </View> : <></>
                                 }
                                 subtitle={
                                     <View>
@@ -241,8 +252,9 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
             return TabNavigation;
         }
 
-        function goBack() {
+        async function goBack() {
             SpotifyStore.clearCurrentUserData();
+            await SpotifyStore.saveTrackForUser(AuthorizationStore.user);
             navigation.goBack();
         }
 

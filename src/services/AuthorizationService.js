@@ -2,6 +2,7 @@ import axios from "axios";
 import * as AuthSession from "expo-auth-session";
 import AsyncStorage from "../storage/AsyncStorage";
 import env from '../../env';
+import {action} from "mobx";
 
 //The scope that we will be asking the user permission for
 const scopesArr = ['user-read-email', 'user-read-currently-playing', 'user-follow-read',
@@ -100,6 +101,52 @@ export default {
             });
             return response;
         } catch(error) {
+            throw error;
+        }
+    },
+
+    //Log out
+    async logout() {
+        try {
+            let response = await axios.get(env.API_URL + '/auth/logout');
+            return response;
+        } catch (error) {
+            console.debug("At authorization service failed to logout", error);
+        }
+    },
+
+    //Send password reset code
+    async sendPasswordResetCode(email) {
+        try {
+            let response = await axios.post(env.API_URL + '/auth/generateToken', {
+                email: email
+            });
+            return response;
+        } catch (error) {
+            throw error;
+        }
+    },
+
+    async createNewPassword(email,password) {
+        try {
+            let response = await axios.post(env.API_URL + '/auth/newPassword', {
+               email: email,
+               password: password,
+            });
+            return response;
+        } catch (error) {
+            console.log('At createNewPassword in authService', error);
+        }
+    },
+
+    @action.bound async checkCode(email, code) {
+        try {
+            let response = await axios.post(env.API_URL + '/auth/checkCode', {
+                email: email,
+                code: code
+            });
+            return response;
+        } catch (error) {
             throw error;
         }
     }

@@ -4,8 +4,10 @@ import {View, Text, TextInput, StyleSheet} from 'react-native';
 import axios from "axios";
 import AsyncStorage from '../../storage/AsyncStorage'
 import env from '../../../env';
+import {useStores} from '../../hooks/useStores'
 
 const CreatePasswordScreen = (props) => {
+    const {AuthorizationStore} = useStores();
     const [password, onChangePassword] = useState('');
     const [error, setError] = useState('');
     const [buttonErrorShake, setButtonErrorShake] = useState('');
@@ -54,8 +56,7 @@ const CreatePasswordScreen = (props) => {
                 if (user) {
                     await AsyncStorage.saveToAsyncStorage('user', user);
 
-                    //Log new user
-                    console.log('New user:', user);
+                    AuthorizationStore.authorizedUser = user.name;
 
                     props.navigator.push('AuthorizeSpotifyScreen');
                 }

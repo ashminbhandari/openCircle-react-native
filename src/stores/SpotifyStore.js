@@ -3,6 +3,7 @@ import axios from 'axios';
 import Toast from 'react-native-root-toast';
 import SpotifyService from "../services/SpotifyService";
 import env from '../../env';
+import AsyncStorage from "../storage/AsyncStorage";
 
 /**/
 export class SpotifyStore {
@@ -25,15 +26,7 @@ export class SpotifyStore {
 
     @observable playbackState = false;
 
-    @observable newTracksSaved = [];
-
-    @observable topTracksRender = null;
-
-    @observable topArtistsRender = null;
-
-    @observable recentlyPlayedRender = null;
-
-    @observable savedTracksRender = null;
+    @observable tracksToSave = [];
 
     @action.bound
     async gatherOnlineUsers(LocationStore, AuthorizationStore) {
@@ -133,6 +126,36 @@ export class SpotifyStore {
         this.topArtists = null;
         this.topTracks = null;
         this.currentlyPlaying = null;
+    }
+
+    @action.bound
+    async saveTrackForUser(user) {
+        try {
+            if(this.tracksToSave.length) {
+                await axios.post(env.API_URL + '/spotify/saveTracks', {
+                    user: user,
+                    tracks: this.tracksToSave
+                });
+            }
+        } catch (error) {
+            console.debug("Error occured at saveTrack in SpotifyStore", error);
+            //Show an error Toast
+            Toast.show('Dingnibit, the tracks you selected could not be saved to your Spotify for some reason.', {
+                position: Toast.positions.CENTER,
+                shadow: true,
+                animation: true,
+                hideOnPress: true,
+                containerStyle: {
+                    borderWidth: 1,
+                    borderColor: 'red',
+                    marginTop: 20
+                }
+            });
+        }
+    }
+
+    @action.bound async addToTracksToSaveList(id) {
+        this.tracksToSave.push(id);
     }
 }
 

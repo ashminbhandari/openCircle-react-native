@@ -12,7 +12,7 @@ const Button = (observer((props) => {
                             <TouchableOpacity style={[styles.button, {borderColor: props.error ? 'red' : 'white'}]}
                                               onPress={props.onPress}>
                                 <View style={{flexDirection: 'row', alignSelf: 'center'}}>
-                                    <FontAwesome size={32} name={props.faName} style={{
+                                    <FontAwesome size={props.size || 32} name={props.faName} style={{
                                         color: props.error ? 'red' : props.faColor ? props.faColor : 'white',
                                     }}/>
                                     <Text

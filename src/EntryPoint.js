@@ -7,6 +7,7 @@ import AuthorizeSpotifyScreen from "./screens/AuthorizeSpotifyScreen/AuthorizeSp
 import CreatePasswordScreen from "./screens/CreatePasswordScreen/CreatePasswordScreen";
 import ServerConnectScreen from "./screens/ServerConnectScreen/ServerConnectScreen";
 import UserSpotifyPopupScreen from "./screens/UserSpotifyPopupScreen/UserSpotifyPopupScreen";
+import ForgotPasswordScreen from "./screens/ForgotPasswordScreen/ForgotPasswordScreen";
 
 //MobX imports
 import {observer} from 'mobx-react';
@@ -41,6 +42,10 @@ const EntryPoint = observer(() => {
                             <Stack.Screen
                                 name="CreatePasswordScreen"
                                 component={CreatePasswordScreen}
+                            />
+                            <Stack.Screen
+                                name={"ForgotPasswordScreen"}
+                                component={ForgotPasswordScreen}
                             />
                         </>
                     ) : (

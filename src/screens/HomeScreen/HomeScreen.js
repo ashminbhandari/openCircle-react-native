@@ -4,7 +4,7 @@ import MapView, {PROVIDER_GOOGLE, Marker, AnimatedRegion} from 'react-native-map
 import mapStyle from './HomeStyle';
 import MapMarker from '../../components/UIElements/MapMarker';
 import {useStores} from '../../hooks/useStores';
-import {FontAwesome, FontAwesome5, Octicons} from '@expo/vector-icons'
+import {FontAwesome, MaterialCommunityIcons, Octicons} from '@expo/vector-icons'
 import {observer} from 'mobx-react';
 import UserSpotifyPopupScreen from '../UserSpotifyPopupScreen/UserSpotifyPopupScreen';
 
@@ -14,8 +14,12 @@ const HomeScreen = observer(({navigation}) => {
         const [locationLoading, setLocationLoading] = useState(null);
         const [usersLoading, setUsersLoading] = useState(null);
         const [loadForUser, setLoadForUser] = useState(null);
-
+        const [loggingOut, setLoggingOut] = useState(null);
         let mapRef = useRef(null);
+
+        async function logout() {
+            await AuthorizationStore.logout();
+        }
 
         async function setupLocation() {
             try {
@@ -59,10 +63,10 @@ const HomeScreen = observer(({navigation}) => {
         //Displays all the online users
         function displayOnlineUsers() {
             let userMarkers = [];
-            SpotifyStore.onlineUsers.map(user => {
+            SpotifyStore.onlineUsers.map((user,index) => {
                 if (user.latitude && user.longitude) userMarkers.push(
                     <View
-                        key={user.id.toString()}
+                        key={index + user.id.toString()}
                         onPress={() => toSpotifyScreen(user.id)}
                     >
                         <Marker
@@ -184,7 +188,29 @@ const HomeScreen = observer(({navigation}) => {
                             )
                         }
                     </TouchableOpacity>
+                    {
+                       // Logout Button
+                    }
+                    <TouchableOpacity onPress={logout}>
+                        {
+                            loggingOut ? (
+                                <ActivityIndicator
+                                    style={styles.buttonsStyle}
+                                    size="small"
+                                    color="#1DB954"/>
+                            ) : (
+                                <MaterialCommunityIcons
+                                    name={'logout'}
+                                    size={20}
+                                    color={'white'}
+                                    style={styles.buttonsStyle}
+                                />
+                            )
+                        }
+                    </TouchableOpacity>
+
                 </View>
+
             )
         }
 

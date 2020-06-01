@@ -4,27 +4,15 @@ import {observer} from 'mobx-react';
 import AuthorizationService from '../../services/AuthorizationService';
 import CreatePasswordScreen from "../CreatePasswordScreen/CreatePasswordScreen";
 import {View, StyleSheet, Text, KeyboardAvoidingView} from "react-native";
-import AsyncStorage from '../../storage/AsyncStorage';
+import {useStores} from '../../hooks/useStores';
 import {FontAwesome} from "@expo/vector-icons";
 import RotatingImageComponent from "../../components/UIElements/RotatingImageComponent";
 
 const AuthorizeSpotifyScreen = observer(({navigation}) => {
+    const {AuthorizationStore} = useStores();
     const [authCode, setAuthCode] = useState(null);
     const [error, setError] = useState(null);
-    const [user, setUser] = useState(null);
     const [buttonIsLoading, setButtonIsLoading] = useState(null);
-
-    //useEffect hook given by React architecture
-    /* useEffect(() => {
-         //Check if there is already a user for this device
-         async function getUser() {
-             let user = await AsyncStorage.getFromAsyncStorage('user');
-             if (user) {
-                 setUser(user);
-             };
-         };
-         getUser();
-     }, [user]); */
 
     //Gets the authorization code
     async function getAuthCode() {
@@ -74,7 +62,7 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
             }
 
             {
-                user ? (
+                AuthorizationStore.authorizedUser ? (
                     <View style={{
                         marginTop: 40,
                         alignSelf: 'center'
@@ -87,17 +75,13 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
                                 alignSelf: 'center'
                             }}
                         />
-                        {
-                            /*
-                            <Text style={{
-                                color: 'white',
-                                fontSize: 15,
-                                marginTop: 10
-                            }}>
-                                Spotify is registered for {user.name}
-                            </Text>
-                            */
-                        }
+                        <Text style={{
+                            color: 'white',
+                            fontSize: 15,
+                            marginTop: 10
+                        }}>
+                            Spotify was successfully registered for {AuthorizationStore.authorizedUser}
+                        </Text>
                     </View>
                 ) : (
                     <></>

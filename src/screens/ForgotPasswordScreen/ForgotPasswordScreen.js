@@ -5,47 +5,60 @@ import {FontAwesome} from "@expo/vector-icons";
 import AuthorizationService from "../../services/AuthorizationService";
 import RotatingImageComponent from "../../components/UIElements/RotatingImageComponent";
 import {useStores} from '../../hooks/useStores';
-import TouchableOpacity from "react-native-web/dist/exports/TouchableOpacity";
 
 const ServerConnectScreen = ({navigation}) => {
-    const [password, onChangePassword] = useState('password');
     const [email, onChangeEmail] = useState('Spotify email');
-    const [loginError, onLoginError] = useState(null);
+    const [code, setCode] = useState('5 digit code')
+    const [error, onError] = useState(null);
+    const [password, setPassword] = useState('Password');
     const [buttonError, setButtonError] = useState(null);
     const [buttonIsLoading, setButtonIsLoading] = useState(null);
     const {AuthorizationStore} = useStores();
-    const [checkingCookie, setCheckingCookie] = useState(null);
 
-    //Utilizing the useEffect hook to check if the cookie saved is valid
-    useEffect(() => {
-        async function checkCookie() {
-            setCheckingCookie(true);
-            //Checks cookie and if cookie exists, set isAuthenticated to true
-            await AuthorizationStore.checkCookie();
-            setCheckingCookie(false);
-        }
-
-        checkCookie();
-    }, []);
-
-    async function joinServer() {
+    async function sendPasswordResetCode() {
         try {
             setButtonIsLoading(true);
-            let response = await AuthorizationService.joinServer(email, password);
-
-            if (response) {
-                AuthorizationStore.isAuthenticated = true;
-                AuthorizationStore.user = response.data;
-            }
-
-            //Set cookie
-            await AuthorizationService.saveCookie(response.headers['set-cookie']);
-
+            await AuthorizationStore.sendPasswordResetCode(email);
+            setButtonError(null);
+            onError(null);
+            setButtonIsLoading(false);
         } catch (error) {
-            console.log(error);
             setButtonIsLoading(false);
             setButtonError(true);
-            onLoginError('Please check your credentials');
+            onError('Hoopla, account not found');
+        }
+    }
+
+    async function checkCode() {
+        try {
+            setButtonIsLoading(true);
+            await AuthorizationStore.checkCode(email, code);
+            setButtonError(null);
+            onError(null);
+            setButtonIsLoading(false);
+        } catch (error) {
+            setButtonIsLoading(false);
+            setButtonError(true);
+            onError('The code does not match')
+        }
+    }
+
+    async function createNewPassword() {
+        try {
+            setButtonIsLoading(true);
+            await AuthorizationStore.createNewPassword(email, password);
+            setButtonError(null);
+            onError(null);
+            setButtonIsLoading(false);
+            if(AuthorizationStore.passwordResetFlag) {
+                AuthorizationStore.codeSent = false;
+                AuthorizationStore.codeVerified = false;
+                navigation.navigate('ServerConnectScreen');
+            }
+        } catch (error) {
+            setButtonIsLoading(false);
+            setButtonError(true);
+            onError('Sorry, your password could not be reset. Did the code expire?')
         }
     }
 
@@ -69,74 +82,54 @@ const ServerConnectScreen = ({navigation}) => {
                             }
                         ]}/>
                         <TextInput
-                            value={email}
-                            onChangeText={email => onChangeEmail(email)}
-                            style={styles.textInput}
-                            keyboardAppearance={'dark'}
-                        />
-                    </View>
-                    <View style={styles.textInputContainer}>
-                        <FontAwesome size={45} name={'bug'} style={styles.textInputIcon}/>
-                        <TextInput
-                            secureTextEntry={true}
-                            maxLength={16}
+                            secureTextEntry={AuthorizationStore.codeVerified ? true : false}
                             textContentType="password"
-                            value={password}
-                            onChangeText={pass => onChangePassword(pass)}
+                            value={AuthorizationStore.codeVerified ? password : AuthorizationStore.codeSent ? code : email}
+                            onChangeText={AuthorizationStore.codeVerified ? password => setPassword(password) : AuthorizationStore.codeSent ? code => setCode(code) : email => onChangeEmail(email)}
                             style={styles.textInput}
                             keyboardAppearance={'dark'}
                         />
                     </View>
-                    <View style={styles.joinServerBtn}>
+
+                    <View style={styles.resetCodeBtn}>
                         <Button
-                            text={'Join Server'}
-                            faName='plug'
-                            onPress={joinServer}
+                            text={AuthorizationStore.codeVerified ? 'Create new password' : AuthorizationStore.codeSent ? 'Verify Code' : 'Request Reset Code'}
+                            faName={AuthorizationStore.codeVerified ? 'lock' : AuthorizationStore.codeSent ? 'certificate' : 'send'}
+                            size={27}
+                            onPress={AuthorizationStore.codeVerified ? createNewPassword : AuthorizationStore.codeSent ? checkCode : sendPasswordResetCode}
                             error={buttonError}
                             isLoading={buttonIsLoading}
                         />
                         {
-                            loginError ? (
+                            error ? (
                                 <Text style={{
                                     color: 'red',
                                     marginTop: 20,
                                     alignSelf: 'center'
                                 }}>
-                                    {loginError}
+                                    {error}
+                                </Text>
+                            ) : (
+                                <></>
+                            )
+                        }
+                        {
+                            AuthorizationStore.codeSent || AuthorizationStore.codeVerified ? (
+                                <Text style={{
+                                    color: 'green',
+                                    marginTop: 20,
+                                    alignSelf: 'center'
+                                }}>
+                                    Successfull
                                 </Text>
                             ) : (
                                 <></>
                             )
                         }
                     </View>
-                    <Text
-                        style={{color: 'white', alignSelf: 'center', marginTop: 20}}
-                        onPress={() => navigation.navigate('ForgotPasswordScreen')}>
-                        Forgot your password?
-                    </Text>
+
                 </View>
             </KeyboardAvoidingView>
-            {
-                checkingCookie ? (
-                    <View style={{
-                        flexDirection: 'row',
-                        marginTop: 35,
-                    }}>
-                        <ActivityIndicator size="small" color="#1DB954"/>
-                        <Text style={{
-                            color: 'white',
-                            marginLeft: 10
-                        }}>Checking for an existing session</Text>
-                        {
-                            AuthorizationStore.passwordResetFlag ?
-                            <Text style={{
-                                color: 'green',
-                                marginLeft: 10
-                            }}>Checking for an existing session</Text> : <></>
-                        }
-                    </View>
-                ) : <></>
-            }
         </View>
     );
 };
@@ -171,7 +164,7 @@ const styles = StyleSheet.create({
         color: 'white',
         padding: 5
     },
-    joinServerBtn: {
+    resetCodeBtn: {
         marginTop: 35,
         alignSelf: 'center',
         width: 200
