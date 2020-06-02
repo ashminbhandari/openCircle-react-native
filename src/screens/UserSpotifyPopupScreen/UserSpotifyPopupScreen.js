@@ -57,6 +57,7 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
         function saveTrack(id) {
             SpotifyStore.tracksToSave.push(id);
         }
+
         const displayCurrentlyPlaying = () => {
             if (SpotifyStore.currentlyPlaying) {
                 return (

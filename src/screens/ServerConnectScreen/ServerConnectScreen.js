@@ -127,15 +127,15 @@ const ServerConnectScreen = ({navigation}) => {
                             color: 'white',
                             marginLeft: 10
                         }}>Checking for an existing session</Text>
-                        {
-                            AuthorizationStore.passwordResetFlag ?
-                            <Text style={{
-                                color: 'green',
-                                marginLeft: 10
-                            }}>Checking for an existing session</Text> : <></>
-                        }
                     </View>
                 ) : <></>
+            }
+            {
+                AuthorizationStore.passwordResetFlag ?
+                    <Text style={{
+                        color: 'green',
+                        marginTop: 10
+                    }}>Password successfully reset</Text> : <></>
             }
         </View>
     );
@@ -156,7 +156,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'center',
         marginTop: 30,
-        marginLeft: 4
+        marginLeft: 5
     },
     textInput: {
         color: 'white',
@@ -173,7 +173,6 @@ const styles = StyleSheet.create({
     },
     joinServerBtn: {
         marginTop: 35,
-        alignSelf: 'center',
         width: 200
     },
     authNavigationButtonIcon: {

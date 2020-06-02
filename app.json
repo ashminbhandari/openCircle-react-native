@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "openCircle",
-    "slug": "openCircle",
+    "name": "openCircle for Spotify - Word Server",
+    "slug": "open-circle-for-spotify-world-server",
     "scheme": "open-circle",
     "platforms": [
       "ios",
@@ -10,9 +10,9 @@
     ],
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/SWS.png",
+    "icon": "./assets/opencircle-logo.png",
     "splash": {
-      "image": "./assets/SWS.png",
+      "image": "./assets/opencircle-splash.png",
       "resizeMode": "contain",
       "backgroundColor": "#000000"
     },
@@ -26,7 +26,7 @@
       "supportsTablet": true,
       "bundleIdentifier": "cp.opencircle.bi",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "openCircle uses your location to display you on the world map."
+        "NSLocationWhenInUseUsageDescription": "openCircle uses a user's location to display them on a map"
       }
     }
   }

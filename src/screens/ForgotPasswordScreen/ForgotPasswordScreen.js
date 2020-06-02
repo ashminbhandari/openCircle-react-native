@@ -50,10 +50,10 @@ const ServerConnectScreen = ({navigation}) => {
             setButtonError(null);
             onError(null);
             setButtonIsLoading(false);
-            if(AuthorizationStore.passwordResetFlag) {
+            if (AuthorizationStore.passwordResetFlag) {
                 AuthorizationStore.codeSent = false;
                 AuthorizationStore.codeVerified = false;
-                navigation.navigate('ServerConnectScreen');
+                navigation.push('ServerConnectScreen');
             }
         } catch (error) {
             setButtonIsLoading(false);
@@ -93,7 +93,7 @@ const ServerConnectScreen = ({navigation}) => {
 
                     <View style={styles.resetCodeBtn}>
                         <Button
-                            text={AuthorizationStore.codeVerified ? 'Create new password' : AuthorizationStore.codeSent ? 'Verify Code' : 'Request Reset Code'}
+                            text={AuthorizationStore.codeVerified ? 'Create new password' : AuthorizationStore.codeSent ? 'Verify code' : 'Request reset code'}
                             faName={AuthorizationStore.codeVerified ? 'lock' : AuthorizationStore.codeSent ? 'certificate' : 'send'}
                             size={27}
                             onPress={AuthorizationStore.codeVerified ? createNewPassword : AuthorizationStore.codeSent ? checkCode : sendPasswordResetCode}
@@ -113,19 +113,15 @@ const ServerConnectScreen = ({navigation}) => {
                                 <></>
                             )
                         }
-                        {
-                            AuthorizationStore.codeSent || AuthorizationStore.codeVerified ? (
-                                <Text style={{
-                                    color: 'green',
-                                    marginTop: 20,
-                                    alignSelf: 'center'
-                                }}>
-                                    Successfull
-                                </Text>
-                            ) : (
-                                <></>
-                            )
-                        }
+                        <Text style={{
+                            color: 'green',
+                            marginTop: 20,
+                            alignSelf: 'center'
+                        }}>
+                            {
+                                AuthorizationStore.codeVerified ? 'Code verified' : AuthorizationStore.codeSent ? 'A code was sent to your email' : ''
+                            }
+                        </Text>
                     </View>
 
                 </View>
@@ -166,7 +162,6 @@ const styles = StyleSheet.create({
     },
     resetCodeBtn: {
         marginTop: 35,
-        alignSelf: 'center',
         width: 200
     },
     authNavigationButtonIcon: {
