@@ -19,6 +19,8 @@ const HomeScreen = observer(({navigation}) => {
 
         async function logout() {
             await AuthorizationStore.logout();
+            LocationStore.userLocation = null;
+            LocationStore.sessionLocation = null;
         }
 
         async function setupLocation() {

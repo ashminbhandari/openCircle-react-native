@@ -63,12 +63,6 @@ const ServerConnectScreen = ({navigation}) => {
         }
     }
 
-    function tryAgain() {
-        console.log('here');
-        AuthorizationStore.codeVerified = false;
-        AuthorizationStore.codeSent = false;
-    }
-
     return (
         <View style={styles.container}>
             <FontAwesome
