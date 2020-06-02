@@ -256,7 +256,7 @@ const UserSpotifyPopupScreen = observer(({navigation, route}) => {
         async function goBack() {
             SpotifyStore.clearCurrentUserData();
             await SpotifyStore.saveTrackForUser(AuthorizationStore.user);
-            navigation.goBack();
+            navigation.navigate('HomeScreen');
         }
 
         return (

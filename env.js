@@ -1,3 +1,3 @@
 export default {
-    API_URL: `http://10.0.0.144:3000`
+    API_URL: `https://vast-dusk-47439.herokuapp.com`
 }
