@@ -31,4 +31,16 @@ router.post('/joinServer', passport.authenticate('login'), (req,res) => {
     });
 });
 
+router.get('/logout', (req,res) => {
+    console.log(req.session);
+
+    res.send('a');
+});
+
+router.route('/generateToken').post(authController.generateToken);
+
+router.route('/checkCode').post(authController.checkCode);
+
+router.route('/newPassword').post(authController.newPassword);
+
 module.exports = router;

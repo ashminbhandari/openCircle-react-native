@@ -35,6 +35,12 @@ let usersSchema = new mongoose.Schema({
     },
     longitude: {
         type: Number
+    },
+    passwordResetToken: {
+        type: Number
+    },
+    passwordResetTokenExpirationTime: {
+        type: String
     }
 })
 

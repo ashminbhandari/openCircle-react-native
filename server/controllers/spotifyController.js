@@ -33,5 +33,16 @@ module.exports = {
             console.log("Error in getUserSpotify in SpotifyController", error);
             return res.status(httpStatus.INTERNAL_SERVER_ERROR).send('Error, getting user Spotify information...');
         }
+    },
+
+    //Save tracks
+    async saveTracks(req,res) {
+        try {
+            let response = await spotifyService.saveTracks(req.body.user.id, req.body.tracks);
+            return res.status(response.httpStatus).send(response);
+        } catch (error) {
+            console.log('Error in saveTracks in spotifyController', error);
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).send('Hoofff, Error saving the tracks requested...');
+        }
     }
 };

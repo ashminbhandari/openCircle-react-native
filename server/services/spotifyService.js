@@ -3,7 +3,7 @@ const connection = mongoose.connection; //Get the database connection
 const httpStatus = require('http-status-codes');
 const User = require('../database/models/users');
 const spotifyApi = require('../spotifyAPI/api');
-const axios = require('axios');
+const CryptoJS = require('crypto-js');
 
 //Extracting the user id
 //
@@ -84,7 +84,7 @@ module.exports = {
             let theUser = await User.findById(user);
 
             //Refresh the access token
-            spotifyApi.setRefreshToken(theUser.refresh_token);
+            spotifyApi.setRefreshToken(CryptoJS.AES.decrypt(theUser.refresh_token, process.env.TOKENS_HASHER).toString(CryptoJS.enc.Utf8));
             let response = await spotifyApi.refreshAccessToken();
             let accessToken = response.body.access_token;
 
@@ -125,6 +125,7 @@ module.exports = {
                     id: track.id ? track.id : '',
                     image: track.album.images[0].url ? track.album.images[0].url : '',
                     subtitle: track.artists[0].name ? track.artists[0].name : '',
+                    preview: track.preview_url
                 })
             });
 
@@ -136,6 +137,7 @@ module.exports = {
                         id: item.track.id ? item.track.id : '',
                         time: item.played_at ? item.played_at : '',
                         subtitle: item.track.artists[0].name ? item.track.artists[0].name : '',
+                        preview: item.track.preview_url
                     })
                 }
             })
@@ -147,6 +149,7 @@ module.exports = {
                     id: currentlyPlaying.body.item.id ? currentlyPlaying.body.item.id : '',
                     image: currentlyPlaying.body.item.album.images[0].url ? currentlyPlaying.body.item.album.images[0].url : '',
                     subtitle: currentlyPlaying.body.item.artists[0].name ? currentlyPlaying.body.item.artists[0].name : '',
+                    preview: currentlyPlaying.body.item.preview_url
                 }
             }
 
@@ -157,7 +160,8 @@ module.exports = {
                     url: item.track.external_urls.spotify ? item.track.external_urls.spotify : '',
                     image: item.track.album.images[0].url ? item.track.album.images[0].url : '',
                     subtitle: item.track.artists[0].name ? item.track.artists[0].name : '',
-                    time: item.added_at ? item.added_at : ''
+                    time: item.added_at ? item.added_at : '',
+                    preview: item.track.preview_url
                 })
             })
 
@@ -180,6 +184,40 @@ module.exports = {
                 status: 'failed',
                 errorDetails: 'INTERNAL SERVER ERROR'
             }
+        }
+    },
+
+    async saveTracks(user, tracks) {
+        let result;
+
+        try {
+            //Find the user by their ID
+            let theUser = await User.findById(user);
+
+            //Refresh the access token
+            spotifyApi.setRefreshToken(CryptoJS.AES.decrypt(theUser.refresh_token, process.env.TOKENS_HASHER).toString(CryptoJS.enc.Utf8));
+            let response = await spotifyApi.refreshAccessToken();
+            let accessToken = response.body.access_token;
+
+            //Set the token
+            spotifyApi.setAccessToken(accessToken);
+
+            //Add the tracks
+            await spotifyApi.addToMySavedTracks(tracks);
+
+            result = {
+                httpStatus: httpStatus.OK,
+                status: 'success',
+            };
+
+            return result;
+        } catch (error) {
+            console.log(error);
+            result = {
+                httpStatus: httpStatus.INTERNAL_SERVER_ERROR,
+                status: 'failed',
+            };
+            return result;
         }
     }
 };

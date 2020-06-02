@@ -22,4 +22,7 @@ router.route('/gatherOnlineUsers').get(spotifyController.gatherOnlineUsers);
 //Gets the Spotify data of a user
 router.route('/getUserSpotifyData').post(spotifyController.getUserSpotifyData);
 
+//Save tracks
+router.route('/saveTracks').post(spotifyController.saveTracks);
+
 module.exports = router;
