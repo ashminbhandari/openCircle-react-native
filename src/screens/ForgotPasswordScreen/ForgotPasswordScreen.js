@@ -5,6 +5,7 @@ import {FontAwesome} from "@expo/vector-icons";
 import AuthorizationService from "../../services/AuthorizationService";
 import RotatingImageComponent from "../../components/UIElements/RotatingImageComponent";
 import {useStores} from '../../hooks/useStores';
+import TouchableOpacity from "react-native-web/src/exports/TouchableOpacity";
 
 const ServerConnectScreen = ({navigation}) => {
     const [email, onChangeEmail] = useState('Spotify email');
@@ -60,6 +61,12 @@ const ServerConnectScreen = ({navigation}) => {
             setButtonError(true);
             onError('Sorry, your password could not be reset. Did the code expire?')
         }
+    }
+
+    function tryAgain() {
+        console.log('here');
+        AuthorizationStore.codeVerified = false;
+        AuthorizationStore.codeSent = false;
     }
 
     return (
@@ -122,6 +129,7 @@ const ServerConnectScreen = ({navigation}) => {
                                 AuthorizationStore.codeVerified ? 'Code verified' : AuthorizationStore.codeSent ? 'A code was sent to your email' : ''
                             }
                         </Text>
+
                     </View>
 
                 </View>
