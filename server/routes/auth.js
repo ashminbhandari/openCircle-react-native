@@ -32,9 +32,22 @@ router.post('/joinServer', passport.authenticate('login'), (req,res) => {
 });
 
 router.get('/logout', (req,res) => {
-    console.log(req.session);
-
-    res.send('a');
+    if (req.session) {
+        req.session.destroy((err) => {
+            if(err) {
+                return res.status(httpStatus.INTERNAL_SERVER_ERROR).send("server error - could not clear out session info completely")
+            }
+            return res.status(httpStatus.OK).send("logged out successfully");
+        });
+    }
+    else {
+        if (req.isUnauthenticated()) {
+            return res.status(httpStatus.OK).send("logged out successfully");
+        }
+        else {
+            return res.status(httpStatus.INTERNAL_SERVER_ERROR).send("server error - could not log out")
+        }
+    }
 });
 
 router.route('/generateToken').post(authController.generateToken);
