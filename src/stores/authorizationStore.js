@@ -29,7 +29,7 @@ export class AuthorizationStore {
             console.log("Cookie not valid. User has to log in.");
         }
     }
-    
+
     @action.bound async logout() {
         try {
             let res = await AuthorizationService.logout();
@@ -88,8 +88,5 @@ export class AuthorizationStore {
             throw error;
         }
     }
-
-
-
 }
 
