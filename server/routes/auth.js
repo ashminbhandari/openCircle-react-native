@@ -4,11 +4,19 @@ const router = express.Router();
 const passport = require('passport');
 const httpStatus = require('http-status-codes');
 
+//The scope that we will be asking the user permission for
+const scopesArr = ['user-read-email', 'user-read-currently-playing',
+    'user-read-recently-played',
+    'user-library-read', 'user-library-modify', 'user-top-read',
+    'user-read-private'
+]; //This is the scope of accessing that we will be asking for from the user
+const scopes = scopesArr.join(' ');
+
 //Get request for Spotify credentials
 router.get('/credentials', function (req, res) {
     const clientId = process.env.SPOTIFY_CLIENT_ID;
     const redirectUri = process.env.SPOTIFY_REDIRECT_URI;
-    const credentials = {clientId, redirectUri};
+    const credentials = {clientId, redirectUri, scopes};
     res.json(credentials);
 });
 
