@@ -63,9 +63,9 @@ const ServerConnectScreen = ({navigation}) => {
                 <RotatingImageComponent imgSource={require('../../../assets/opencircle.png')}/>
                 <View style={styles.formContainer}>
                     <View style={styles.textInputContainer}>
-                        <FontAwesome size={45} name={'spotify'} style={[
+                        <FontAwesome size={45} name={'music'} style={[
                             styles.textInputIcon, {
-                                color: '#1DB954'
+                                color: 'white'
                             }
                         ]}/>
                         <TextInput
@@ -122,7 +122,7 @@ const ServerConnectScreen = ({navigation}) => {
                         flexDirection: 'row',
                         marginTop: 35,
                     }}>
-                        <ActivityIndicator size="small" color="#1DB954"/>
+                        <ActivityIndicator size="small" color="white"/>
                         <Text style={{
                             color: 'white',
                             marginLeft: 10
@@ -133,7 +133,7 @@ const ServerConnectScreen = ({navigation}) => {
             {
                 AuthorizationStore.passwordResetFlag ?
                     <Text style={{
-                        color: 'green',
+                        color: 'white',
                         marginTop: 10
                     }}>Password successfully reset</Text> : <></>
             }

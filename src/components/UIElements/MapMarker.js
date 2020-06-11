@@ -7,11 +7,11 @@ const MapMarker = ({loadingDataForId, userId, iconName}) => {
         <View style={styles.container}>
             {
                 loadingDataForId == userId ? (
-                <ActivityIndicator style={{padding:5}} size="small" color="#1DB954"/>
+                <ActivityIndicator style={{padding:5}} size="small" color="white"/>
             ) : (
                 <MaterialCommunityIcons
                     name={iconName}
-                    color={'#1DB954'}
+                    color={'white'}
                     size={25}
                 />
             )}

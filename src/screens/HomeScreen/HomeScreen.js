@@ -7,6 +7,7 @@ import {useStores} from '../../hooks/useStores';
 import {FontAwesome, MaterialCommunityIcons, Octicons} from '@expo/vector-icons'
 import {observer} from 'mobx-react';
 import UserSpotifyPopupScreen from '../UserSpotifyPopupScreen/UserSpotifyPopupScreen';
+import Toast from "react-native-root-toast";
 
 //VsCode test 
 const HomeScreen = observer(({navigation}) => {
@@ -65,7 +66,7 @@ const HomeScreen = observer(({navigation}) => {
         //Displays all the online users
         function displayOnlineUsers() {
             let userMarkers = [];
-            SpotifyStore.onlineUsers.map((user,index) => {
+            SpotifyStore.onlineUsers.map((user, index) => {
                 if (user.latitude && user.longitude) userMarkers.push(
                     <View
                         key={index + user.id.toString()}
@@ -80,7 +81,7 @@ const HomeScreen = observer(({navigation}) => {
                             <MapMarker
                                 loadingDataForId={loadForUser}
                                 userId={user.id}
-                                iconName={'spotify'}
+                                iconName={'music'}
                             />
                         </Marker>
                     </View>
@@ -127,7 +128,7 @@ const HomeScreen = observer(({navigation}) => {
                         <FontAwesome
                             name={'globe'}
                             size={20}
-                            color={'#1DB954'}
+                            color={'white'}
                         />
                         <Text style={{
                             color: 'white',
@@ -153,7 +154,7 @@ const HomeScreen = observer(({navigation}) => {
                                 <ActivityIndicator
                                     style={styles.buttonsStyle}
                                     size="small"
-                                    color="#1DB954"/>
+                                    color="white"/>
                             ) : (
                                 <FontAwesome
                                     name={SpotifyStore.hasDownloadedUsers ? 'refresh' : 'arrow-circle-down'}
@@ -176,14 +177,14 @@ const HomeScreen = observer(({navigation}) => {
                                 <ActivityIndicator
                                     style={styles.buttonsStyle}
                                     size="small"
-                                    color="#1DB954"/>
+                                    color="white"/>
                             ) : (
                                 <Octicons
                                     name={'broadcast'}
                                     size={20}
-                                    color={LocationStore.userLocation ? '#1DB954' : 'white'}
+                                    color={LocationStore.userLocation ? 'white' : 'white'}
                                     style={[styles.buttonsStyle, {
-                                        borderColor: LocationStore.userLocation ? '#1DB954' : 'white',
+                                        borderColor: LocationStore.userLocation ? 'white' : 'white',
                                         padding: 9
                                     }]}
                                 />
@@ -191,7 +192,7 @@ const HomeScreen = observer(({navigation}) => {
                         }
                     </TouchableOpacity>
                     {
-                       // Logout Button
+                        // Logout Button
                     }
                     <TouchableOpacity onPress={logout}>
                         {
@@ -199,7 +200,7 @@ const HomeScreen = observer(({navigation}) => {
                                 <ActivityIndicator
                                     style={styles.buttonsStyle}
                                     size="small"
-                                    color="#1DB954"/>
+                                    color="white"/>
                             ) : (
                                 <MaterialCommunityIcons
                                     name={'logout'}

@@ -49,7 +49,7 @@ export class AuthorizationStore {
                 hideOnPress: true,
                 containerStyle: {
                     borderWidth: 1,
-                    borderColor: 'red',
+                    borderColor: 'white',
                     marginTop: 20
                 }
             });

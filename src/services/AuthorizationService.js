@@ -33,7 +33,7 @@ export default {
             const credentials = await this.getCredentials();
 
             //Session redirect URL
-            const redirectUrl = AuthSession.getRedirectUrl();
+            const redirectUrl = credentials.redirectUri
 
             //Auth session
             const sessionResult = await AuthSession.startAsync({

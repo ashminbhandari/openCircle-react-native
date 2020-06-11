@@ -51,8 +51,8 @@ const AuthorizeSpotifyScreen = observer(({navigation}) => {
                     <View style={styles.connectButtonAddedStyles}>
                         <Button
                             text={'Connect with Spotify'}
-                            faName='spotify'
-                            faColor='#1DB954'
+                            faName='plus-circle'
+                            faColor='white'
                             onPress={getAuthCode}
                             error={error}
                             isLoading={buttonIsLoading}

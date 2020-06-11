@@ -77,9 +77,9 @@ const ServerConnectScreen = ({navigation}) => {
                 <RotatingImageComponent imgSource={require('../../../assets/opencircle.png')}/>
                 <View style={styles.formContainer}>
                     <View style={styles.textInputContainer}>
-                        <FontAwesome size={45} name={'spotify'} style={[
+                        <FontAwesome size={45} name={'music'} style={[
                             styles.textInputIcon, {
-                                color: '#1DB954'
+                                color: 'white'
                             }
                         ]}/>
                         <TextInput

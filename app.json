@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "openCircle for Spotify - World Server",
-    "slug": "open-circle-for-spotify-world-server",
-    "scheme": "open-circle",
+    "name": "openCircle - Music World Server",
+    "slug": "open-circle-music-world-server",
+    "scheme": "ocopencircle",
     "platforms": [
       "ios",
       "android",
       "web"
     ],
-    "version": "1.0.0",
+    "version": "1.0.4",
     "orientation": "portrait",
     "icon": "./assets/opencircle-logo.png",
     "splash": {
@@ -23,6 +23,9 @@
       "**/*"
     ],
     "ios": {
+      "config": {
+        "googleMapsApiKey": "AIzaSyAhjyX2B0vAzccFenQ93wILAg3Sx7EoCLU"
+      },
       "supportsTablet": true,
       "bundleIdentifier": "cp.opencircle.bi",
       "infoPlist": {

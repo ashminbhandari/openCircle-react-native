@@ -3,7 +3,6 @@ import axios from 'axios';
 import Toast from 'react-native-root-toast';
 import SpotifyService from "../services/SpotifyService";
 import env from '../../env';
-import AsyncStorage from "../storage/AsyncStorage";
 
 /**/
 export class SpotifyStore {
@@ -55,7 +54,7 @@ export class SpotifyStore {
                     hideOnPress: true,
                     containerStyle: {
                         borderWidth: 1,
-                        borderColor: 'green',
+                        borderColor: 'white',
                         marginTop: 20
                     }
                 });
@@ -78,7 +77,7 @@ export class SpotifyStore {
             }
         } else {
             //Show an error Toast
-            Toast.show('Hoopaa, please broadcast yourself before downloading online users', {
+            Toast.show('Hoopaa, please broadcast yourself before downloading online users. \nopenCircle does not know of your location, it uses a random one.', {
                 duration: Toast.durations.LONG,
                 position: Toast.positions.TOP,
                 shadow: true,
@@ -86,7 +85,7 @@ export class SpotifyStore {
                 hideOnPress: true,
                 containerStyle: {
                     borderWidth: 1,
-                    borderColor: 'yellow',
+                    borderColor: 'white',
                     marginTop: 20
                 }
             });
@@ -112,7 +111,7 @@ export class SpotifyStore {
                 hideOnPress: true,
                 containerStyle: {
                     borderWidth: 1,
-                    borderColor: 'red',
+                    borderColor: 'white',
                     marginTop: 20
                 }
             });
@@ -147,7 +146,7 @@ export class SpotifyStore {
                 hideOnPress: true,
                 containerStyle: {
                     borderWidth: 1,
-                    borderColor: 'red',
+                    borderColor: 'white',
                     marginTop: 20
                 }
             });
