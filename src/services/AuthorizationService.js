@@ -4,16 +4,9 @@ import AsyncStorage from "../storage/AsyncStorage";
 import env from '../../env';
 import {action} from "mobx";
 
-//The scope that we will be asking the user permission for
-const scopesArr = ['user-read-email', 'user-read-currently-playing', 'user-follow-read',
-    'app-remote-control', 'user-read-recently-played', 'streaming',
-    'user-follow-modify', 'user-library-read', 'playlist-modify-public', 'user-top-read',
-    'user-read-private', 'user-read-playback-position', 'ugc-image-upload'
-]; //This is the scope of accessing that we will be asking for from the user
-const scopes = scopesArr.join(' ');
+
 
 export default {
-
     //Get Spotify credentials from the server to initiate an auth session
     async getCredentials() {
         try {
@@ -23,7 +16,7 @@ export default {
         } catch (error) {
             console.log("Error at getCredentials in AuthorizationService...", error);
             throw error;
-        }post
+        }
     },
 
     //AuthCode from session
@@ -42,7 +35,7 @@ export default {
                     '?response_type=code' +
                     '&client_id=' +
                     credentials.clientId +
-                    (scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
+                    (credentials.scopes ? '&scope=' + encodeURIComponent(scopes) : '') +
                     '&redirect_uri=' +
                     encodeURIComponent(redirectUrl),
             });
@@ -100,7 +93,7 @@ export default {
                 }
             });
             return response;
-        } catch(error) {
+        } catch (error) {
             throw error;
         }
     },
@@ -127,11 +120,11 @@ export default {
         }
     },
 
-    async createNewPassword(email,password) {
+    async createNewPassword(email, password) {
         try {
             let response = await axios.post(env.API_URL + '/auth/newPassword', {
-               email: email,
-               password: password,
+                email: email,
+                password: password,
             });
             return response;
         } catch (error) {
