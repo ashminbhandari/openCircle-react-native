@@ -16,7 +16,7 @@
     "crypto-js": "^4.0.0",
     "debug": "~2.6.9",
     "dotenv": "^8.2.0",
-    "express": "~4.16.1",
+    "express": "~4.17.3",
     "express-sesssion": "^1.15.5",
     "helmet": "^3.22.0",
     "http-errors": "~1.6.3",
